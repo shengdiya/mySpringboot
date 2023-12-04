@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.demo.Dao.BookDao">
+	<!-- 查找所有图书 -->
+	<select id="selectAllBooks" resultType="com.myapp.demo.Entiy.Book">
+		select * from book_info
+	</select>
+	<!-- 通过Id查找图书 -->
+	<select id="selectBookById" resultType="com.myapp.demo.Entiy.Book">
+		select * from book_info where bookId = #{bookId}
+	</select>
+	
+	<!-- 通过Id模糊查找图书 -->
+	<select id="LikeSelectBookById" parameterType="String" resultType="com.myapp.demo.Entiy.Book">
+		select * from book_info where CAST(bookId AS char) like '%${booId}%'
+	</select>
+	<!-- 根据书名模糊查找图书 -->
+	<select id="LikeSelectBookByBookName" resultType="com.myapp.demo.Entiy.Book">
+		select * from book_info where bookName like '%${bookName}%'
+	</select>
+	<!-- 根据作者模糊查找图书 -->
+	<select id="LikeSelectBookByauthorName" resultType="com.myapp.demo.Entiy.Book">
+		select * from book_info where authorName like '%${authorName}%'
+	</select>
+	<!-- 根据出版社模糊查找图书 -->
+	<select id="LikeSelectBookByPress" resultType="com.myapp.demo.Entiy.Book">
+		select * from book_info where press like '%${press}%'
+	</select>
+	
+	<!-- 查找所有现在在unit单位的图书 -->
+	<select id="selectBookByNowWhere" resultType="com.myapp.demo.Entiy.Book">
+		select * from book_info where nowWhere = #{nowWhere}
+	</select>
+	<!-- 根据所属单位查找图书 -->
+	<select id="selectBookByWhichUnit" resultType="com.myapp.demo.Entiy.Book">
+		select * from book_info where whichUnit = #{whichUnit}
+	</select>
+	
+	
+	<!-- 添加一本图书 -->
+	<insert id="insertOneBook" useGeneratedKeys="true" keyProperty="bookId">
+		insert into book_info 
+		(bookId,bookName,outTime,authorName,press,pageNumber,
+			price,type,`left`,whichUnit,isAllowed,nowWhere,isflowed,picturePath)
+		values(#{bookId},#{bookName},#{outTime},#{authorName},#{press},#{pageNumber},
+			#{price},#{type},#{left},#{whichUnit},#{isAllowed},#{nowWhere},#{isflowed},#{picturePath})
+	</insert>
+	
+	<!-- 更新图书详细信息 -->
+	<update id="adminModifyBookDetailsById" parameterType="com.myapp.demo.Entiy.Book">
+		update book_info set 
+		bookName = #{bookName},outTime = #{outTime},authorName = #{authorName},press = #{press}
+			,pageNumber = #{pageNumber},price = #{price},type = #{type},picturePath = #{picturePath}
+		where bookId = #{bookId}
+	</update>
+	
+	<!-- 根据图书Id删除一个图书 -->
+	<delete id="deleteBook">
+        delete from book_info where bookId = #{bookId}
+    </delete>
+	
+	<!-- 单纯更新书的剩余数量（归还或借出） -->
+	<update id="leftChange" parameterType="com.myapp.demo.Entiy.Book">
+		update book_info set 
+		`left` = #{left}
+		where bookId = #{bookId}
+	</update>
+	
+	<!-- 单纯更新是否允许借阅或流通 -->
+	<update id="updateIsAllowed" parameterType="com.myapp.demo.Entiy.Book">
+		update book_info set 
+		isAllowed = #{isAllowed}
+		where bookId = #{bookId}
+	</update>
+	
+	<!-- 更新是否流出,同时更新现存地 -->
+	<update id="updateIsflowed" parameterType="com.myapp.demo.Entiy.Book">
+		update book_info set 
+		isflowed = #{isflowed},nowWhere = #{nowWhere} 
+		where bookId = #{bookId}
+	</update>
+	
+	<!-- 统计本单位总图书数 -->
+	<select id="countAllbooksInOwnUnit" resultType="Integer">
+		select count(*) from book_info where whichUnit = #{whichUnit}
+	</select>
+	
+	<!-- 统计本单位在库图书数（未借出和流出，即isflowed为0并且left==1） -->
+	<select id="countAllbooksInNow" resultType="Integer">
+		select count(*) from book_info 
+			where whichUnit = #{whichUnit} and `left` = 1 and isflowed = false
+	</select>
+
+</mapper>

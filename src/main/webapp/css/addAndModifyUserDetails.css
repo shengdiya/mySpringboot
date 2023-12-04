@@ -1,0 +1,89 @@
+@charset "UTF-8";
+		body {
+           	font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .containerAll{
+        	width: 60%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: left;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .form-group label.required::after {
+            content: " *";
+            color: red;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="password"],
+        .form-group input[type="email"],
+        .form-group input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+        }
+        .radio-group label,
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+        }
+        .form-group input[type="submit"],
+		.form-group input[type="button"], 
+		.form-group button {
+		    background-color: #5cb85c;
+		    color: white;
+		    padding: 10px 20px;
+		    border: none;
+		    border-radius: 4px;
+		    cursor: pointer;
+		    margin: 5px; 
+		}
+		
+		.form-group input[type="submit"]:hover,
+		.form-group input[type="button"]:hover, 
+		.form-group button:hover {
+		    background-color: #4cae4c;
+		}
+		.button-container{
+			display: flex;
+    		justify-content: center;
+		}
+        .form-group select {
+		    width: 100%; /* 与输入框相同的宽度 */
+		    padding: 10px; /* 与输入框相同的内填充 */
+		    border: 1px solid #ddd; /* 边框颜色和风格与其他输入框一致 */
+		    border-radius: 4px; /* 圆角风格与其他输入框一致 */
+		    background-color: #fff; /* 背景颜色应与页面背景一致 */
+		    box-sizing: border-box; /* 确保内填充不影响总宽度 */
+		}
+        
+        
+        
