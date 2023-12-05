@@ -157,15 +157,15 @@ public class BorrowBookOrderController {
 		return mav;
 	}
 	
-	//工作人员查看审核中的图书界面
-	@RequestMapping("/staffBookBorrowingWating")
-	public String staffBookBorrowingWating(HttpServletRequest request){
-		User staff = (User) request.getSession().getAttribute("staff");
-		List<BorrowBookOrder> borrowBookOrders = borrowBookOrderService.selectOrderByUnitAndStatus(staff.getWhichUnit(), "待审核");
-		request.setAttribute("bookservice", bookservice);
-		request.setAttribute("borrowBookOrdersPending", borrowBookOrders);
-		return "staffBookBorrowingWating";
-	}
+//	//工作人员查看审核中的图书界面
+//	@RequestMapping("/staffBookBorrowingWating")
+//	public String staffBookBorrowingWating(HttpServletRequest request){
+//		User staff = (User) request.getSession().getAttribute("staff");
+//		List<BorrowBookOrder> borrowBookOrders = borrowBookOrderService.selectOrderByUnitAndStatus(staff.getWhichUnit(), "待审核");
+//		request.setAttribute("bookservice", bookservice);
+//		request.setAttribute("borrowBookOrdersPending", borrowBookOrders);
+//		return "staffBookBorrowingWating";
+//	}
 	//工作人员在借阅待审核界面点击“同意”
 	@RequestMapping(params = "method=agreeBorrowing")
 	public ModelAndView agreeBorrowing(HttpServletRequest request,ModelAndView mav) {
@@ -202,27 +202,27 @@ public class BorrowBookOrderController {
 		return mav;
 	}
 	
-	//工作人员查看已借出的图书界面
-	@RequestMapping("/staffBookBorrowingReviewed")
-	public String staffBookBorrowingReviewed(HttpServletRequest request){	
-		User staff = (User) request.getSession().getAttribute("staff");
-		List<BorrowBookOrder> borrowBookOrders = borrowBookOrderService.selectOrderByUnitAndStatus(staff.getWhichUnit(), "已借出");
-		request.setAttribute("bookservice", bookservice);
-		request.setAttribute("staffBookBorrowingReviewed", borrowBookOrders);
-		return "staffBookBorrowingReviewed";
-	}
+//	//工作人员查看已借出的图书界面
+//	@RequestMapping("/staffBookBorrowingReviewed")
+//	public String staffBookBorrowingReviewed(HttpServletRequest request){
+//		User staff = (User) request.getSession().getAttribute("staff");
+//		List<BorrowBookOrder> borrowBookOrders = borrowBookOrderService.selectOrderByUnitAndStatus(staff.getWhichUnit(), "已借出");
+//		request.setAttribute("bookservice", bookservice);
+//		request.setAttribute("staffBookBorrowingReviewed", borrowBookOrders);
+//		return "staffBookBorrowingReviewed";
+//	}
 	
 	//工作人员查看已结束和已拒绝的图书界面
-	@RequestMapping("/staffBookBorrowingFinished")
-	public String staffBookBorrowingFinished(HttpServletRequest request){	
-		//把已结束和已拒绝的都找出来，然后拼在一起
-		User staff = (User) request.getSession().getAttribute("staff");
-		List<BorrowBookOrder> borrowBookOrders1 = borrowBookOrderService.selectOrderByUnitAndStatus(staff.getWhichUnit(),"已结束");
-		List<BorrowBookOrder> borrowBookOrders2 = borrowBookOrderService.selectOrderByUnitAndStatus(staff.getWhichUnit(),"已拒绝");
-		List<BorrowBookOrder> borrowBookOrders = new ArrayList<>(borrowBookOrders1);
-		borrowBookOrders.addAll(borrowBookOrders2);
-		request.setAttribute("bookservice", bookservice);
-		request.setAttribute("staffBookBorrowingFinished", borrowBookOrders);
-		return "staffBookBorrowingFinished";
-	}
+//	@RequestMapping("/staffBookBorrowingFinished")
+//	public String staffBookBorrowingFinished(HttpServletRequest request){
+//		//把已结束和已拒绝的都找出来，然后拼在一起
+//		User staff = (User) request.getSession().getAttribute("staff");
+//		List<BorrowBookOrder> borrowBookOrders1 = borrowBookOrderService.selectOrderByUnitAndStatus(staff.getWhichUnit(),"已结束");
+//		List<BorrowBookOrder> borrowBookOrders2 = borrowBookOrderService.selectOrderByUnitAndStatus(staff.getWhichUnit(),"已拒绝");
+//		List<BorrowBookOrder> borrowBookOrders = new ArrayList<>(borrowBookOrders1);
+//		borrowBookOrders.addAll(borrowBookOrders2);
+//		request.setAttribute("bookservice", bookservice);
+//		request.setAttribute("staffBookBorrowingFinished", borrowBookOrders);
+//		return "staffBookBorrowingFinished";
+//	}
 }

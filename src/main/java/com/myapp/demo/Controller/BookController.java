@@ -215,8 +215,8 @@ public class BookController {
                 book.setLeft(1);
                 book.setAllowed(true);
                 User staff = (User) request.getSession().getAttribute("staff");
-                book.setWhichUnit(staff.getWhichUnit());
-                book.setNowWhere(staff.getWhichUnit());
+                //book.setWhichUnit(staff.getWhichUnit());
+                //book.setNowWhere(staff.getWhichUnit());
                 book.setIsflowed(false);
 
                 // 图片处理，添加默认图片路径
@@ -244,21 +244,21 @@ public class BookController {
     }
 	
 	//工作人员查看图书界面
-	@RequestMapping("/staffSeeBooks")
-	public String staffSeeBooks(HttpServletRequest request) {
-		User staff = (User) request.getSession().getAttribute("staff");
-		List<Book> booksInThisUnit = bookservice.selectBookByWhichUnit(staff.getWhichUnit());
-		request.setAttribute("booksInThisUnit", booksInThisUnit);
-		return "staffSeeBooks";
-	}
+//	@RequestMapping("/staffSeeBooks")
+//	public String staffSeeBooks(HttpServletRequest request) {
+//		User staff = (User) request.getSession().getAttribute("staff");
+//		List<Book> booksInThisUnit = bookservice.selectBookByWhichUnit(staff.getWhichUnit());
+//		request.setAttribute("booksInThisUnit", booksInThisUnit);
+//		return "staffSeeBooks";
+//	}
 	//工作人员查看图书（缩略图版）界面
-	@RequestMapping("/staffSeeBooksByPicture")
-	public String staffSeeBooksByPicture(HttpServletRequest request) {
-		User staff = (User) request.getSession().getAttribute("staff");
-		List<Book> booksInThisUnit = bookservice.selectBookByWhichUnit(staff.getWhichUnit());
-		request.setAttribute("booksInThisUnit", booksInThisUnit);
-		return "staffSeeBooksByPicture";
-	}
+//	@RequestMapping("/staffSeeBooksByPicture")
+//	public String staffSeeBooksByPicture(HttpServletRequest request) {
+//		User staff = (User) request.getSession().getAttribute("staff");
+//		List<Book> booksInThisUnit = bookservice.selectBookByWhichUnit(staff.getWhichUnit());
+//		request.setAttribute("booksInThisUnit", booksInThisUnit);
+//		return "staffSeeBooksByPicture";
+//	}
 	
 	//工作人员查看图书详细信息界面
 	@RequestMapping("/StaffSeeBookDetails")
@@ -374,33 +374,33 @@ public class BookController {
 	public String staffSearchBooksResult(HttpServletRequest request) {
 		return "staffSearchBooksResult";
 	}
-	//处理工作人员搜索图书
-	@RequestMapping(params = "method=searchBook")
-	public ModelAndView searchBook(ModelAndView mav, HttpServletRequest request){	
-		String searchType = request.getParameter("searchType");
-        String searchQuery = request.getParameter("searchQuery");
-        
-        List<Book> books = searchBooks(searchType, searchQuery); //查找结果
-		if(books.isEmpty()) {
-			mav.addObject("NotFound","无结果");
-			request.getSession().setAttribute("bookResult", books);	//更新要展示的列表
-		}else {
-			User staff = (User) request.getSession().getAttribute("staff");
-		    String unit = staff.getWhichUnit();
-
-		    List<Book> finalBooks = new ArrayList<>(); // 创建新的列表存储符合条件的书籍
-		    for(Book book : books) {
-		        if(book.getWhichUnit().equals(unit)) {
-		        	finalBooks.add(book); // 只添加当前单位的书籍
-		        }
-		    }
-		    request.getSession().setAttribute("bookResult", finalBooks); //更新要展示的列表
-		}
-		  
-		mav.setViewName("staffIndex");		
-		mav.addObject("staffStart","/book/staffSearchBooksResult");
-		return mav;
-	}
+//	//处理工作人员搜索图书
+//	@RequestMapping(params = "method=searchBook")
+//	public ModelAndView searchBook(ModelAndView mav, HttpServletRequest request){
+//		String searchType = request.getParameter("searchType");
+//        String searchQuery = request.getParameter("searchQuery");
+//
+//        List<Book> books = searchBooks(searchType, searchQuery); //查找结果
+//		if(books.isEmpty()) {
+//			mav.addObject("NotFound","无结果");
+//			request.getSession().setAttribute("bookResult", books);	//更新要展示的列表
+//		}else {
+//			User staff = (User) request.getSession().getAttribute("staff");
+//		    String unit = staff.getWhichUnit();
+//
+//		    List<Book> finalBooks = new ArrayList<>(); // 创建新的列表存储符合条件的书籍
+//		    for(Book book : books) {
+//		        if(book.getWhichUnit().equals(unit)) {
+//		        	finalBooks.add(book); // 只添加当前单位的书籍
+//		        }
+//		    }
+//		    request.getSession().setAttribute("bookResult", finalBooks); //更新要展示的列表
+//		}
+//
+//		mav.setViewName("staffIndex");
+//		mav.addObject("staffStart","/book/staffSearchBooksResult");
+//		return mav;
+//	}
 	private List<Book> searchBooks(String searchType, String searchQuery) {
 		List<Book> result = new ArrayList<>();
 

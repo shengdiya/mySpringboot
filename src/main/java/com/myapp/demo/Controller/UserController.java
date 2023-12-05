@@ -52,10 +52,8 @@ public class UserController {
 		user = userservice.selectUserByuserName(user.getUserName());  //把其他信息补全
 		//管理员
 		if("admin".equals(role) && roleId==1) {
-			user.setStatus("online"); //设为在线
 			//更新登录时间
 			Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-			user.setCreateTime(sqlDate);
 			userservice.modifyloginTimeAndStatus(user); //更新登陆状态和登陆时间
 			
 			request.getSession().setAttribute("admin", user);
@@ -64,10 +62,8 @@ public class UserController {
 		}
 		//工作人员
 		else if("staff".equals(role) && roleId==2) {
-			user.setStatus("online"); //设为在线
 			//更新登录时间
 			Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-			user.setCreateTime(sqlDate);
 			userservice.modifyloginTimeAndStatus(user); //更新登陆状态和登陆时间
 			request.getSession().setAttribute("staff", user);
 			mav.setViewName("staffIndex");
@@ -75,10 +71,8 @@ public class UserController {
 		}
 		//普通用户
 		else if("user".equals(role) && roleId==3) { 
-			user.setStatus("online"); //设为在线
 			//更新登录时间
 			Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-			user.setCreateTime(sqlDate);
 			userservice.modifyloginTimeAndStatus(user); //更新登陆状态和登陆时间
 			request.getSession().setAttribute("reader", user); //把登陆的读者传过去（存到Session里）
 			mav.setViewName("readerIndex");
@@ -109,7 +103,6 @@ public class UserController {
 			request.getSession().removeAttribute("reader");
 		}
 		
-		user.setStatus("offline");
 		userservice.modifyStatus(user);
 		mav.setViewName("login");
 		return mav;
@@ -123,12 +116,9 @@ public class UserController {
 	//处理注册
 	@RequestMapping(params = "method=Getregister")
 	public ModelAndView Getregister(HttpServletRequest request, User user, ModelAndView mav) {
-		user.setRegister(true);//设置是否进行注册(肯定是)
-		user.setStatus("offline");//设置登陆状态（刚注册肯定离线）
-		user.setPicturePath("/imgs/reader.jpg");//设置头像
+
 		//设置创建时间
 		Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-		user.setCreateTime(sqlDate);
 		//开始插入进数据库
 		if(userservice.isReadNameSame(user)!=0) { //如果不重名（没返回0说明没重名）
 			String subject = "用户注册"; //标题
@@ -251,29 +241,23 @@ public class UserController {
 		//用户名、性别、真实姓名、联系电话、邮箱、住址、所属单位为管理员输入
 		//用户Id自动生成，其余的工号（与用户名一致）、创建时间、是否注册（肯定是注册了的）、密码（用户名后四位）需要在此处手动set。
 		//还要在user_role表里添加新的工作人员映射
-		if(unitservice.selectUnitByUnitName(user.getWhichUnit())==null) { //发现填的单位还没有入库
-			mav.addObject("addStaff","改单位尚未入库，请先添加单位"); //传给前端需要弹窗的内容
+		String userName = user.getUserName();
+		String password = userName.substring(userName.length() - 4); // 用户名后4位为密码
+
+		user.setPassword(password);//设置密码
+
+		//设置创建时间
+		Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
+		//开始添加
+		if(userservice.adminInsertStaff(user)!=0) {
+			//添加工作人员的user_role表映射
+			Integer userId = user.getUserId();//获取自增生成的userId
+			userservice.insertStaffRole(userId, 2);
+			mav.addObject("addStaff","用户添加成功"); //传给前端需要弹窗的内容
 		}else {
-			String userName = user.getUserName();
-			String password = userName.substring(userName.length() - 4); // 用户名后4位为密码
-			user.setPicturePath("/imgs/staff.jpg");
-			user.setPassword(password);//设置密码
-			user.setNumber(userName);//设置工号
-			user.setRegister(true);//设置是否进行注册
-			user.setStatus("offline");//设置登陆状态
-			//设置创建时间
-			Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-			user.setCreateTime(sqlDate);
-			//开始添加
-			if(userservice.adminInsertStaff(user)!=0) {
-				//添加工作人员的user_role表映射
-				Integer userId = user.getUserId();//获取自增生成的userId
-				userservice.insertStaffRole(userId, 2);		
-				mav.addObject("addStaff","用户添加成功"); //传给前端需要弹窗的内容
-			}else {
-				mav.addObject("addStaff","已有此工号，添加失败"); //传给前端需要弹窗的内容
-			}
+			mav.addObject("addStaff","已有此工号，添加失败"); //传给前端需要弹窗的内容
 		}
+
 		mav.setViewName("adminIndex");
 		mav.addObject("start","user/adminAddStaff");//添加完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminAddStaff.jsp，让加完之后还留在添加用户的界面
 		return mav;
