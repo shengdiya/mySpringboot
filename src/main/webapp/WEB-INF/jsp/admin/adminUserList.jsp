@@ -24,9 +24,10 @@
         <th>序号</th>
         <th>用户名</th>
         <th>身份</th>
-        <th>在线状态</th>
+        <th>姓名</th>
         <th>邮箱</th>
         <th>电话号码</th>
+        <th>住址</th>
         <th>操作</th>
     </tr>
     <% for (int i = 0; i < users.size(); i++) {
@@ -36,13 +37,13 @@
             <td><%= (i + 1) %></td>
             <td><%= user.getUserName() %></td>
             <td><%= userservice.getUserRole(user.getUserId()) %></td>
-            <td><%= user.getStatus() %></td>
+            <td><%= user.getRealName() %></td>
             <td><%= user.getEmail() %></td>
             <td><%= user.getTelephone() %></td>
+            <th><%= user.getAddress() %></th>
             <td>
-                <!-- 前两个需要跳转到一个新的界面，而删除后需要留在原界面，这里采用form表单提交的方式 -->
+                <!-- 修改跳转到一个新的界面，而删除后需要留在原界面，这里采用form表单提交的方式 -->
                 <form action="user?method=deleteUser" method="post">
-	                <a href="user/adminSeeDetails?userId=<%= user.getUserId() %>" class="action-button detail-button">详情</a>
 	                <a href="user/adminModifyDetails?userId=<%= user.getUserId() %>" class="action-button edit-button">修改</a>
 	                
 	                <!-- 隐藏的userId，用于删除时向后端传递参数，后端可以通过request.getParameter("userId")得到这个Id -->

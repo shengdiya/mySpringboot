@@ -2,26 +2,19 @@ package com.myapp.demo.Controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.myapp.demo.Service.*;
@@ -34,16 +27,10 @@ public class UserController {
 	@Resource(name="userService")
 	private UserService userservice;
 	
-	@Resource(name="unitService")
-	private UnitService unitservice;
-	
-	@Resource(name="borrowBookOrderService")	
-	private BorrowBookOrderService borrowBookOrderService;
-	
 	//登陆界面
 	@RequestMapping("/login")
 	public String login() {
-		return "login";
+		return "otherModel/login";
 	}
 	//登录处理
 	@RequestMapping(params = "method=Getlogin")
@@ -52,35 +39,34 @@ public class UserController {
 		user = userservice.selectUserByuserName(user.getUserName());  //把其他信息补全
 		//管理员
 		if("admin".equals(role) && roleId==1) {
-			//更新登录时间
-			Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-			userservice.modifyloginTimeAndStatus(user); //更新登陆状态和登陆时间
-			
 			request.getSession().setAttribute("admin", user);
-			mav.setViewName("adminIndex");
-			mav.addObject("start","user/adminAddStaff");//登陆后默认加载"adminAddStaff"界面
+			mav.setViewName("admin/adminIndex");
+			mav.addObject("start","user/adminAddUser");//登陆后默认加载"adminAddStaff"界面
 		}
-		//工作人员
-		else if("staff".equals(role) && roleId==2) {
-			//更新登录时间
-			Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-			userservice.modifyloginTimeAndStatus(user); //更新登陆状态和登陆时间
-			request.getSession().setAttribute("staff", user);
-			mav.setViewName("staffIndex");
-			mav.addObject("staffStart","book/staffBookCirculation");//登陆后默认加载"staffBookCirculation"界面
+		//养护人员
+		else if("conserver".equals(role) && roleId==2) {
+
+			request.getSession().setAttribute("conserver", user);
+			mav.setViewName("conserver/conserverIndex");
+			//mav.addObject("staffStart","book/staffBookCirculation");//登陆后默认加载"staffBookCirculation"界面
 		}
-		//普通用户
-		else if("user".equals(role) && roleId==3) { 
-			//更新登录时间
-			Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-			userservice.modifyloginTimeAndStatus(user); //更新登陆状态和登陆时间
-			request.getSession().setAttribute("reader", user); //把登陆的读者传过去（存到Session里）
-			mav.setViewName("readerIndex");
-			mav.addObject("readerStart","book/readerBorrowBooks");//登陆后默认加载"readerBorrowBooks"界面	
+		//监测用户
+		else if("monitor".equals(role) && roleId==3) {
+
+			request.getSession().setAttribute("monitor", user); //把登陆的读者传过去（存到Session里）
+			mav.setViewName("monitor/monitorIndex");
+			//mav.addObject("readerStart","book/readerBorrowBooks");//登陆后默认加载"readerBorrowBooks"界面
+		}
+		//上级主管部门
+		else if("boss".equals(role) && roleId==4) {
+
+			request.getSession().setAttribute("boss", user); //把登陆的读者传过去（存到Session里）
+			mav.setViewName("boss/bossIndex");
+			//mav.addObject("readerStart","book/readerBorrowBooks");//登陆后默认加载"readerBorrowBooks"界面
 		}
 		//用户不存在
 		else {
-			mav.setViewName("login");
+			mav.setViewName("login/login");
 			mav.addObject("noSuchUser","密码错误或用户不存在，请重新输入");
 		}
 		return mav;
@@ -108,59 +94,10 @@ public class UserController {
 		return mav;
 	}
 	
-	//注册界面
-	@RequestMapping("/register")
-    public String register() {
-    	return "register";
-    }
-	//处理注册
-	@RequestMapping(params = "method=Getregister")
-	public ModelAndView Getregister(HttpServletRequest request, User user, ModelAndView mav) {
-
-		//设置创建时间
-		Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-		//开始插入进数据库
-		if(userservice.isReadNameSame(user)!=0) { //如果不重名（没返回0说明没重名）
-			String subject = "用户注册"; //标题
-		    String code = generateRandomCode();  //生成一个验证码
-		    String emailBody = "您的验证码是: " + code; //邮件正文
-		    try { 
-				EmailSender.sendEmail(user.getEmail(), subject, emailBody); //发送
-				request.getSession().setAttribute("code", code); // 将验证码保存到session以便后续验证
-				request.getSession().setAttribute("userRegistering",user); //把这个user传给下一个界面
-				mav.setViewName("register_email");//进入输入验证码的界面
-			} catch (MessagingException e) { //没发送成功跳回，并用弹窗提示
-				 mav.setViewName("register"); 
-			     mav.addObject("RegisterEmailError","发送邮箱验证码失败，请重试");
-			     e.printStackTrace();
-			}						
-		}else { //返回0说明重名了
-			mav.setViewName("register");
-			mav.addObject("registerStatus","已有这个用户名，换个名字吧");
-		}
-		return mav;
-	}
-	//验证注册验证码
-	@RequestMapping(params = "method=GetRegisterEmail")
-	public ModelAndView GetRegisterEmail(HttpServletRequest request, String code, ModelAndView mav) {
-		String codeInEmail = (String) request.getSession().getAttribute("code");
-		User user = (User) request.getSession().getAttribute("userRegistering");
-		if(code.equals(codeInEmail)) { //验证码没错
-			userservice.insertRaeder(user);//可以插入了
-			userservice.insertReaderRole(user.getUserId(),3); 
-			mav.setViewName("login");
-			mav.addObject("registerSuccess","注册成功，现在可以登陆啦！");
-		}else { //验证码错了，跳回register_email，并给出提示
-			mav.setViewName("register_email"); 
-			mav.addObject("RegisterCodeError","验证码错误");
-		}
-		return mav;
-	}
-	
 	//忘记密码第一个界面
 	@RequestMapping("/forgetPassword1")
 	public String forgetPassword1() {
-	    return "forgetPassword1";
+	    return "otherModel/forgetPassword1";
 	}
 	//验证用户名和邮箱是否匹配，并发送验证码
 	@RequestMapping(params = "method=GetforgetPassword1")
@@ -175,18 +112,18 @@ public class UserController {
 					EmailSender.sendEmail(user.getEmail(), subject, emailBody); //发送
 					request.getSession().setAttribute("code", code); // 将验证码保存到session以便后续验证
 					request.getSession().setAttribute("user", user); // 把用户也保存到 session，让系统知道这是哪个用户在改密码
-					mav.setViewName("forgetPassword2"); //发送成功后跳转到forgetPassword2界面输入验证码
+					mav.setViewName("otherModel/forgetPassword2"); //发送成功后跳转到forgetPassword2界面输入验证码
 				} catch (MessagingException e) { //没发送成功跳回forgetPassword1，并用弹窗提示
-					 mav.setViewName("forgetPassword1"); 
+					 mav.setViewName("otherModel/forgetPassword1");
 				     mav.addObject("emailError","发送邮箱验证码失败，请重试");
 				     e.printStackTrace();
 				}		
 			}else { //用户名和邮箱不匹配
-				mav.setViewName("forgetPassword1");
+				mav.setViewName("otherModel/forgetPassword1");
 				mav.addObject("userNotEmail","用户名和邮箱不匹配");
 			}	
 		}else{ //用户不存在
-			mav.setViewName("forgetPassword1");
+			mav.setViewName("otherModel/forgetPassword1");
 			mav.addObject("noSuchUser","用户不存在");
 		}
 	    return mav;
@@ -202,9 +139,9 @@ public class UserController {
 	public ModelAndView GetforgetPassword2(HttpServletRequest request, String code, ModelAndView mav) {
 		String codeInEmail = (String) request.getSession().getAttribute("code");
 		if(code.equals(codeInEmail)) { //验证码没错，进入下一个界面修改密码
-			mav.setViewName("forgetPassword3");
+			mav.setViewName("otherModel/forgetPassword3");
 		}else { //验证码错了，跳回forgetPassword2，并给出提示
-			mav.setViewName("forgetPassword2"); 
+			mav.setViewName("otherModel/forgetPassword2");
 			mav.addObject("codeError","验证码错误");
 		}
 		return mav;
@@ -216,7 +153,7 @@ public class UserController {
 		user.setPassword(password);
 		//System.out.println("password: " + user.getPassword());
 		userservice.modifyPassword(user); //修改密码
-		mav.setViewName("login");
+		mav.setViewName("otherModel/login");
 		mav.addObject("modifyPasswordSeccuss", "重置密码成功，可以登录");
 		return mav;
 	}
@@ -229,37 +166,31 @@ public class UserController {
 	}
 		
 	//管理员添加工作人员
-	@RequestMapping("/adminAddStaff")
+	@RequestMapping("/adminAddUser")
 	public String addUser(HttpServletRequest request) {
-		List<Unit> units = unitservice.selectAllUnits();
-		request.setAttribute("units", units);
-	    return "adminAddStaff";
+	    return "admin/adminAddUser";
 	}
 	//管理员添加一个工作人员
 	@RequestMapping(params = "method=adminAddStaff")
-	public ModelAndView adminAddStaff(User user,ModelAndView mav) throws IOException {
-		//用户名、性别、真实姓名、联系电话、邮箱、住址、所属单位为管理员输入
-		//用户Id自动生成，其余的工号（与用户名一致）、创建时间、是否注册（肯定是注册了的）、密码（用户名后四位）需要在此处手动set。
+	public ModelAndView adminAddStaff(User user,String identity,ModelAndView mav) throws IOException {
+		//用户名、真实姓名、联系电话、邮箱、住址、用户身份为管理员输入
 		//还要在user_role表里添加新的工作人员映射
-		String userName = user.getUserName();
-		String password = userName.substring(userName.length() - 4); // 用户名后4位为密码
-
-		user.setPassword(password);//设置密码
-
-		//设置创建时间
-		Timestamp sqlDate = new Timestamp(System.currentTimeMillis());
-		//开始添加
 		if(userservice.adminInsertStaff(user)!=0) {
 			//添加工作人员的user_role表映射
 			Integer userId = user.getUserId();//获取自增生成的userId
-			userservice.insertStaffRole(userId, 2);
+			if(identity.equals("conserver")){
+				userservice.insertStaffRole(userId, 2);
+			} else if (identity.equals("monitor")) {
+				userservice.insertStaffRole(userId, 3);
+			} else if (identity.equals("boss")) {
+				userservice.insertStaffRole(userId, 4);
+			}
 			mav.addObject("addStaff","用户添加成功"); //传给前端需要弹窗的内容
 		}else {
 			mav.addObject("addStaff","已有此工号，添加失败"); //传给前端需要弹窗的内容
 		}
-
-		mav.setViewName("adminIndex");
-		mav.addObject("start","user/adminAddStaff");//添加完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminAddStaff.jsp，让加完之后还留在添加用户的界面
+		mav.setViewName("admin/adminIndex");
+		mav.addObject("start","user/adminAddUser");//添加完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminAddStaff.jsp，让加完之后还留在添加用户的界面
 		return mav;
 	}
 	
@@ -269,7 +200,7 @@ public class UserController {
 		List<User> users = userservice.selectAllUsers();
 		request.setAttribute("users", users);
 		request.setAttribute("userservice", userservice);//把userservice也传过去，在adminUserList.jsp中要用
-	    return "adminUserList";
+	    return "admin/adminUserList";
 	}
 	//点击查看用户的详细信息
 	@RequestMapping("/adminSeeDetails")
@@ -321,14 +252,9 @@ public class UserController {
 	public ModelAndView deleteUser(ModelAndView mav, HttpServletRequest request) throws IOException {
 		try {	
 			String userId = request.getParameter("userId"); //接收要删用户的Id
-			if(borrowBookOrderService.selectOrderByUserIdAndStatus(Integer.valueOf(userId),"待审核").isEmpty() 
-					&& borrowBookOrderService.selectOrderByUserIdAndStatus(Integer.valueOf(userId),"已借出").isEmpty()) { //该用户有没有没还的书
-				userservice.deleteUser(Integer.valueOf(userId)); //删除user表里的
-				userservice.deleteUserRole(Integer.valueOf(userId)); //删除user_role表里的
-				mav.addObject("deleteUser","删除成功"); //传给前端需要弹窗的内容
-			}else {
-				mav.addObject("deleteUser","该用户有尚未完成的借阅订单，删除失败"); //传给前端需要弹窗的内容
-			}
+			userservice.deleteUser(Integer.valueOf(userId)); //删除user表里的
+			userservice.deleteUserRole(Integer.valueOf(userId)); //删除user_role表里的
+			mav.addObject("deleteUser","删除成功"); //传给前端需要弹窗的内容
 			mav.setViewName("adminIndex");
 			
 		}catch(Exception e) {

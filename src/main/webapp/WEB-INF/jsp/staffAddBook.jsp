@@ -61,7 +61,7 @@
             
             <div class="form-group">
             	<!-- 隐藏的把这本书属于哪个单位也传过去 -->
-            	<input type="hidden" name="whichUnit" value="<%= staff.getWhichUnit() %>">
+<%--            	<input type="hidden" name="whichUnit" value="<%= staff.getWhichUnit() %>">--%>
                 <input type="submit" value="提交">
             </div>
         </form>

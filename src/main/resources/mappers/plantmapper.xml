@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.demo.Dao.PlantDao">
+    <!-- admin添加一株植物 -->
+    <insert id="adminInsertPlant" useGeneratedKeys="true" keyProperty="plantId">
+        insert into plant (plantId,plantName,feature,cultivation,value,number)
+        values(#{plantId},#{plantName},#{feature},#{cultivation},#{value},#{number})
+    </insert>
+    <!--admin插入植物的同时要插入图片-->
+    <insert id="adminInsertPlantPhoto">
+        insert into photo (photoId,plantId,photoPath,photoPlace,photoDescribe,photographer)
+        values(#{photoId},#{plantId},#{photoPath},#{photoPlace},#{photoDescribe},#{photographer})
+    </insert>
+
+    <!-- 查找所有植物 -->
+    <select id="selectAllPlants" resultType="com.myapp.demo.Entiy.Plant" >
+        select * from plant
+    </select>
+
+    <!--根据种名查找一种植物的所有株-->
+    <select id="selectPlantsByPlaneName" resultType="com.myapp.demo.Entiy.Plant" >
+        select * from plant where plantName = #{plantName}
+    </select>
+
+    <!--根据种名查找一种植物有多少株-->
+    <select id="countOnePlant" resultType="Integer" >
+        select count(*) from plant where plantName = #{plantName}
+    </select>
+
+
+</mapper>

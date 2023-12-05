@@ -3,10 +3,6 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myapp.demo.Dao.UserDao">
-	<!-- 根据用户名密码查询一个用户信息 -->
-	<select id="selectUserId" resultType="Integer">
-		select userId from user where userName = #{userName} and password = #{password}
-	</select>
 	
 	<!-- 根据用户Id查找用户 -->
 	<select id="selectUserById" resultType="com.myapp.demo.Entiy.User">
@@ -33,13 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select roleName from role where roleId = #{roleId}
 	</select>
 	
-	<!-- admin添加一个工作人员 -->
-	<!-- 当调用这个adminInsertStaff方法后，它的返回值将会是一个整数，表示插入操作影响的行数（通常情况下，插入单条记录成功则返回1，失败则返回0）。
-		   同时，传入的User对象将自动被更新，userId字段被设为数据库生成的新主键值。 -->
-	<insert id="adminInsertStaff" useGeneratedKeys="true" keyProperty="userId">
-		insert into user (userId,userName,password,realName,telephone,email,address,sexy,number,whichUnit,createTime,isRegister,status,picturePath) 
-			values(#{userId},#{userName},#{password},#{realName},#{telephone},#{email},#{address},#{sexy},#{number},#{whichUnit},#{createTime},#{isRegister},#{status},#{picturePath})
-	</insert>
+
 	<!-- 工作人员添加后同时更新user_role表  -->
 	<insert id="insertStaffRole">
 		insert into user_role (userId,roleId) values(#{userId},#{roleId})
@@ -84,7 +74,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update user set password = #{password} where userId = #{userId}
     </update>
     
-    <!-- TODO -->
    	<!-- 更改上次登陆时间和登录状态（上线的时候使用） -->
    	<update id="modifyloginTimeAndStatus" parameterType="com.myapp.demo.Entiy.User">
 		update user set lastTimeLogin = #{lastTimeLogin}, status = "online" where userId = #{userId}
@@ -93,7 +82,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	<update id="modifyStatus" parameterType="com.myapp.demo.Entiy.User">
 		update user set status = "offline" where userId = #{userId}
     </update>
-    
+
+
+	<!-- &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&以下为数据库课设用得着的，以上是javaWeb课设用的&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -->
+
+	<!-- 根据用户名密码查询一个用户信息 -->
+	<select id="selectUserId" resultType="Integer">
+		select userId from user where userName = #{userName} and password = #{password}
+	</select>
+
+	<!-- admin添加一个用户 -->
+	<insert id="adminInsertStaff" useGeneratedKeys="true" keyProperty="userId">
+		insert into user (userId,userName,password,realName,telephone,email,address)
+		values(#{userId},#{userName},#{password},#{realName},#{telephone},#{email},#{address})
+	</insert>
+
+
+
+
+
 </mapper>
 
 

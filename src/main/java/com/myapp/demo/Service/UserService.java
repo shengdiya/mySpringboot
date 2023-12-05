@@ -30,7 +30,20 @@ public class UserService {
 	//通过roleId查找角色名
 	public String getUserRole(Integer userId) {
 		Integer roleId = userdao.selectRoleByuserId(userId);
-		return userdao.selectRoleById(roleId);
+		String roleEng =  userdao.selectRoleById(roleId);
+		String roleChinese = null;
+        switch (roleEng) {
+            case "conserver":
+                roleChinese = "养护人员";
+                break;
+            case "monitor":
+                roleChinese = "监护人员";
+                break;
+            case "boss":
+                roleChinese = "上级主管人员";
+                break;
+        }
+		return roleChinese;
 	}
 	
 	//通过用户名userName查找用户

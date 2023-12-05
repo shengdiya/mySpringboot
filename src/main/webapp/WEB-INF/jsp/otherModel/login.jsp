@@ -93,7 +93,7 @@
             <input type="radio" name="role" value="conserver" checked onchange="onRoleChange(this.value)"> 养护人员
             <input type="radio" name="role" value="monitor" onchange="onRoleChange(this.value)"> 检测人员
             <input type="radio" name="role" value="boss" onchange="onRoleChange(this.value)"> 上级管理
-
+            <input type="radio" name="role" value="admin" onchange="onRoleChange(this.value)"> 系统管理员
             <br><br>
 
 			<div id="conserver-input" class="hide">
@@ -118,9 +118,6 @@
             <input type="submit" value="Login">
            
         </form>
-		
-        <p>还没有账号？ <a href="/user/register">去注册</a></p> 
-        <!-- 后端接受的是register这个名字，然后根据application.properties中的前后缀配置进行拼接 -->
     </div>
 </body>
 </html>

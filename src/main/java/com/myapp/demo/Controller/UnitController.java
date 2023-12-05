@@ -2,26 +2,20 @@ package com.myapp.demo.Controller;
 import java.io.IOException;
 
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Resource;
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.myapp.demo.Service.*;
-import com.myapp.demo.Tool.EmailSender;
 import com.myapp.demo.Entiy.*;
 
 @Controller
@@ -108,7 +102,7 @@ public class UnitController {
 	//管理员添加单位界面
 	@RequestMapping("/adminAddUnit")
 	public String adminAddUnit() {
-	    return "adminAddUnit";
+	    return "adminAddPlant";
 	}
 	//管理员添加一个单位
 	@RequestMapping(params = "method=GetadminAddUnit") 
