@@ -14,6 +14,11 @@ public class PlantService {
     @Resource(name="plantDao")
     private PlantDao plantDao;
 
+    //得到所有的种名
+    public List<String> getAllSpecies() {
+        return plantDao.getAllSpecies();
+    }
+
     //admin添加一株植物
     public Integer adminInsertPlant(Plant plant){
         List<Plant> plants = plantDao.selectPlantsByPlantName(plant.getPlantName());
@@ -31,6 +36,8 @@ public class PlantService {
         return plantDao.adminInsertPlant(plant);
     }
 
+
+
     //admin添加植物的同时要插入图片
     public Integer adminInsertPlantPhoto(Photo photo){
         return plantDao.adminInsertPlantPhoto(photo);
@@ -42,12 +49,29 @@ public class PlantService {
     }
 
     //根据plantId查找图片
-    public Photo selectPhotoByPlantId(String plantId){
+    public Photo selectPhotoByPlantId(Integer plantId){
         return plantDao.selectPhotoByPlantId(plantId);
+    }
+
+    //根据plantId查找图片
+    public Plant selectPlantByPlantId(Integer plantId){
+        return plantDao.selectPlantByPlantId(plantId);
     }
 
     //根据plantName查找所有种名为plantName的植物
     public List<Plant> selectPlantsByPlantName(String plantName){
         return plantDao.selectPlantsByPlantName(plantName);
     }
+
+    //修改植物基本信息（包括形态特征、培养技巧和）
+    public Integer modifyPlantInfo(Plant plant){
+        return plantDao.modifyPlantInfo(plant);
+    }
+
+    //修改植物的图片
+    public Integer modifyPlantPhoto(Photo photo) {
+        return plantDao.modifyPlantPhoto(photo);
+    }
+
+
 }

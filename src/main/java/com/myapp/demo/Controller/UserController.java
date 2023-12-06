@@ -26,7 +26,7 @@ import com.myapp.demo.Entiy.*;
 public class UserController {
 	@Resource(name="userService")
 	private UserService userservice;
-	
+
 	//登陆界面
 	@RequestMapping("/login")
 	public String login() {
@@ -41,7 +41,7 @@ public class UserController {
 		if("admin".equals(role) && roleId==1) {
 			request.getSession().setAttribute("admin", user);
 			mav.setViewName("admin/adminIndex");
-			mav.addObject("start","user/adminAddUser");//登陆后默认加载"adminAddStaff"界面
+			mav.addObject("start","plant/adminPlantList");//登陆后默认加载"adminPlantList"界面
 		}
 		//养护人员
 		else if("conserver".equals(role) && roleId==2) {

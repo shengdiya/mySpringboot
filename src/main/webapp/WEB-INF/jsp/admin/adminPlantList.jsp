@@ -45,6 +45,14 @@
         .grid-item:hover {
             transform: scale(1.05); /* 鼠标悬停时放大效果 */
         }
+        img.user-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            display: block;
+        }
     </style>
 </head>
 
@@ -55,7 +63,7 @@
     <% for(Plant plant : plants) { %>
     <div class="grid-item">
         <a href="/plant/adminPlantSameSpeciesList?plantName=<%= plant.getPlantName() %>">
-            <img src="<%= plantservice.selectPhotoByPlantId(String.valueOf(plant.getPlantId())).getPhotoPath() %>" alt="植物缩略图">
+            <img src="<%= plantservice.selectPhotoByPlantId(plant.getPlantId()).getPhotoPath() %>" alt="植物缩略图" class="user-avatar">
             <p><%= plant.getPlantName() %></p>
         </a>
     </div>

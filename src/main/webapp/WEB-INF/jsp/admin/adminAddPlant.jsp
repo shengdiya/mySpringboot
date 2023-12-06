@@ -3,8 +3,10 @@
 <%@ page import="com.myapp.demo.Entiy.*" %>
 <%@ page import="com.myapp.demo.Service.*" %>
 <%@ page import="com.myapp.demo.Controller.*" %>
+<%@ page import="java.util.List" %>
 
 <%
+    List<String> plantNames = (List<String>) request.getAttribute("plantsSpecies");
 	User admin = (User) request.getSession().getAttribute("admin");
  %>
 <!DOCTYPE html>
@@ -22,7 +24,11 @@
         <form action="/plant?method=GetAdminAddPlant" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="plantName" class="required">植物种名：</label>
-                <input type="text" id="plantName" name="plantName" required>
+                <select id="plantName" name="plantName" required>
+                    <% for (String name : plantNames) { %>
+                            <option value="<%= name %>"> <%= name %> </option>
+                    <% } %>
+                </select>
             </div>     
             <div class="form-group">
                 <label for="feature" class="required">形态特征：</label>

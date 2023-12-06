@@ -25,7 +25,9 @@ public class PlantController {
     @Resource(name="plantService")
     private PlantService plantservice;
     @RequestMapping("/adminAddPlant")
-    public String adminAddPlant() {
+    public String adminAddPlant(HttpServletRequest request) {
+        List<String> plantsSpecies = plantservice.getAllSpecies();
+        request.setAttribute("plantsSpecies", plantsSpecies);
         return "admin/adminAddPlant";
     }
 
@@ -47,7 +49,7 @@ public class PlantController {
         if(photo.getPhotoDescribe()==null || photo.getPhotoDescribe().equals("")){
             photo.setPhotoDescribe("无");
         }
-        //图片的编号photoId由自增约束自动生成，对应的植物编号PlantId在此处手动设置，blob类型的二进制数据字段photo在此处理
+        //图片的编号photoId由自增约束自动生成，对应的植物编号PlantId在此处手动设置
         photo.setPlantId(plant.getPlantId()); //绑定植物_图片映射
         if (plantImg != null && !plantImg.isEmpty()) {
             String originalFilename = plantImg.getOriginalFilename();
@@ -86,7 +88,7 @@ public class PlantController {
 
     //管理员点击一个缩略图，进入对应种名植物的株数列表
     @RequestMapping("/adminPlantSameSpeciesList")
-    public String adminSeeBookDetails(@RequestParam("plantName") String plantName, HttpServletRequest request) {
+    public String adminPlantSameSpeciesList(@RequestParam("plantName") String plantName, HttpServletRequest request) {
         //@RequestParam注解用于获取名为 plantName 的请求参数。这个参数对应于超链接中传递的植物种名（adminPlantList.jsp中传来的）。
         //根据种名得到植物列表后，用request的setAttribute方法传给前端adminPlantSameSpeciesList.jsp
         //adminPlantSameSpeciesList.jsp再用request的getAttribute方法得到这个植物列表plantsInSameSpecies
@@ -96,4 +98,75 @@ public class PlantController {
         return "admin/adminPlantSameSpeciesList";
     }
 
+    //修改植物详细信息的界面
+    @RequestMapping("/adminModifyPlantDetails")
+    public String adminModifyPlantDetails(@RequestParam("plantId") int plantId, HttpServletRequest request){
+        Plant plantToBeModified = plantservice.selectPlantByPlantId(plantId);
+        request.setAttribute("plantToBeModified", plantToBeModified);
+        return "admin/adminModifyPlantDetails";
+    }
+
+    //执行修改操作
+    @RequestMapping(params = "method=ModifyPlantDetails")
+    public String ModifyPlantDetails(Plant plant, HttpServletRequest request){
+        //前端传来了隐藏的PlantId和三个修改后的信息，可以根据PlantId修改该条记录
+        plantservice.modifyPlantInfo(plant);
+        plant = plantservice.selectPlantByPlantId(plant.getPlantId()); //通过plantId找到这一条记录，将此处的Plat对象信息补全
+        request.setAttribute("modifyPlantDetails","修改成功");
+        return adminPlantSameSpeciesList(plant.getPlantName(),request); //修改后返回adminPlantSameSpeciesList.jsp界面
+    }
+
+    //修改植物图片的界面
+    @RequestMapping("/adminModifyPlantPhoto")
+    public String adminModifyPlantPhoto(@RequestParam("plantId") int plantId, HttpServletRequest request){
+        Plant plantToBeModified = plantservice.selectPlantByPlantId(plantId);
+        Photo photoToBeModify = plantservice.selectPhotoByPlantId(plantId);
+        request.setAttribute("plantToBeModified", plantToBeModified);
+        request.setAttribute("photoToBeModify", photoToBeModify);
+        return "admin/adminModifyPlantPhoto";
+    }
+
+    //执行修改图片操作
+    @RequestMapping(params = "method=ModifyPlantPhoto")
+    public String ModifyPlantPhoto(Plant plant, Photo photo, MultipartFile plantImg, HttpServletRequest request) throws IOException {
+        if (plantImg != null && !plantImg.isEmpty()) {
+            String originalFilename = plantImg.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+            // 对文件名进行唯一化处理，加上时间戳
+            String fileName = System.currentTimeMillis() + extension;
+            String storagePath = request.getSession().getServletContext().getRealPath("/imgs/plants");
+            File destinationFile = new File(storagePath, fileName);
+            // 确保目录存在
+            if (!destinationFile.getParentFile().exists()) {
+                destinationFile.getParentFile().mkdirs();
+            }
+            plantImg.transferTo(destinationFile);
+            // 设置植物的图片路径字段
+            photo.setPhotoPath("/imgs/plants/" + fileName);
+        }
+        plantservice.modifyPlantPhoto(photo);
+
+        plant = plantservice.selectPlantByPlantId(plant.getPlantId());
+        request.setAttribute("modifyPlantPhoto","修改成功");
+        return adminPlantSameSpeciesList(plant.getPlantName(),request); //修改后返回adminPlantSameSpeciesList.jsp界面
+    }
+
+
+
+
+
+
+    //返回adminPlantList.jsp界面
+    @RequestMapping(params = "method=returnPlantList")
+    public ModelAndView returnPlantList(ModelAndView mav){
+        mav.setViewName("admin/adminIndex");
+        mav.addObject("start","plant/adminPlantList");
+        return mav;
+    }
+
+    //返回adminPlantSameSpeciesList.jsp界面
+    @RequestMapping(params = "method=returnPlantSameSpeciesList")
+    public String returnPlantSameSpeciesList(String plantName, HttpServletRequest request){
+        return adminPlantSameSpeciesList(plantName,request);
+    }
 }

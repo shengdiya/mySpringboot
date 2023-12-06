@@ -27,7 +27,7 @@
         cursor: pointer;
         outline: none;
         font-family: Arial, sans-serif;
-        border-radius: 10px 30px;
+        border-radius: 20px 20px;
     }
     .detail-button { background-color: #3498db;width: 45px; height: 25px; font-size:15px;}
     .edit-button { background-color: #f1c40f; width: 45px; height: 25px; font-size:15px;}
