@@ -14,6 +14,11 @@
         values(#{photoId},#{plantId},#{photoPath},#{photoPlace},#{photoDescribe},#{photographer})
     </insert>
 
+    <!--通过plantId查找图片-->
+    <select id="selectPhotoByPlantId" resultType="com.myapp.demo.Entiy.Photo" >
+        select * from photo where plantId = #{plantId}
+    </select>
+
     <!-- 查找所有植物 -->
     <select id="selectAllPlants" resultType="com.myapp.demo.Entiy.Plant" >
         select * from plant
@@ -22,6 +27,15 @@
     <!--根据种名查找一种植物的所有株-->
     <select id="selectPlantsByPlaneName" resultType="com.myapp.demo.Entiy.Plant" >
         select * from plant where plantName = #{plantName}
+    </select>
+
+    <!--分组查询所有种类的植物-->
+    <select id="selectPlantsByGroup" resultType="com.myapp.demo.Entiy.Plant" >
+        SELECT MIN(plantId) as plantId, plantName,
+        Min(feature) as feature, Min(cultivation) as cultivation,
+        Min(`value`) as `value`, Min(number) as number
+        FROM plant
+        GROUP BY plantName;
     </select>
 
     <!--根据种名查找一种植物有多少株-->

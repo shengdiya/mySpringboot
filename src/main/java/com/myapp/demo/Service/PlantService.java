@@ -13,9 +13,10 @@ import java.util.List;
 public class PlantService {
     @Resource(name="plantDao")
     private PlantDao plantDao;
+
     //admin添加一株植物
     public Integer adminInsertPlant(Plant plant){
-        List<Plant> plants = plantDao.selectPlantsByPlaneName(plant.getPlantName());
+        List<Plant> plants = plantDao.selectPlantsByPlantName(plant.getPlantName());
         if(!plants.isEmpty()){ //之前就添加过此植物，找出当前编号的最大值，将该株植物的编号设为“最大值＋1”
             int max = -1;
             for(Plant p : plants){
@@ -29,8 +30,24 @@ public class PlantService {
         }
         return plantDao.adminInsertPlant(plant);
     }
+
     //admin添加植物的同时要插入图片
     public Integer adminInsertPlantPhoto(Photo photo){
         return plantDao.adminInsertPlantPhoto(photo);
+    }
+
+    //利用分组查找，找出同种的植物
+    public List<Plant> selectPlantsByGroup(){
+        return plantDao.selectPlantsByGroup();
+    }
+
+    //根据plantId查找图片
+    public Photo selectPhotoByPlantId(String plantId){
+        return plantDao.selectPhotoByPlantId(plantId);
+    }
+
+    //根据plantName查找所有种名为plantName的植物
+    public List<Plant> selectPlantsByPlantName(String plantName){
+        return plantDao.selectPlantsByPlantName(plantName);
     }
 }

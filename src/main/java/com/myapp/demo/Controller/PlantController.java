@@ -2,7 +2,6 @@ package com.myapp.demo.Controller;
 
 import com.myapp.demo.Entiy.Photo;
 import com.myapp.demo.Entiy.Plant;
-import com.myapp.demo.Entiy.User;
 import com.myapp.demo.Service.PlantService;
 import com.myapp.demo.Service.UserService;
 import org.springframework.stereotype.Controller;
@@ -13,10 +12,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/plant")
@@ -27,7 +25,7 @@ public class PlantController {
     @Resource(name="plantService")
     private PlantService plantservice;
     @RequestMapping("/adminAddPlant")
-    public String login() {
+    public String adminAddPlant() {
         return "admin/adminAddPlant";
     }
 
@@ -75,4 +73,27 @@ public class PlantController {
         mav.addObject("start","plant/adminAddPlant");
         return mav;
     }
+
+    //管理员缩略图方式查看所有植物
+    @RequestMapping("/adminPlantList")
+    public String adminPlantList(HttpServletRequest request) {
+        //该plantsInOneSpecies列表返回的是所有种名不同的植物，在adminPlantList界面中展示的是所有不同种名植物的缩略图
+        List<Plant> plantsInOneSpecies = plantservice.selectPlantsByGroup();
+        request.setAttribute("plantsInOneSpecies", plantsInOneSpecies);
+        request.setAttribute("plantservice", plantservice);
+        return "admin/adminPlantList";
+    }
+
+    //管理员点击一个缩略图，进入对应种名植物的株数列表
+    @RequestMapping("/adminPlantSameSpeciesList")
+    public String adminSeeBookDetails(@RequestParam("plantName") String plantName, HttpServletRequest request) {
+        //@RequestParam注解用于获取名为 plantName 的请求参数。这个参数对应于超链接中传递的植物种名（adminPlantList.jsp中传来的）。
+        //根据种名得到植物列表后，用request的setAttribute方法传给前端adminPlantSameSpeciesList.jsp
+        //adminPlantSameSpeciesList.jsp再用request的getAttribute方法得到这个植物列表plantsInSameSpecies
+        //该plantsInSameSpecies列表返回的是所有种名为plantName的植物，在adminPlantSameSpeciesList界面中展示的是所有种名为plantName的植物
+        List<Plant> plantsInSameSpecies = plantservice.selectPlantsByPlantName(plantName);
+        request.setAttribute("plantsInSameSpecies", plantsInSameSpecies);
+        return "admin/adminPlantSameSpeciesList";
+    }
+
 }

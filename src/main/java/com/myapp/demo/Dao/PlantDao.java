@@ -14,5 +14,7 @@ public interface PlantDao {
     public Integer adminInsertPlantPhoto(Photo photo);
     public List<Plant> selectAllPlants();
     public Integer countOnePlant(String plantName);
-    public List<Plant> selectPlantsByPlaneName(String plantName);
+    public List<Plant> selectPlantsByPlantName(String plantName);
+    public List<Plant> selectPlantsByGroup();
+    public Photo selectPhotoByPlantId(String plantId);
 }
