@@ -63,4 +63,16 @@
             photoDescribe = #{photoDescribe}, photographer = #{photographer}
         where photoId = #{photoId}
     </update>
+
+    <!-- 根据植物名模糊查找一种植物 -->
+    <select id="LikeSearchPlantByName" resultType="com.myapp.demo.Entiy.Plant">
+        SELECT MIN(plantId) as plantId, plantName,
+        Min(feature) as feature, Min(cultivation) as cultivation,
+        Min(`value`) as `value`, Min(number) as number
+        FROM plant
+        where plantName like '%${plantName}%'
+        GROUP BY plantName
+    </select>
+
+
 </mapper>

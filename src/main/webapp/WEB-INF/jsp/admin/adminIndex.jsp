@@ -38,11 +38,13 @@
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
             <% if(request.getAttribute("addPlant") != null) { %>
-            alert("${addPlant}");
+                alert("${addPlant}");
             <% } else if(request.getAttribute("NotFound") != null) { %>
-            alert("${NotFound}");
+                alert("${NotFound}");
             <% } else if(request.getAttribute("alreadyLogin") != null) { %>
-            alert("${alreadyLogin}");
+                alert("${alreadyLogin}");
+            <% } else if(request.getAttribute("LikeSearchPlantByName") != null) { %>
+                alert("${LikeSearchPlantByName}");
             <% } %>
         }, 0); // 设置延时时间为0，将代码推入事件循环的末尾
     });

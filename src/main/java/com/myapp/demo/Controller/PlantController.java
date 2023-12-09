@@ -151,7 +151,25 @@ public class PlantController {
         return adminPlantSameSpeciesList(plant.getPlantName(),request); //修改后返回adminPlantSameSpeciesList.jsp界面
     }
 
+    @RequestMapping("/adminPlantListSearchResult")
+    public String adminPlantListSearchResult(){
+        return "admin/adminPlantListSearchResult";
+    }
 
+    @RequestMapping(params = "method=searchPlant")
+    public ModelAndView searchPlant(ModelAndView mav, HttpServletRequest request){
+        String searchQuery = request.getParameter("searchQuery");
+        List<Plant> TargetPlants = plantservice.LikeSearchPlantByName(searchQuery);
+        if(TargetPlants.isEmpty()) { //如果没查出来，就给一个弹窗
+            mav.addObject("LikeSearchPlantByName", "查询无结果");
+        }
+        request.getSession().setAttribute("TargetPlants",TargetPlants); //更新要展示的植物
+        request.getSession().setAttribute("plantservice", plantservice);
+        mav.setViewName("admin/adminIndex");
+        mav.addObject("start", "plant/adminPlantListSearchResult");
+
+        return mav;
+    }
 
 
 

@@ -1,20 +1,20 @@
 <%--
   Created by IntelliJ IDEA.
   User: 圣地亚鸽
-  Date: 2023/12/6
-  Time: 14:20
+  Date: 2023/12/7
+  Time: 10:08
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, java.text.*"%>
 <%@ page import="com.myapp.demo.Entiy.*" %>
 <%@ page import="com.myapp.demo.Service.*" %>
+<%@ page import="java.util.List" %>
 
 <%
-    List<Plant> plants = (List<Plant>) request.getAttribute("plantsInOneSpecies");
+    List<Plant> TargetPlants = (List<Plant>) request.getSession().getAttribute("TargetPlants");
     User admin = (User) request.getSession().getAttribute("admin");
-    PlantService plantservice = (PlantService) request.getAttribute("plantservice");
+    PlantService plantservice = (PlantService) request.getSession().getAttribute("plantservice");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -60,13 +60,12 @@
 <input name="safe" type="hidden" value="<%= admin.getUserName() %>">
 <h2>植物缩略图展示</h2>
 <form id="searchForm" action="/plant?method=searchPlant" method="post">
-
     <input type="text" id="searchInput" name="searchQuery" >
     <button type="submit">搜索</button>
 </form>
 
 <div class="grid-container">
-    <% for(Plant plant : plants) { %>
+    <% for(Plant plant : TargetPlants) { %>
     <div class="grid-item">
         <a href="/plant/adminPlantSameSpeciesList?plantName=<%= plant.getPlantName() %>">
             <img src="<%= plantservice.selectPhotoByPlantId(plant.getPlantId()).getPhotoPath() %>" alt="植物缩略图" class="user-avatar">
@@ -78,4 +77,3 @@
 
 </body>
 </html>
-

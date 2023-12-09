@@ -1,7 +1,6 @@
 package com.myapp.demo.Service;
 
 import com.myapp.demo.Dao.PlantDao;
-import com.myapp.demo.Dao.UserDao;
 import com.myapp.demo.Entiy.Photo;
 import com.myapp.demo.Entiy.Plant;
 import org.springframework.stereotype.Service;
@@ -73,5 +72,7 @@ public class PlantService {
         return plantDao.modifyPlantPhoto(photo);
     }
 
-
+    public List<Plant> LikeSearchPlantByName(String searchQuery) {
+        return plantDao.LikeSearchPlantByName(searchQuery);
+    }
 }
