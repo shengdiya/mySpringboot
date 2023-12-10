@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.demo.Dao.Monitor.MonitoringDeviceDao">
+    <!-- 查找所有监测设备 -->
+    <select id="selectAllMonitoringDevice" resultType="com.myapp.demo.Entiy.Monitor.MonitoringDevice">
+        select * from monitoring_device
+    </select>
+    
+    <!-- 通过Id查找监测设备 -->
+    <select id="selectMonitoringDeviceById" resultType="com.myapp.demo.Entiy.Monitor.MonitoringDevice">
+        select * from monitoring_device where monitoringDeviceId = #{monitoringDeviceId}
+    </select>
+
+    <!-- 通过名字查找监测设备 -->
+    <select id="selectMonitoringDeviceByName" resultType="com.myapp.demo.Entiy.Monitor.MonitoringDevice">
+        select * from monitoring_device where monitoringDeviceName = #{monitoringDeviceName}
+    </select>
+
+    <!-- 通过Id模糊查找监测设备 -->
+    <select id="LikeSelectMonitoringDeviceById" parameterType="String" resultType="com.myapp.demo.Entiy.Monitor.MonitoringDevice">
+        select * from monitoring_device where CAST(monitoringDeviceId AS char) like '%${booId}%'
+    </select>
+
+
+    <!-- 添加一个监测设备 -->
+    <insert id="insertOneMonitoringDevice" useGeneratedKeys="true" keyProperty="monitoringDeviceId">
+        insert into monitoring_device
+            (monitoringDeviceId, monitoringDeviceName, monitoringIndicatorCategories, monitoringDeviceStatus)
+        values(#{monitoringDeviceId}, #{monitoringDeviceName}, #{monitoringIndicatorCategories}, #{monitoringDeviceStatus})
+    </insert>
+
+    <!-- 更新监测设备详细信息 -->
+    <update id="updateMonitoringDevice" parameterType="com.myapp.demo.Entiy.Monitor.MonitoringDevice">
+        update monitoring_device set
+            monitoringIndicatorCategories = #{monitoringIndicatorCategories},
+            monitoringDeviceName = #{monitoringDeviceName},
+            monitoringDeviceStatus = #{monitoringDeviceStatus}
+        where monitoringDeviceId = #{monitoringDeviceId}
+    </update>
+
+    <!-- 根据监测设备Id删除一个监测设备 -->
+    <delete id="deleteMonitoringDevice">
+        delete from monitoring_device where monitoringDeviceId = #{monitoringDeviceId}
+    </delete>
+
+
+
+</mapper>
