@@ -23,7 +23,7 @@
         <form action="user?method=adminAddStaff" method="post">
             <div class="form-group">
                 <label for="userName" class="required">用户名:</label>
-                <input type="number" id="userName" name="userName" required>
+                <input type="text" id="userName" name="userName" required>
             </div>
 
             <div class="form-group">

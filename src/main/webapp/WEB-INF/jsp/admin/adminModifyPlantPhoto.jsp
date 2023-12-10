@@ -19,6 +19,16 @@
 <head>
     <title>admin修改植物图片</title>
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
+    <style>
+        img.user-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
@@ -27,6 +37,8 @@
     <h2>修改<%= plant.getPlantName() %><%= plant.getNumber()%>图片</h2>
 
     <form action="/plant?method=ModifyPlantPhoto" method="post" enctype="multipart/form-data">
+        <img src="<%= photo.getPhotoPath() %>" alt="User Avatar" class="user-avatar"/>
+
         <input type="hidden" name="plantId" value="<%= plant.getPlantId() %>" />
         <input type="hidden" name="photoId" value="<%= photo.getPhotoId() %>" />
         <input type="hidden" name="photoPath" value="<%= photo.getPhotoPath() %>" />

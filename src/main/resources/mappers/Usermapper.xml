@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查找所有用户 -->
 	<select id="selectAllUsers" resultType="com.myapp.demo.Entiy.User" >
-		select * from user
+		select * from userInfo
 	</select>
 	
 	<!-- 在uesr_role表中根据用户id识别用户身份 -->

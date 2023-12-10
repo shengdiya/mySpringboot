@@ -19,9 +19,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/plant")
 public class PlantController {
-    @Resource(name="userService")
-    private UserService userservice;
-
     @Resource(name="plantService")
     private PlantService plantservice;
     @RequestMapping("/adminAddPlant")
@@ -108,14 +105,23 @@ public class PlantController {
         return "admin/adminPlantSameSpeciesList";
     }
 
-    //修改植物详细信息的界面
+    //管理员查看植物详细信息
+    @RequestMapping("/adminSeePlantDetails")
+    public String adminSeePlantDetails(@RequestParam("plantId") int plantId, HttpServletRequest request){
+        Plant plantToBeShow = plantservice.selectPlantByPlantId(plantId);
+        Photo photoToBeShow = plantservice.selectPhotoByPlantId(plantId);
+        request.setAttribute("plantToBeShow", plantToBeShow);
+        request.setAttribute("photoToBeShow", photoToBeShow);
+        return "admin/adminSeePlantDetails";
+    }
+
+    //管理员修改植物详细信息的界面
     @RequestMapping("/adminModifyPlantDetails")
     public String adminModifyPlantDetails(@RequestParam("plantId") int plantId, HttpServletRequest request){
-        Plant plantToBeModified = plantservice.selectPlantByPlantId(plantId);
+        Plant plantToBeModified = plantservice.selectPlantInfoByPlantId(plantId);
         request.setAttribute("plantToBeModified", plantToBeModified);
         return "admin/adminModifyPlantDetails";
     }
-
     //执行修改操作
     @RequestMapping(params = "method=ModifyPlantDetails")
     public String ModifyPlantDetails(Plant plant, HttpServletRequest request){
@@ -135,7 +141,6 @@ public class PlantController {
         request.setAttribute("photoToBeModify", photoToBeModify);
         return "admin/adminModifyPlantPhoto";
     }
-
     //执行修改图片操作
     @RequestMapping(params = "method=ModifyPlantPhoto")
     public String ModifyPlantPhoto(Plant plant, Photo photo, MultipartFile plantImg, HttpServletRequest request) throws IOException {
@@ -161,11 +166,13 @@ public class PlantController {
         return adminPlantSameSpeciesList(plant.getPlantName(),request); //修改后返回adminPlantSameSpeciesList.jsp界面
     }
 
+    //搜索结果界面
     @RequestMapping("/adminPlantListSearchResult")
     public String adminPlantListSearchResult(){
         return "admin/adminPlantListSearchResult";
     }
 
+    //执行搜索
     @RequestMapping(params = "method=searchPlant")
     public ModelAndView searchPlant(ModelAndView mav, HttpServletRequest request){
         String searchQuery = request.getParameter("searchQuery");
@@ -181,9 +188,6 @@ public class PlantController {
         return mav;
     }
 
-
-
-
     //返回adminPlantList.jsp界面
     @RequestMapping(params = "method=returnPlantList")
     public ModelAndView returnPlantList(ModelAndView mav){
@@ -197,4 +201,6 @@ public class PlantController {
     public String returnPlantSameSpeciesList(String plantName, HttpServletRequest request){
         return adminPlantSameSpeciesList(plantName,request);
     }
+
+
 }

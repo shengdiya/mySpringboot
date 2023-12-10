@@ -46,7 +46,7 @@
             <% } else if(request.getAttribute("LikeSearchPlantByName") != null) { %>
                 alert("${LikeSearchPlantByName}");
             <% } else if(request.getAttribute("addStaff") != null) { %>
-            alert("${addStaff}");
+                alert("${addStaff}");
             <% } %>
         }, 0); // 设置延时时间为0，将代码推入事件循环的末尾
     });
@@ -88,7 +88,7 @@
 <%--                        <el-menu-item index="unit-list">植物病虫害列表</el-menu-item>--%>
                     </el-submenu>
                     <el-submenu index="5">
-                        <template slot="title"><i class="el-icon-setting"></i> 植物分类和分布管理</template>
+                        <template slot="title"><i class="el-icon-setting"></i> 植物分类分布管理</template>
 <%--                        <el-menu-item index="unit-add">植物分类添加</el-menu-item>--%>
                     </el-submenu>
                     <el-submenu index="6">
@@ -96,9 +96,7 @@
                         <el-menu-item index="user-add">用户添加</el-menu-item>
                         <el-menu-item index="user-list">用户列表</el-menu-item>
                     </el-submenu>
-
                 </el-menu>
-
             </el-aside>
 
             <el-main>

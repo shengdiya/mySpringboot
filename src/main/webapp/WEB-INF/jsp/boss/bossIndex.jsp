@@ -71,7 +71,7 @@
                         <%--                        <el-menu-item index="unit-list">检测记录列表</el-menu-item>--%>
                     </el-submenu>
                     <el-submenu index="3">
-                        <template slot="title"><i class="el-icon-setting"></i> 植物分类和分布查看</template>
+                        <template slot="title"><i class="el-icon-setting"></i> 植物分类分布查看</template>
                         <%--                        <el-menu-item index="unit-add">植物分类添加</el-menu-item>--%>
                     </el-submenu>
                     <el-submenu index="4">

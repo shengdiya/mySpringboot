@@ -18,13 +18,19 @@
         values(#{photoId},#{plantId},#{photoPath},#{photoPlace},#{photoDescribe},#{photographer})
     </insert>
 
-    <!--通过plantId查找图片-->
+    <!--通过plantId查找植物图片-->
     <select id="selectPhotoByPlantId" resultType="com.myapp.demo.Entiy.Photo" >
         select * from photo where plantId = #{plantId}
     </select>
+
     <!--通过plantId查找植物-->
     <select id="selectPlantByPlantId" resultType="com.myapp.demo.Entiy.Plant" >
         select * from plant where plantId = #{plantId}
+    </select>
+
+    <!--通过plantId查找植物的基本信息（基本信息视图）-->
+    <select id="selectPlantInfoByPlantId" resultType="com.myapp.demo.Entiy.Plant" >
+        select * from plantInfo where plantId = #{plantId}
     </select>
 
     <!-- 查找所有植物 -->

@@ -52,11 +52,15 @@ public class PlantService {
         return plantDao.selectPhotoByPlantId(plantId);
     }
 
-    //根据plantId查找图片
+    //根据plantId查找植物
     public Plant selectPlantByPlantId(Integer plantId){
         return plantDao.selectPlantByPlantId(plantId);
     }
 
+    //通过plantId查找植物的基本信息（基本信息视图）
+    public Plant selectPlantInfoByPlantId(Integer plantId){
+        return plantDao.selectPlantInfoByPlantId(plantId);
+    }
     //根据plantName查找所有种名为plantName的植物
     public List<Plant> selectPlantsByPlantName(String plantName){
         return plantDao.selectPlantsByPlantName(plantName);

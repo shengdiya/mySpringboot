@@ -27,7 +27,6 @@ import com.myapp.demo.Entiy.*;
 public class UserController {
 	@Resource(name="userService")
 	private UserService userservice;
-
 	//登陆界面
 	@RequestMapping("/login")
 	public String login() {
@@ -199,7 +198,7 @@ public class UserController {
 	    return "admin/adminUserList";
 	}
 
-	//管理员查看所有养护人员
+	//主管部门查看所有养护人员
 	@RequestMapping("/bossConserverList")
 	public String bossConserverList(HttpServletRequest request) {
 		List<User> allUsers = userservice.selectAllUsers();
@@ -224,7 +223,7 @@ public class UserController {
 			}
 		}
 		request.setAttribute("monitors", monitors);
-		return "boss/bossConserverList";
+		return "boss/bossMonitorList";
 	}
 
 //----------------------------------------------------------------------------------------------------------------

@@ -21,5 +21,7 @@ public interface PlantDao {
     public Integer modifyPlantInfo(Plant plant);
     public Integer modifyPlantPhoto(Photo photo);
     public List<String> getAllSpecies();
-    List<Plant> LikeSearchPlantByName(String searchQuery);
+    public List<Plant> LikeSearchPlantByName(String searchQuery);
+    public Plant selectPlantInfoByPlantId(Integer plantId);
+
 }
