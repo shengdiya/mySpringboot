@@ -56,8 +56,13 @@
                 <input type="text" id="photographer" name="photographer">
             </div>
             <div class="form-group">
-                <label for="photoDescribe">图片描述：</label>
+                <label for="photoDescribe" class="required">图片描述：</label>
                 <input type="text" id="photoDescribe" name="photoDescribe">
+            </div>
+
+            <div class="form-group">
+                <label for="total">添加数量：</label>
+                <input type="number" id="total" name="total" max="50" required>
             </div>
 
             <div class="form-group">

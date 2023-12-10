@@ -33,12 +33,7 @@ public class PlantController {
 
     //管理员添加一株植物
     @RequestMapping(params = "method=GetAdminAddPlant")
-    public ModelAndView GetAdminAddPlant(Plant plant, Photo photo, MultipartFile plantImg, ModelAndView mav, HttpServletRequest request) throws IOException {
-        //植物的种名、形态特征、栽培技术要点、应用价值由前端输入
-        //植物的编号plantId由自增约束自动生成，株数编号number由添加函数plantservice.adminInsertPlant(plant)生成
-        plantservice.adminInsertPlant(plant); // 将植物插入plant表
-
-        //以下为图片处理
+    public ModelAndView GetAdminAddPlant(Integer total, Plant plant, Photo photo, MultipartFile plantImg, ModelAndView mav, HttpServletRequest request) throws IOException {
         //图片的拍摄地点、图片描述、图片拍摄人由前端输入，如果没输入就在此设置为“无”
         if(photo.getPhotoPlace()==null || photo.getPhotoPlace().equals("")) {
             photo.setPhotoPlace("拍摄地点不详");
@@ -49,31 +44,46 @@ public class PlantController {
         if(photo.getPhotoDescribe()==null || photo.getPhotoDescribe().equals("")){
             photo.setPhotoDescribe("无");
         }
-        //图片的编号photoId由自增约束自动生成，对应的植物编号PlantId在此处手动设置
-        photo.setPlantId(plant.getPlantId()); //绑定植物_图片映射
-        if (plantImg != null && !plantImg.isEmpty()) {
-            String originalFilename = plantImg.getOriginalFilename();
-            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-            // 对文件名进行唯一化处理，加上时间戳
-            String fileName = System.currentTimeMillis() + extension;
-            String storagePath = request.getSession().getServletContext().getRealPath("/imgs/plants");
-            File destinationFile = new File(storagePath, fileName);
-            // 确保目录存在
-            if (!destinationFile.getParentFile().exists()) {
-                destinationFile.getParentFile().mkdirs();
-            }
-            plantImg.transferTo(destinationFile);
-            // 设置植物的图片路径字段
-            photo.setPhotoPath("/imgs/plants/" + fileName);
-        }else {  //没上传图片就使用默认图片
-            photo.setPhotoPath("/imgs/plants/plantDefault.jpg");
+        //植物的种名、形态特征、栽培技术要点、应用价值由前端输入
+        //植物的编号plantId由自增约束自动生成，株数编号number由添加函数plantservice.adminInsertPlant(plant)生成
+        for(int i = 0; i<total ; i++){
+            insertOnePlant(plant,photo,plantImg,request);
+            plant.setPlantId(null); //把主键设置为null是为了多次添加，不设置为null的话主键就不会自增
         }
-        plantservice.adminInsertPlantPhoto(photo);
 
         mav.setViewName("admin/adminIndex");
         mav.addObject("addPlant","添加植物成功"); //传给前端需要弹窗的内容
         mav.addObject("start","plant/adminAddPlant");
         return mav;
+    }
+    //插入一株植物，为GetAdminAddPlant插入多株植物所用
+    private void insertOnePlant(Plant plant, Photo photo, MultipartFile plantImg, HttpServletRequest request) throws IOException {
+        plantservice.adminInsertPlant(plant); // 将植物插入plant表
+
+        //以下为图片处理
+        photo.setPlantId(plant.getPlantId()); //绑定植物_图片映射
+        if (plantImg != null && !plantImg.isEmpty()) {
+            String originalFilename = plantImg.getOriginalFilename();
+            // 获取服务器中图片存储路径
+            String storagePath = request.getSession().getServletContext().getRealPath("/imgs/plants");
+            File storageDir = new File(storagePath);
+            // 确保目录存在
+            if (!storageDir.exists()) {
+                storageDir.mkdirs();
+            }
+            File destinationFile = new File(storageDir, originalFilename); // 创建一个指向要保存或者检查的文件的引用
+            // 检查文件是否已经存在于目录中
+            if (!destinationFile.exists()) {
+                // 如果文件不存在，保存上传的文件
+                plantImg.transferTo(destinationFile);
+            }
+            // 文件已存在或者刚刚被保存，设置图片路径
+            photo.setPhotoPath("/imgs/plants/" + originalFilename);
+        } else {
+            // 没上传图片就使用默认图片
+            photo.setPhotoPath("/imgs/plants/plantDefault.jpg");
+        }
+        plantservice.adminInsertPlantPhoto(photo);
     }
 
     //管理员缩略图方式查看所有植物

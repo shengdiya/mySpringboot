@@ -11,9 +11,6 @@
 <%@ page import="com.myapp.demo.Entiy.*" %>
 <%@ page import="com.myapp.demo.Service.*" %>
 
-
-
-
 <%
     User admin = (User) request.getSession().getAttribute("admin");
     List<Plant> plants = (List<Plant>) request.getAttribute("plantsInSameSpecies");
@@ -75,7 +72,7 @@
             <form action="/plant?method=deletePlant" method="post">
                 <a href="/plant/adminSeePlantDetails?plantId=<%= plant.getPlantId() %>" class="action-button detail-button">详情</a>
                 <a href="/plant/adminModifyPlantDetails?plantId=<%= plant.getPlantId() %>" class="action-button edit-button">修改</a>
-                <a href="/plant/adminModifyPlantPhoto?plantId=<%= plant.getPlantId() %>" class="action-button edit-button">改图</a>
+                <a href="/plant/adminModifyPlantPhoto?plantId=<%= plant.getPlantId() %>" class="action-button edit-button">配图</a>
                 <!-- 隐藏的userId，用于删除时向后端传递参数，后端可以通过request.getParameter("userId")得到这个Id -->
                 <input type="hidden" name="plantId" value="<%= plant.getPlantId() %>">
                 <!-- input按钮用CSS时鼠标悬浮时变小手 -->

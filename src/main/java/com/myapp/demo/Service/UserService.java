@@ -42,6 +42,9 @@ public class UserService {
             case "boss":
                 roleChinese = "上级主管人员";
                 break;
+			case "admin":
+				roleChinese = "管理员";
+				break;
         }
 		return roleChinese;
 	}

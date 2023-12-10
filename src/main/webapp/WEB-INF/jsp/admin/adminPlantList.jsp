@@ -39,15 +39,15 @@
         .grid-item img {
             width: 100%; /* 宽度占满容器 */
             height: auto; /* 高度自适应 */
-            max-width: 150px; /* 最大宽度限制，可调整 */
-            max-height: 200px; /* 最大高度限制，可调整 */
+            max-width: 100px; /* 最大宽度限制，可调整 */
+            max-height: 150px; /* 最大高度限制，可调整 */
         }
         .grid-item:hover {
             transform: scale(1.05); /* 鼠标悬停时放大效果 */
         }
         img.user-avatar {
-            width: 150px;
-            height: 150px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             margin: 20px auto;
@@ -60,7 +60,6 @@
 <input name="safe" type="hidden" value="<%= admin.getUserName() %>">
 <h2>植物缩略图展示</h2>
 <form id="searchForm" action="/plant?method=searchPlant" method="post">
-
     <input type="text" id="searchInput" name="searchQuery" >
     <button type="submit">搜索</button>
 </form>

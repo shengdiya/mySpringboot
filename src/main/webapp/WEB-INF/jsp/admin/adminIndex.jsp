@@ -45,6 +45,8 @@
                 alert("${alreadyLogin}");
             <% } else if(request.getAttribute("LikeSearchPlantByName") != null) { %>
                 alert("${LikeSearchPlantByName}");
+            <% } else if(request.getAttribute("addStaff") != null) { %>
+            alert("${addStaff}");
             <% } %>
         }, 0); // 设置延时时间为0，将代码推入事件循环的末尾
     });
@@ -53,8 +55,12 @@
 <div id="app">
     <el-container style="height: 100vh;">
         <el-header>
-            <span class="brand">图书馆借阅系统</span>
-            <a href="/user/adminDetails" class="user-info">欢迎你，管理员</a>
+            <span class="brand">植物信息管理系统</span>
+            <form class="logout" action="/user?method=LogOut" method="post">
+                <input type="hidden" name="userIdOnlineing" value="<%= admin.getUserId() %>">
+                <input type="submit" value="退出登录" class="submitbuttom">
+            </form>
+            <span class="user-info">欢迎你，管理员</span>
         </el-header>
 
         <el-container>
@@ -92,12 +98,6 @@
                     </el-submenu>
 
                 </el-menu>
-
-                <!-- 底部按钮 -->
-                <form class="aside-form" action="/user?method=LogOut" method="post">
-                    <input type="hidden" name="userIdOnlineing" value="<%= admin.getUserId() %>">
-                    <input type="submit" value="退出登录" class="submitbuttom">
-                </form>
 
             </el-aside>
 

@@ -2,6 +2,7 @@ package com.myapp.demo.Controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -45,28 +46,25 @@ public class UserController {
 		}
 		//养护人员
 		else if("conserver".equals(role) && roleId==2) {
-
 			request.getSession().setAttribute("conserver", user);
 			mav.setViewName("conserver/conserverIndex");
 			//mav.addObject("staffStart","book/staffBookCirculation");//登陆后默认加载"staffBookCirculation"界面
 		}
 		//监测用户
 		else if("monitor".equals(role) && roleId==3) {
-
 			request.getSession().setAttribute("monitor", user); //把登陆的读者传过去（存到Session里）
 			mav.setViewName("monitor/monitorIndex");
 			//mav.addObject("readerStart","book/readerBorrowBooks");//登陆后默认加载"readerBorrowBooks"界面
 		}
 		//上级主管部门
 		else if("boss".equals(role) && roleId==4) {
-
 			request.getSession().setAttribute("boss", user); //把登陆的读者传过去（存到Session里）
 			mav.setViewName("boss/bossIndex");
-			//mav.addObject("readerStart","book/readerBorrowBooks");//登陆后默认加载"readerBorrowBooks"界面
+			mav.addObject("start","user/bossConserverList");//登陆后默认加载"readerBorrowBooks"界面
 		}
 		//用户不存在
 		else {
-			mav.setViewName("login/login");
+			mav.setViewName("otherModel/login");
 			mav.addObject("noSuchUser","密码错误或用户不存在，请重新输入");
 		}
 		return mav;
@@ -76,21 +74,20 @@ public class UserController {
 	@RequestMapping(params = "method=LogOut")
 	public ModelAndView LogOut(ModelAndView mav,HttpServletRequest request) {
 		String userId = request.getParameter("userIdOnlineing");
-		User user = userservice.selectUserById(Integer.valueOf(userId));
-		
+
 		//退出后把他们的Session删掉，这样退出后除非在登陆，否则干不了任何事，甚至可能进不去
 		String role = userservice.getUserRole(Integer.valueOf(userId));
 		System.out.println("role: " + role);
-		if(role.equals("admin")) {
+		if(role.equals("管理员")) {
 			request.getSession().removeAttribute("admin");
-		}else if(role.equals("staff")) {
-			request.getSession().removeAttribute("staff");
-		}else {
-			request.getSession().removeAttribute("reader");
+		}else if(role.equals("养护人员")) {
+			request.getSession().removeAttribute("conserver");
+		}else if(role.equals("监护人员")){
+			request.getSession().removeAttribute("monitor");
+		}else{
+			request.getSession().removeAttribute("boss");
 		}
-		
-		userservice.modifyStatus(user);
-		mav.setViewName("login");
+		mav.setViewName("otherModel/login");
 		return mav;
 	}
 	
@@ -151,7 +148,6 @@ public class UserController {
 	public ModelAndView GetforgetPassword3(HttpServletRequest request, String password, ModelAndView mav) {
 		User user = (User) request.getSession().getAttribute("user");
 		user.setPassword(password);
-		//System.out.println("password: " + user.getPassword());
 		userservice.modifyPassword(user); //修改密码
 		mav.setViewName("otherModel/login");
 		mav.addObject("modifyPasswordSeccuss", "重置密码成功，可以登录");
@@ -196,12 +192,43 @@ public class UserController {
 	
 	//管理员查看所有的用户
 	@RequestMapping("/adminUserList")
-	public String userList(HttpServletRequest request, HttpServletResponse response) {
+	public String userList(HttpServletRequest request) {
 		List<User> users = userservice.selectAllUsers();
 		request.setAttribute("users", users);
 		request.setAttribute("userservice", userservice);//把userservice也传过去，在adminUserList.jsp中要用
 	    return "admin/adminUserList";
 	}
+
+	//管理员查看所有养护人员
+	@RequestMapping("/bossConserverList")
+	public String bossConserverList(HttpServletRequest request) {
+		List<User> allUsers = userservice.selectAllUsers();
+		List<User> conservers = new ArrayList<>();
+		for(User user : allUsers){
+			if(userservice.getUserRole(user.getUserId()).equals("养护人员")){
+				conservers.add(user);
+			}
+		}
+		request.setAttribute("conservers", conservers);
+		return "boss/bossConserverList";
+	}
+
+	//主管人员查看监测人员
+	@RequestMapping("/bossMonitorList")
+	public String bossMonitorList(HttpServletRequest request) {
+		List<User> allUsers = userservice.selectAllUsers();
+		List<User> monitors = new ArrayList<>();
+		for(User user : allUsers){
+			if(userservice.getUserRole(user.getUserId()).equals("监测人员")){
+				monitors.add(user);
+			}
+		}
+		request.setAttribute("monitors", monitors);
+		return "boss/bossConserverList";
+	}
+
+//----------------------------------------------------------------------------------------------------------------
+
 	//点击查看用户的详细信息
 	@RequestMapping("/adminSeeDetails")
 	public String adminSeeDetails(@RequestParam("userId") int userId, HttpServletRequest request) {
@@ -256,7 +283,6 @@ public class UserController {
 			userservice.deleteUserRole(Integer.valueOf(userId)); //删除user_role表里的
 			mav.addObject("deleteUser","删除成功"); //传给前端需要弹窗的内容
 			mav.setViewName("adminIndex");
-			
 		}catch(Exception e) {
 			mav.setViewName("adminIndex");
 			mav.addObject("deleteUser","删除失败"); //传给前端需要弹窗的内容
@@ -320,6 +346,8 @@ public class UserController {
 		mav.addObject("readerStart","/book/readerBorrowBooks");
 		return mav;
 	}
+
+
 	
 }
 
