@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>管理员详细信息</title>
+    <title>管理员</title>
 		 <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 		 
 	<style>
