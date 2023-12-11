@@ -43,6 +43,8 @@
 
 
         <div class="form-group">
+            <label for="inputNumber" class="required">输入可测种类数量:</label>
+
             <input type="number" id="inputNumber" name="inputNumber"/>
             <button type="button" onclick="generateInputFields()">生成输入框</button>
             <div id="inputContainer"></div>

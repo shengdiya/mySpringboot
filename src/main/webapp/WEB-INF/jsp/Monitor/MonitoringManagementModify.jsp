@@ -10,7 +10,7 @@
 
 <%
     System.out.println(2);
-    MonitoringManagement monitoringmanagementdetail = (MonitoringManagement) request.getAttribute("monitoringmanagementdetail");
+    MonitoringManagement monitoringmanagementdetail = (MonitoringManagement) request.getAttribute("monitoringManagementmodify");
     MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) session.getAttribute("monitoringdeviceservice");
     User admin = (User) request.getSession().getAttribute("admin");
     List<Unit> units = (List<Unit>) request.getAttribute("units");

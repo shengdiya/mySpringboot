@@ -38,7 +38,7 @@
 <input name="oldname" type="hidden" value="<%= name %>">
 
 <div class="container">
-    <h2>增加监测管理信息</h2>
+    <h2>修改监测管理信息</h2>
     <form action="MonitorDevice?method=modifyMonitorDevices" method="post">
         <div class="form-group">
             <label for="monitoringDeviceId" class="required">设备id:</label>
@@ -50,10 +50,11 @@
         </div>
         <div class="form-group">
             <label for="monitoringDeviceStatus" class="required">设备状态:</label>
-            <input type="text" id="monitoringDeviceStatus" name="monitoringDeviceStatus"  readonly>
+            <input type="text" id="monitoringDeviceStatus" name="monitoringDeviceStatus" value="<%=monitoringdevice.getMonitoringDeviceStatus()%>"  readonly>
         </div>
 
         <div class="form-group">
+            <label for="inputNumber" class="required">输入可测种类数量:</label>
             <input type="number" id="inputNumber" name="inputNumber"/>
             <button type="button" onclick="generateInputFields()">生成输入框</button>
             <div id="inputContainer"></div>

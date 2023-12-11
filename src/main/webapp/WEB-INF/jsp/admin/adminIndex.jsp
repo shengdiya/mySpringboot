@@ -35,6 +35,50 @@
 <body>
 <input name="safe" type="hidden" value="<%= admin.getUserName() %>">
 <script>
+    function filterOptions() {
+        console.log("******");
+        var inputValue = document.getElementById("inputText").value.trim();
+        console.log(inputValue);
+        var selectOptions = document.getElementById("monitoringDeviceId").options;
+        console.log(selectOptions);
+        var isMatching = false;
+        for (var i = 0; i < selectOptions.length; i++) {
+            var optionValue = selectOptions[i].text.trim();
+            console.log(optionValue);
+            if (optionValue.indexOf(inputValue) !== -1) {
+                console.log("匹配上");
+                selectOptions[i].style.display = "";
+                isMatching = true;
+            } else {
+                console.log("没匹配上");
+                selectOptions[i].style.display = "none";
+            }
+        }
+        if (isMatching) {
+            document.getElementById("monitoringDeviceId").selectedIndex = -1;
+        }
+        console.log("******");
+    }
+    function updateInputText(selectElement) {
+        var selectedValue = selectElement.value;
+        document.getElementById("inputText").value = selectedValue;
+    }
+    function generateInputFields() {
+        var inputNumber = parseInt(document.getElementById("inputNumber").value);
+        var inputContainer = document.getElementById("inputContainer");
+
+        // 清空容器
+        inputContainer.innerHTML = "";
+
+        // 生成输入框并添加到容器
+        for (var i = 1; i <= inputNumber; i++) {
+            var inputField = document.createElement("input");
+            inputField.type = "text";
+            inputField.name = "inputField" + i;
+            inputContainer.appendChild(inputField);
+            inputContainer.appendChild(document.createElement("br"));
+        }
+    }
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
             <% if(request.getAttribute("addPlant") != null) { %>
@@ -78,8 +122,10 @@
                     </el-submenu>
                     <el-submenu index="3">
                         <template slot="title"><i class="el-icon-setting"></i> 植物检测记录管理</template>
-<%--                        <el-menu-item index="unit-add">检测记录添加</el-menu-item>--%>
-<%--                        <el-menu-item index="unit-list">检测记录列表</el-menu-item>--%>
+                        <el-menu-item index="monitormanagement-add">监测记录添加</el-menu-item>
+                        <el-menu-item index="monitormanagement-list">监测记录查看</el-menu-item>
+                        <el-menu-item index="monitordevice-add">监测设备添加</el-menu-item>
+                        <el-menu-item index="monitordevice-list">监测设备查看</el-menu-item>
                     </el-submenu>
                     <el-submenu index="4">
                         <template slot="title"><i class="el-icon-setting"></i> 植物病虫害管理</template>
@@ -130,6 +176,18 @@
                         break;
                     case 'plantInfo-list':
                         this.loadPageContent('plant/adminPlantList');
+                        break;
+                    case 'monitordevice-add':
+                        this.loadPageContent("MonitorDevice/MonitorDeviceAdd");
+                        break;
+                    case 'monitordevice-list':
+                        this.loadPageContent("MonitorDevice/MonitorDeviceShow");
+                        break;
+                    case 'monitormanagement-list':
+                        this.loadPageContent("MonitorManagement/MonitorManagementShow");
+                        break;
+                    case 'monitormanagement-add':
+                        this.loadPageContent("MonitorManagement/MonitorManagementAdd");
                         break;
                 }
             },

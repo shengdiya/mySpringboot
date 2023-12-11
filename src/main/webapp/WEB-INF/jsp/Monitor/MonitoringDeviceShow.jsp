@@ -14,6 +14,7 @@
     MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService ) session.getAttribute("monitoringdeviceservice");
     MonitoringIndicatorService monitoringindicatorservice = (MonitoringIndicatorService ) session.getAttribute("monitoringindicatorservice");
     List<MonitoringDevice> monitoringdevices = (List<MonitoringDevice>) request.getAttribute("monitoringdevices");
+
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -68,11 +69,11 @@
 
         <td>
             <form action="/MonitorDevice?method=deleteMonitoringDevice" method="POST">
-                <input type="hidden" name="id" value=<%=monitoringdevice.getMonitoringDeviceId()%>>
+                <input type="hidden" name="id" value="<%=monitoringdevice.getMonitoringDeviceId()%>">
                 <button type="submit">删除</button>
             </form>
             <form action="/MonitorDevice?method=modifyMonitoringDevice" method="POST">
-                <input type="hidden" name="id" value=<%=monitoringdevice.getMonitoringDeviceId()%>>
+                <input type="hidden" name="id" value="<%=monitoringdevice.getMonitoringDeviceId()%>">
                 <button type="submit">修改</button>
             </form>
 

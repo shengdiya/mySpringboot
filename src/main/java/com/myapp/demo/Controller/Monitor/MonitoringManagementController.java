@@ -69,64 +69,17 @@ public class MonitoringManagementController {
             }else { //借出了不能删
                 mav.addObject("deleteMonitoringManagerment","该植物尚在监测，删除失败"); //传给前端需要弹窗的内容
             }
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
         }catch(Exception e) {
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
             mav.addObject("deleteMonitoringManagerment","删除失败"); //传给前端需要弹窗的内容
         }
-        mav.addObject("start","MonitorManagement/MonitoringManagementShow");//删完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
+        mav.addObject("start","MonitorManagement/MonitorManagementShow");//删完一个用户要再跳转到admin/adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
         return mav;
     }
 
-    //修改监测记录
-    @RequestMapping(params ="method=modifyMonitoringManagement")
-    public String adminModifyUnitDetails( HttpServletRequest request) {
-        String monitoringmanagerId = request.getParameter("id"); //接收要删除用户的Id
-        MonitoringManagement monitoringManagement = monitoringmanagementservice.selectMonitoringManagementById(Integer.valueOf(monitoringmanagerId));
-        request.setAttribute("monitoringManagementmodify", monitoringManagement);
-        return "Monitor/MonitoringManagementModify";
-    }
-
-    //管理员修改监测记录信息,并返回adminIndex.jsp
-    @RequestMapping(params ="method=modifyMonitoringManagements")
-    public ModelAndView Modifyunit1Details( MonitoringManagement monitoringmanagement, ModelAndView mav, HttpServletRequest request) {
-        try {
-            String monitoringTimeStr = request.getParameter("monitoringTime1");
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-            java.util.Date date;
-            try {
-                date = dateFormat.parse(monitoringTimeStr);
-                Timestamp monitoringTime = new Timestamp(date.getTime());
-                monitoringmanagement.setMonitoringTime(monitoringTime);
-                // 在这里可以将 Timestamp 类型的 monitoringTime 设置到相应的对象属性中
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
 
-
-            int deviceID = monitoringmanagement.getMonitoringDeviceId();
-            MonitoringDevice monitoringDeviced = monitoringdeviceservice.selectMonitoringDeviceById(deviceID);
-            String monitoringDevicess = monitoringDeviced.getMonitoringIndicatorCategories();
-            String[] monitoringDevices = monitoringDevicess.split(";");
-            String indicators = "";
-            for ( String monitoringdevice :monitoringDevices) {
-                indicators = indicators + (String) request.getParameter(monitoringdevice) + ";";
-            }
-            System.out.println(indicators);
-            monitoringmanagement.setMonitoringIndicatorValues(indicators);
-            monitoringmanagementservice.updateMonitoringManagement(monitoringmanagement);
-
-
-            mav.setViewName("adminIndex");
-            mav.addObject("modifyUnit","修改监测信息成功"); //传给前端需要弹窗的内容
-        }catch(Exception e) {
-            mav.setViewName("adminIndex");
-            mav.addObject("modifyUnit","修改监测信息失败"); //传给前端需要弹窗的内容
-        }
-        mav.addObject("start","MonitorManagement/MonitoringManagementShow");
-        return mav;
-    }
 
     //添加监测记录界面
     @RequestMapping("/MonitorManagementAdd")
@@ -163,7 +116,7 @@ public class MonitoringManagementController {
         return "Monitor/MonitoringManagementAddmore";
     }
 
-    //增加管理记录,并返回adminIndex.jsp
+    //增加管理记录,并返回admin/adminIndex.jsp
     @RequestMapping(params = "method=addmoreMonitorManagement")
     public ModelAndView ModifyunitDetails( MonitoringManagement monitoringmanagement, ModelAndView mav, HttpServletRequest request) {
         try {
@@ -191,16 +144,18 @@ public class MonitoringManagementController {
             }
             System.out.println(indicators);
             monitoringmanagement.setMonitoringIndicatorValues(indicators);
+            monitoringDeviced.setMonitoringDeviceStatus("工作中");
+            monitoringdeviceservice.updateMonitoringDevice(monitoringDeviced);
             monitoringmanagementservice.insertOneMonitoringManagement(monitoringmanagement);
 
 
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
             mav.addObject("modifyUnit","增加监测信息成功"); //传给前端需要弹窗的内容
         }catch(Exception e) {
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
             mav.addObject("modifyUnit","增加监测信息失败"); //传给前端需要弹窗的内容
         }
-        mav.addObject("start","MonitorManagement/MonitoringManagementShow");
+        mav.addObject("start","MonitorManagement/MonitorManagementShow");
         return mav;
     }
 
@@ -214,12 +169,12 @@ public class MonitoringManagementController {
             monitoringmanagementservice.updateMonitoringManagement(monitoringmanagement);
             //进行更新操作
             mav.addObject("deleteMonitoringManagerment","修改成功");
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
         }catch(Exception e) {
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
             mav.addObject("deleteMonitoringManagerment","修改失败"); //传给前端需要弹窗的内容
         }
-        mav.addObject("start","MonitorManagement/MonitoringManagementShow");//删完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
+        mav.addObject("start","MonitorManagement/MonitorManagementShow");//删完一个用户要再跳转到admin/adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
         return mav;
     }
 
@@ -238,6 +193,62 @@ public class MonitoringManagementController {
         request.setAttribute("monitoringmanagementdetail", monitoringmanagement);
         return "Monitor/MonitoringManagementDetail";
     }
+    //修改监测记录
+    @RequestMapping(params ="method=modifyMonitoringManagement")
+    public String adminModifyUnitDetails( HttpServletRequest request) {
+        String monitoringmanagerId = request.getParameter("id"); //接收要删除用户的Id
+        MonitoringManagement monitoringManagement = monitoringmanagementservice.selectMonitoringManagementById(Integer.valueOf(monitoringmanagerId));
+        request.setAttribute("monitoringManagementmodify", monitoringManagement);
+        int num = Integer.valueOf(monitoringManagement.getMonitoringDeviceId());
+        String monitoringDevicess = monitoringdeviceservice.selectMonitoringDeviceById(num).getMonitoringIndicatorCategories();
+        System.out.println(monitoringDevicess);
+        String[] monitoringDevices = monitoringDevicess.split(";");
+        request.setAttribute("monitoringDevices",monitoringDevices);
+
+        return "Monitor/MonitoringManagementModify";
+    }
+
+    //管理员修改监测记录信息,并返回admin/adminIndex.jsp
+    @RequestMapping(params ="method=modifyMonitoringManagements")
+    public ModelAndView Modifyunit1Details( MonitoringManagement monitoringmanagement, ModelAndView mav, HttpServletRequest request) {
+        try {
+            String monitoringTimeStr = request.getParameter("monitoringTime1");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            java.util.Date date;
+            try {
+                date = dateFormat.parse(monitoringTimeStr);
+                Timestamp monitoringTime = new Timestamp(date.getTime());
+                monitoringmanagement.setMonitoringTime(monitoringTime);
+                // 在这里可以将 Timestamp 类型的 monitoringTime 设置到相应的对象属性中
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+
+            int deviceID = monitoringmanagement.getMonitoringDeviceId();
+            MonitoringDevice monitoringDeviced = monitoringdeviceservice.selectMonitoringDeviceById(deviceID);
+            String monitoringDevicess = monitoringDeviced.getMonitoringIndicatorCategories();
+            String[] monitoringDevices = monitoringDevicess.split(";");
+            String indicators = "";
+            for ( String monitoringdevice :monitoringDevices) {
+                indicators = indicators + (String) request.getParameter(monitoringdevice) + ";";
+            }
+            System.out.println(indicators);
+            monitoringmanagement.setMonitoringIndicatorValues(indicators);
+            monitoringmanagementservice.updateMonitoringManagement(monitoringmanagement);
+
+
+            mav.setViewName("admin/adminIndex");
+            mav.addObject("modifyUnit","修改监测信息成功"); //传给前端需要弹窗的内容
+        }catch(Exception e) {
+            mav.setViewName("admin/adminIndex");
+            mav.addObject("modifyUnit","修改监测信息失败"); //传给前端需要弹窗的内容
+        }
+        mav.addObject("start","MonitorManagement/MonitorManagementShow");
+        return mav;
+    }
+
 
 
 }

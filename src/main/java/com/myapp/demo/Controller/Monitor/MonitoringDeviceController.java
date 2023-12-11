@@ -25,8 +25,8 @@ public class MonitoringDeviceController {
     @RequestMapping("/MonitorDeviceShow")
     public String MonitoringDeviceShow(HttpServletRequest request, HttpServletResponse response) {
         List<MonitoringDevice> monitoringdevices = monitoringdeviceservice.selectAllMonitoringDevice();
-        request.setAttribute("monitoringdsevices", monitoringdevices);
-        System.out.println();
+        System.out.println(monitoringdevices.size());
+        request.setAttribute("monitoringdevices", monitoringdevices);
         System.out.println("sss");
         return "Monitor/MonitoringDeviceShow";
     }
@@ -57,10 +57,10 @@ public class MonitoringDeviceController {
                 mav.addObject("modifyMonitorDevice","该设备重名，增加失败"); //传给前端需要弹窗的内容
             }
 
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
 
         }catch(Exception e) {
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
             mav.addObject("modifyMonitoringDevice","增加设备信息失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorDevice/MonitorDeviceShow");
@@ -81,26 +81,26 @@ public class MonitoringDeviceController {
             }else { //工作中不能删
                 mav.addObject("deleteMonitorDevice","该设备尚在监测，删除失败"); //传给前端需要弹窗的内容
             }
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
         }catch(Exception e) {
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
             mav.addObject("deleteMonitoringDevice","删除失败"); //传给前端需要弹窗的内容
         }
-        mav.addObject("start","MonitorDevice/MonitorDeviceShow");//删完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
+        mav.addObject("start","MonitorDevice/MonitorDeviceShow");//删完一个用户要再跳转到admin/adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
         return mav;
     }
 
     //修改监测设备
-    @RequestMapping(params = "method=modifyMonitorDevice")
+    @RequestMapping(params = "method=modifyMonitoringDevice")
     public String MonitoringDeviceModify( HttpServletRequest request) {
         String monitoringdeviceId = request.getParameter("id"); //接收要删除用户的Id
         MonitoringDevice monitoringDevice = monitoringdeviceservice.selectMonitoringDeviceById(Integer.valueOf(monitoringdeviceId));
         request.setAttribute("monitoringDevicemodify", monitoringDevice);
 
-        return "MonitorDevice/MonitoringDeviceModify";
+        return "Monitor/MonitoringDeviceModify";
     }
 
-    //修改监测设备,并返回adminIndex.jsp
+    //修改监测设备,并返回admin/adminIndex.jsp
     @RequestMapping(params = "method=modifyMonitorDevices")
     public ModelAndView ModifymonitoringdeviceDetails( MonitoringDevice monitoringdevice, ModelAndView mav, HttpServletRequest request) {
         try {
@@ -119,10 +119,10 @@ public class MonitoringDeviceController {
                 mav.addObject("modifyMonitoringDevice","该设备重名，修改失败"); //传给前端需要弹窗的内容
             }
 
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
 
         }catch(Exception e) {
-            mav.setViewName("adminIndex");
+            mav.setViewName("admin/adminIndex");
             mav.addObject("modifyMonitoringDevice","修改设备信息失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorDevice/MonitorDeviceShow");
