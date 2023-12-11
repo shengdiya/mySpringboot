@@ -51,7 +51,7 @@
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= uesr.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="container">
     <h2>增加监测管理信息</h2>
