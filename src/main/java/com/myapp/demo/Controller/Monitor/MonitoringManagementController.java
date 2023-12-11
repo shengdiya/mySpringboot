@@ -102,9 +102,6 @@ public class MonitoringManagementController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-
-
             int deviceID = monitoringmanagement.getMonitoringDeviceId();
             MonitoringDevice monitoringDeviced = monitoringdeviceservice.selectMonitoringDeviceById(deviceID);
             String monitoringDevicess = monitoringDeviced.getMonitoringIndicatorCategories();

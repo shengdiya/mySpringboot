@@ -11,6 +11,14 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringIndicator" %>
 
 <%
+    User user = null;
+    List<String> roles = Arrays.asList("admin", "monitor", "boss");
+    for(String role : roles) {
+        user = (User) request.getSession().getAttribute(role);
+        if(user != null) {
+            break;
+        }
+    }
     MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService ) session.getAttribute("monitoringdeviceservice");
     MonitoringIndicatorService monitoringindicatorservice = (MonitoringIndicatorService ) session.getAttribute("monitoringindicatorservice");
     List<MonitoringDevice> monitoringdevices = (List<MonitoringDevice>) request.getAttribute("monitoringdevices");
@@ -23,8 +31,7 @@
 </head>
 
 <body>
-
-
+<input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="searchcontainer">
     <form action="Managershowuser" method="post" onsubmit="return handleSearch(this)">
@@ -48,7 +55,7 @@
         <th>监测设备id</th>
         <th>监测设备名称</th>
         <th>监测指标种类</th>
-        <th>监测设备状态</th>r
+        <th>监测设备状态</th>
         <th>操作</th>
         <!-- 其他表格头部数据 -->
     </tr>

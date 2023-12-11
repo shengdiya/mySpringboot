@@ -44,6 +44,10 @@
         delete from monitoring_management where monitoringManagementId = #{monitoringManagementId}
     </delete>
 
+    <!--根据植物Id查找监测状态-->
+    <select id="selectStatusByPlanId" resultType="String">
+        select monitoringStatus from monitoring_management where monitoringObject = #{monitoringObject}
+    </select>
 
 
 </mapper>

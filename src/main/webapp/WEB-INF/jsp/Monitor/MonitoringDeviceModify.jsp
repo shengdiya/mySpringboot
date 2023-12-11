@@ -7,7 +7,10 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringDevice" %>
 
 <%
-    User admin = (User) request.getSession().getAttribute("admin");
+    User user = (User) request.getSession().getAttribute("admin");
+    if(user==null){
+        user = (User) request.getSession().getAttribute("monitor");
+    }
     MonitoringDevice monitoringdevice = (MonitoringDevice)request.getAttribute("monitoringDevicemodify");
     String name = monitoringdevice.getMonitoringDeviceName();
 
@@ -34,7 +37,7 @@
 
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user.getUserName() %>">
 <input name="oldname" type="hidden" value="<%= name %>">
 
 <div class="container">

@@ -6,8 +6,10 @@
 <%@ page import="com.myapp.demo.Controller.*" %>
 
 <%
-    User admin = (User) request.getSession().getAttribute("admin");
-    List<Unit> units = (List<Unit>) request.getAttribute("units");
+    User user = (User) request.getSession().getAttribute("admin");
+    if(user==null){
+        user = (User) request.getSession().getAttribute("monitor");
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,14 +25,11 @@
             newInput.required = true;
             inputContainer.appendChild(newInput);
         }
-
     </script>
     <title>增加工作人员</title>
-
-
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="container">
     <h2>增加监测管理信息</h2>
@@ -39,16 +38,11 @@
             <label for="monitoringIndicatorName" class="required">设备名字:</label>
             <input type="text" id="monitoringIndicatorName" name="monitoringDeviceName"  required>
         </div>
-
-
-
         <div class="form-group">
             <input type="number" id="inputNumber" name="inputNumber"/>
             <button type="button" onclick="generateInputFields()">生成输入框</button>
             <div id="inputContainer"></div>
         </div>
-
-
 
         <div class="form-group">
             <input type="submit" value="提交">

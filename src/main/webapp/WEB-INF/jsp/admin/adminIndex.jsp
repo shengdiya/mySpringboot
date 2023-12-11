@@ -77,9 +77,11 @@
 <%--                        <el-menu-item index="unit-list">养护任务列表</el-menu-item>--%>
                     </el-submenu>
                     <el-submenu index="3">
-                        <template slot="title"><i class="el-icon-setting"></i> 植物检测记录管理</template>
-<%--                        <el-menu-item index="unit-add">检测记录添加</el-menu-item>--%>
-<%--                        <el-menu-item index="unit-list">检测记录列表</el-menu-item>--%>
+                        <template slot="title"><i class="el-icon-setting"></i> 监测管理</template>
+                        <el-menu-item index="monitormanagement-add">监测记录添加</el-menu-item>
+                        <el-menu-item index="monitormanagement-list">监测记录查看</el-menu-item>
+                        <el-menu-item index="monitordevice-add">监测设备添加</el-menu-item>
+                        <el-menu-item index="monitordevice-list">监测设备查看</el-menu-item>
                     </el-submenu>
                     <el-submenu index="4">
                         <template slot="title"><i class="el-icon-setting"></i> 植物病虫害管理</template>
@@ -130,6 +132,18 @@
                         break;
                     case 'plantInfo-list':
                         this.loadPageContent('plant/adminPlantList');
+                        break;
+                    case 'monitordevice-add':
+                        this.loadPageContent("MonitorDevice/MonitorDeviceAdd");
+                        break;
+                    case 'monitordevice-list':
+                        this.loadPageContent("MonitorDevice/MonitorDeviceShow");
+                        break;
+                    case 'monitormanagement-list':
+                        this.loadPageContent("MonitorManagement/MonitorManagementShow");
+                        break;
+                    case 'monitormanagement-add':
+                        this.loadPageContent("MonitorManagement/MonitorManagementAdd");
                         break;
                 }
             },

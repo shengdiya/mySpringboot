@@ -24,4 +24,7 @@ public interface MonitoringManagementDao {
 
     public Integer updateMonitoringManagement(MonitoringManagement monitoringmanagement);
     //更新一条监测管理记录
+
+    public String selectStatusByPlanId(Integer monitoringObject);
+
 }

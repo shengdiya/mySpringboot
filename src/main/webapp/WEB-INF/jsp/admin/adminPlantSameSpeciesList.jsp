@@ -10,10 +10,12 @@
 <%@ page import="java.util.*, java.text.*"%>
 <%@ page import="com.myapp.demo.Entiy.*" %>
 <%@ page import="com.myapp.demo.Service.*" %>
+<%@ page import="com.myapp.demo.Service.Monitor.MonitoringManagementService" %>
 
 <%
     User admin = (User) request.getSession().getAttribute("admin");
     List<Plant> plants = (List<Plant>) request.getAttribute("plantsInSameSpecies");
+    MonitoringManagementService monitoringmanagementservice = (MonitoringManagementService) request.getAttribute("monitoringManagementService");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -51,7 +53,7 @@
         <th>植物编号</th>
         <th>植物种名</th>
 <%--        <th>养护状态</th>--%>
-<%--        <th>监测状态</th>--%>
+        <th>监测状态</th>
         <th>基本信息管理</th>
 <%--        <th>养护与监测管理</th>--%>
     </tr>
@@ -63,8 +65,7 @@
         <td><%= plant.getPlantName() %></td>
 <%--        <td><%= if(养护任务服务类.select一条养护记录ByplantIdAndStatus(plantId,"进行中")==null) 该位置显示“未分配养护任务
                     else 此处显示“已分配养护任务” %></td>      齐贇波TODO--%>
-<%--        <td><%= if(监测任务服务类.select一条监测记录ByplantIdAndStatus(plantId,"进行中")==null) 该位置显示“未分配监测任务
-                    else 此处显示“已分配监测任务” %></td>      唐景瑞TODO--%>
+        <td><%= monitoringmanagementservice.selectStatusByPlanId(plant.getPlantId()) %></td>
         <!--以上两条业务逻辑可以在service层中编写函数，不一定要在这个界面用纯jsp实现-->
 
         <td>

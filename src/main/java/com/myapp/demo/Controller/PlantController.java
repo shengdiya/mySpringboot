@@ -2,6 +2,7 @@ package com.myapp.demo.Controller;
 
 import com.myapp.demo.Entiy.Photo;
 import com.myapp.demo.Entiy.Plant;
+import com.myapp.demo.Service.Monitor.MonitoringManagementService;
 import com.myapp.demo.Service.PlantService;
 import com.myapp.demo.Service.UserService;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,8 @@ import java.util.List;
 public class PlantController {
     @Resource(name="plantService")
     private PlantService plantservice;
+    @Resource(name="MonitoringManagementService")
+    private MonitoringManagementService monitoringmanagementservice;
     @RequestMapping("/adminAddPlant")
     public String adminAddPlant(HttpServletRequest request) {
         List<String> plantsSpecies = plantservice.getAllSpecies();
@@ -102,6 +105,7 @@ public class PlantController {
         //该plantsInSameSpecies列表返回的是所有种名为plantName的植物，在adminPlantSameSpeciesList界面中展示的是所有种名为plantName的植物
         List<Plant> plantsInSameSpecies = plantservice.selectPlantsByPlantName(plantName);
         request.setAttribute("plantsInSameSpecies", plantsInSameSpecies);
+        request.setAttribute("monitoringManagementService",monitoringmanagementservice);
         return "admin/adminPlantSameSpeciesList";
     }
 

@@ -25,9 +25,8 @@ public class MonitoringDeviceController {
     @RequestMapping("/MonitorDeviceShow")
     public String MonitoringDeviceShow(HttpServletRequest request, HttpServletResponse response) {
         List<MonitoringDevice> monitoringdevices = monitoringdeviceservice.selectAllMonitoringDevice();
-        request.setAttribute("monitoringdsevices", monitoringdevices);
-        System.out.println();
-        System.out.println("sss");
+        request.setAttribute("monitoringdevices", monitoringdevices);
+
         return "Monitor/MonitoringDeviceShow";
     }
 

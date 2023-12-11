@@ -11,6 +11,10 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringIndicator" %>
 
 <%
+    User user = (User) request.getSession().getAttribute("admin");
+    if(user==null){
+        user = (User) request.getSession().getAttribute("monitor");
+    }
     MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService ) session.getAttribute("monitoringdeviceservice");
     MonitoringIndicatorService monitoringindicatorservice = (MonitoringIndicatorService ) session.getAttribute("monitoringindicatorservice");
     List<MonitoringManagement> monitoringmanagements = (List<MonitoringManagement>) request.getAttribute("monitoringmanagements");
@@ -23,8 +27,7 @@
 </head>
 
 <body>
-
-
+<input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="searchcontainer">
     <form action="Managershowuser" method="post" onsubmit="return handleSearch(this)">
@@ -41,7 +44,6 @@
     </form>
 </div>
 
-
 <table class="table-style">
     <thead>
     <tr>
@@ -56,13 +58,10 @@
         <!-- 其他表格头部数据 -->
     </tr>
 
-
     </thead>
     <tbody>
     <% for (MonitoringManagement monitoringmanagement : monitoringmanagements) { %>
     <tr>
-
-
         <td><%= monitoringmanagement.getMonitoringManagementId() %></td>
         <td><%= monitoringmanagement.getMonitoringTime() %></td>
         <td><%= monitoringmanagement.getMonitoringPersonnelId() %></td>
@@ -70,8 +69,6 @@
         <td><%= monitoringmanagement.getMonitoringObject()%></td>
         <td><%= monitoringmanagement.getMonitoringDeviceId() %></td>
         <td><%= monitoringmanagement.getMonitoringStatus() %></td>
-
-
         <td>
             <form action="/MonitorManagement?method=deleteMonitoringManagement" method="POST">
                 <input type="hidden" name="id" value=<%=monitoringmanagement.getMonitoringManagementId()%>>

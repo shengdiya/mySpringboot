@@ -23,6 +23,7 @@ public class MonitoringManagementService {
         return monitoringmanagementdao.selectMonitoringManagementById(monitoringManagementId);
     }
     //根据id查找监测管理记录
+
     public Integer insertOneMonitoringManagement(MonitoringManagement monitoringmanagement) {
         return monitoringmanagementdao.insertOneMonitoringManagement(monitoringmanagement);
     }
@@ -37,4 +38,12 @@ public class MonitoringManagementService {
         return monitoringmanagementdao.updateMonitoringManagement(monitoringmanagement);
     }
     //更新一条监测管理记录
+
+    public String selectStatusByPlanId(Integer monitoringObject){
+        if(monitoringmanagementdao.selectStatusByPlanId(monitoringObject)==null){
+            return "未分配任务";
+        }
+        return monitoringmanagementdao.selectStatusByPlanId(monitoringObject);
+    }
+    //根据植物Id查找监测状态
 }

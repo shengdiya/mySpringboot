@@ -4,18 +4,17 @@
 <%@ page import="com.myapp.demo.Entiy.*" %>
 <%@ page import="com.myapp.demo.Service.*" %>
 <%@ page import="com.myapp.demo.Controller.*" %>
-<%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringManagement" %>
-<%@ page import="com.myapp.demo.Service.Monitor.MonitoringDeviceService" %>
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringDevice" %>
+<%@ page import="com.myapp.demo.Service.Monitor.MonitoringDeviceService" %>
 
 <%
-    System.out.println(2);
-    MonitoringManagement monitoringManagementaddmore = (MonitoringManagement) request.getAttribute("monitoringManagementaddmore");
-    MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) session.getAttribute("monitoringdeviceservice");
-    User admin = (User) request.getSession().getAttribute("admin");
+    User user = (User) request.getSession().getAttribute("admin");
+    if(user==null){
+        user = (User) request.getSession().getAttribute("monitor");
+    }
     List<Unit> units = (List<Unit>) request.getAttribute("units");
-    String []monitoringDevices = (String[]) request.getAttribute("monitoringDevices");
-    System.out.println(3);
+
+    List<MonitoringDevice> MonitoringDevices = (List<MonitoringDevice>)request.getAttribute("MonitoringDevices");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +37,6 @@
                 document.getElementById("monitoringDeviceId").selectedIndex = -1;
             }
         }
-
         function updateInputText(selectElement) {
             var selectedValue = selectElement.value;
             document.getElementById("inputText").value = selectedValue;
@@ -49,50 +47,52 @@
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="container">
     <h2>增加监测管理信息</h2>
-    <form action="MonitorManagement?method=addmoreMonitorManagement" method="post">
+    <form action="MonitorManagement?method=addMonitorManagement" method="post">
         <div class="form-group">
             <label for="monitoringTime1" class="required">监测时间:</label>
-            <input type="datetime-local" id="monitoringTime1" name="monitoringTime1" value="<%=monitoringManagementaddmore.getMonitoringTime()%>" readonly>
+            <input type="datetime-local" id="monitoringTime1" name="monitoringTime1" required>
         </div>
 
         <div class="form-group">
             <label for="monitoringPersonnelId" class="required">监测人员ID:</label>
-            <input type="number" id="monitoringPersonnelId" name="monitoringPersonnelId" value="<%=monitoringManagementaddmore.getMonitoringPersonnelId()%>" readonly>
+            <input type="number" id="monitoringPersonnelId" name="monitoringPersonnelId" required>
         </div>
 
         <div class="form-group">
             <label for="monitoringLocation" class="required">监测地点:</label>
-            <input type="text" id="monitoringLocation" name="monitoringLocation" value="<%=monitoringManagementaddmore.getMonitoringLocation()%>" readonly>
+            <input type="text" id="monitoringLocation" name="monitoringLocation" required>
         </div>
 
         <div class="form-group">
             <label for="monitoringObject" class="required">监测对象:</label>
-            <input type="text" id="monitoringObject" name="monitoringObject" value="<%=monitoringManagementaddmore.getMonitoringObject()%>" readonly>
-
+            <input type="text" id="monitoringObject" name="monitoringObject" required>
         </div>
+
 
         <div class="form-group">
             <label for="monitoringDeviceId" class="required">监测设备ID:</label>
-            <input type="text" id="monitoringDeviceId" name="monitoringDeviceId" value="<%=monitoringManagementaddmore.getMonitoringDeviceId()%>">
+            <input type="text" id="inputText" oninput="filterOptions()" placeholder="可以搜索下拉框内容">
         </div>
-
-        <%
-           System.out.println(1);
-
-           for ( String monitoringdevice :monitoringDevices) {
-                System.out.println(monitoringdevice);
-        %>
         <div class="form-group">
-            <label for="<%= monitoringdevice %>"><%= monitoringdevice %>监测指标:</label>
-            <input type="text" id="<%= monitoringdevice %>" name="<%= monitoringdevice %>" required>
+            <select id="monitoringDeviceId" name="monitoringDeviceId" onchange="updateInputText(this)" required>
+                <%
+                    if (MonitoringDevices != null) {
+                        for (MonitoringDevice monitoringdevice : MonitoringDevices) {
+                            String display = monitoringdevice.getMonitoringDeviceName();
+                            int id = monitoringdevice.getMonitoringDeviceId();// 获取要显示设备名
+                %>
+                <option value="<%= id %>"><%= display %></option>
+                <%
+                        }
+                    }
+                %>
+            </select>
         </div>
-        <%
-            }
-        %>
+
 
         <div class="form-group">
             <input type="submit" value="提交">
