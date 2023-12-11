@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.demo.Dao.Monitor.MonitoringManagementDao">
+    <!-- 查找所有监测管理 -->
+    <select id="selectAllMonitoringManagement" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        select * from monitoring_management
+    </select>
+    
+    <!-- 通过Id查找监测管理 -->
+    <select id="selectMonitoringManagementById" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        select * from monitoring_management where monitoringManagementId = #{monitoringManagementId}
+    </select>
+
+    <!-- 通过Id模糊查找监测管理 -->
+    <select id="LikeSelectMonitoringManagementById" parameterType="String" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        select * from monitoring_management where CAST(monitoringManagementId AS char) like '%${booId}%'
+    </select>
+
+
+    <!-- 添加一个监测管理 -->
+    <insert id="insertOneMonitoringManagement" useGeneratedKeys="true" keyProperty="monitoringManagementId">
+        insert into monitoring_management
+        (monitoringManagementId, monitoringTime, monitoringPersonnelId, monitoringLocation, monitoringObject,
+         monitoringIndicatorValues, monitoringDeviceId, monitoringStatus)
+        values(#{monitoringManagementId}, #{monitoringTime}, #{monitoringPersonnelId}, #{monitoringLocation}, #{monitoringObject},
+               #{monitoringIndicatorValues}, #{monitoringDeviceId}, #{monitoringStatus})
+    </insert>
+
+    <!-- 更新监测管理详细信息 -->
+    <update id="updateMonitoringManagement" parameterType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        update monitoring_management set
+                                         monitoringTime = #{monitoringTime}, monitoringPersonnelId = #{monitoringPersonnelId},
+                                         monitoringLocation = #{monitoringLocation}, monitoringObject = #{monitoringObject},
+                                         monitoringIndicatorValues = #{monitoringIndicatorValues}, monitoringDeviceId = #{monitoringDeviceId},
+                                         monitoringStatus = #{monitoringStatus}
+        where monitoringManagementId = #{monitoringManagementId}
+    </update>
+
+    <!-- 根据监测管理Id删除一个监测管理 -->
+    <delete id="deleteMonitoringManagement">
+        delete from monitoring_management where monitoringManagementId = #{monitoringManagementId}
+    </delete>
+
+    <!--根据植物Id查找监测状态-->
+    <select id="selectStatusByPlanId" resultType="String">
+        select monitoringStatus from monitoring_management where monitoringObject = #{monitoringObject}
+    </select>
+
+
+</mapper>
