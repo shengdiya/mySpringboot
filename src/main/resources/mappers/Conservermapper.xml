@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.demo.Dao.ConserverDao">
+
+<!--根据养护人员ID查找他的养护任务-->
+    <select id="selectConserveTaskByUserId" parameterType="int" resultType="com.myapp.demo.Entiy.ConserveTask">
+        select * from conservetask where executionPersonnel = #{executionPersonnel}
+    </select>
+<!--根据养护人员ID查找他的养护任务-->
+    <select id="selectAllConserveTasks" resultType="com.myapp.demo.Entiy.ConserveTask">
+        select * from conservetask
+    </select>
+<!--修改养护任务的状态为正在进行-->
+    <update id="statusChangeToInProgress" parameterType="int">
+        update conservetask set
+            status = 1
+        where taskId = #{taskId}
+    </update>
+    <!--修改养护任务的状态为已完成-->
+    <update id="statusChangeToFinished" parameterType="int">
+        update conservetask set
+            status = -1
+        where taskId = #{taskId}
+    </update>
+<!--删除养护任务-->
+    <delete id="deleteTaskByTaskId">
+        delete from conservetask where taskId = #{taskId}
+    </delete>
+    <!-- 添加一个任务 -->
+    <insert id="insertTask" useGeneratedKeys="true" keyProperty="taskId">
+        insert into conservetask
+        (taskId, taskName, executionTime, executionLocation, executionPersonnel, taskDescription, plantId, pestId, status)
+        values(#{taskId}, #{taskName}, #{executionTime}, #{executionLocation}, #{executionPersonnel}, #{taskDescription}, #{plantId}, #{pestId}, #{status})
+    </insert>
+<!--查询所有植物信息-->
+    <select id="selectAllPlants" resultType="com.myapp.demo.Entiy.Plant">
+        select * from plant
+    </select>
+<!--查询所有病虫害信息-->
+    <select id="selectAllPests" resultType="com.myapp.demo.Entiy.Garden_pest">
+        select * from garden_pest
+    </select>
+<!--为植物添加感染病虫害的信息，在plant_disease表里添加-->
+    <insert id="insertPlantPest">
+        insert into plant_disease (plantId, pestId) values(#{plantId}, #{pestId})
+    </insert>
+<!--根据病虫害的ID删除病虫害-->
+    <delete id="deletePestById">
+        delete from garden_pest where pestId = #{pestId}
+    </delete>
+<!--添加病虫害信息-->
+    <insert id="addPest" useGeneratedKeys="true" keyProperty="pestId">
+        insert into garden_pest (pestId, pestName) values(#{pestId}, #{pestName})
+    </insert>
+<!--用于在完成养护任务时删除植物病虫害-->
+    <delete id="deletePlantPestByPlantIdAndPestId">
+        DELETE FROM plant_disease WHERE plantId = #{plantId} AND pestId = #{pestId}
+    </delete>
+<!--在植物病虫害表用某一个植物的ID选出它得的病虫害-->
+    <select id="selectPestByPlantId" resultType="int">
+        select pestId from plant_disease where plantId = #{plantId}
+    </select>
+<!--和上一个一起用，根据查找到的病虫害ID查找病虫害记录-->
+    <select id="selectPestByPestId" resultType="com.myapp.demo.Entiy.Garden_pest">
+        select * from garden_pest where pestId = #{pestId}
+    </select>
+<!--在植物病虫害表根据病虫害ID查询被它感染的植物-->
+    <select id="selectPlantByPestId" resultType="int">
+        select plantId from plant_disease where pestId = #{pestId}
+    </select>
+<!--和上一个一起用，根据查找到的植物ID查询植物记录-->
+    <select id="selectPlantByPlantId" resultType="com.myapp.demo.Entiy.Plant">
+        select * from plant where plantId = #{plantId}
+    </select>
+<!--根据病虫害ID查询有哪些关联养护任务-->
+    <select id="selectConserveTaskByPestId" resultType="com.myapp.demo.Entiy.ConserveTask">
+        select * from conservetask where pestId = #{pestId}
+    </select>
+<!--根据执行人员编号查询执行人员姓名，在conserverTaskList里用到-->
+    <select id="selectConserverNameByConserverId" resultType="string">
+        select realName from user where userId = #{userId}
+    </select>
+
+
+    <!--以下为5个模糊匹配-->
+    <!--根据养护人名模糊匹配-->
+    <select id="LikeSelectTaskByRealName" resultType="com.myapp.demo.Entiy.ConserveTask">
+        select * from conservetask
+        inner join user
+        on conservetask.executionPersonnel = user.userId
+        where user.realName like '%${searchContent}%'
+    </select>
+    <!--根据养护对象模糊匹配-->
+    <select id="LikeSelectTaskByPlantName" resultType="com.myapp.demo.Entiy.ConserveTask">
+        select * from conservetask
+        inner join plant
+        on conservetask.plantId = plant.plantId
+        where plant.plantName like '%${searchContent}%'
+    </select>
+    <!--根据病虫害名模糊匹配-->
+    <select id="LikeSelectTaskByPestName" resultType="com.myapp.demo.Entiy.ConserveTask">
+        select * from conservetask
+        inner join garden_pest
+        on conservetask.pestId = garden_pest.pestId
+        where garden_pest.pestName like '%${searchContent}%'
+    </select>
+    <!--根据监测地点模糊匹配-->
+    <select id="LikeSelectTaskByPlace" resultType="com.myapp.demo.Entiy.ConserveTask">
+        select * from conservetask where executionLocation like '%${searchContent}%'
+    </select>
+    <!--根据任务名称模糊匹配-->
+    <select id="LikeSelectTaskByTaskName" resultType="com.myapp.demo.Entiy.ConserveTask">
+        select * from conservetask where taskName like '%${searchContent}%'
+    </select>
+
+</mapper>

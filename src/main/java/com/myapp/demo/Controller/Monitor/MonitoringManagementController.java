@@ -99,6 +99,7 @@ public class MonitoringManagementController {
         List<MonitoringDevice> MonitoringDevices =monitoringdeviceservice.selectAllMonitoringDevice();
         request.setAttribute("MonitoringDevices",MonitoringDevices);
         request.setAttribute("plantToBoMonitor",plantToBoMonitor);
+        request.setAttribute("userservice",userservice);
         return "Monitor/MonitoringManagementAdd";
     }
 

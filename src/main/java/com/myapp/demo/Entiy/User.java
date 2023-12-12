@@ -13,7 +13,6 @@ public class User {
     private String email; //邮箱
     private String address; //住址
 
-
     public Integer getUserId() {
         return userId;
     }

@@ -62,7 +62,7 @@ public class UserService {
 	
 	//管理员添加一个工作人员
 	public Integer adminInsertStaff(User user) {
-		List<User> users = userdao.selectAllusersInOneRole(2);
+		List<User> users = userdao.selectAllUsers();
 		for(User u : users) {
 			if(u.getUserName().equals(user.getUserName())) {  //重名了
 				return 0; //重名就返回0

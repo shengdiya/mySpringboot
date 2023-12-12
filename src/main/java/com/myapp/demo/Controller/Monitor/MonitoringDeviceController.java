@@ -113,9 +113,8 @@ public class MonitoringDeviceController {
                 }
                 monitoringdevice.setMonitoringIndicatorCategories(inputValues);
                 monitoringdeviceservice.updateMonitoringDevice(monitoringdevice);
-
                 mav.addObject("modifyMonitoringDevice","修改单位信息成功"); //传给前端需要弹窗的内容
-            }else { //工作中不能删
+            }else {  //此处可以改成用触发器
                 mav.addObject("modifyMonitoringDevice","该设备重名，修改失败"); //传给前端需要弹窗的内容
             }
 

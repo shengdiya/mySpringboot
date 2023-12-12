@@ -13,6 +13,7 @@
         user = (User) request.getSession().getAttribute("monitor");
     }
     Plant plantToBoMonitor = (Plant) request.getAttribute("plantToBoMonitor");
+    UserService userservice = (UserService) request.getAttribute("userservice");
     List<MonitoringDevice> MonitoringDevices = (List<MonitoringDevice>)request.getAttribute("MonitoringDevices");
 %>
 <!DOCTYPE html>
@@ -57,8 +58,17 @@
         </div>
 
         <div class="form-group">
-            <label for="monitoringPersonnelId" class="required">监测人员ID:</label>
-            <input type="number" id="monitoringPersonnelId" name="monitoringPersonnelId" required>
+            <label for="monitoringPersonnelId" class="required">监测人员:</label>
+            <select id="monitoringPersonnelId" name="monitoringPersonnelId" required>
+                <%
+                    List<User> users = userservice.selectAllUsers();
+                    for(User u : users){
+                        if(userservice.getUserRole(u.getUserId()).equals("监测人员")){
+                %>
+                <option value="<%= u.getUserId() %>"><%= u.getRealName() %></option>
+                <% }
+                } %>
+            </select>
         </div>
 
         <div class="form-group">

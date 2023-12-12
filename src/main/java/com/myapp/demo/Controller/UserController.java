@@ -40,6 +40,11 @@ public class UserController {
 		//管理员
 		if("admin".equals(role) && roleId==1) {
 			request.getSession().setAttribute("admin", user);
+
+			//.............
+			request.getSession().setAttribute("roleId", userservice.getUserRoleId(user));
+			//...................
+
 			mav.setViewName("admin/adminIndex");
 			mav.addObject("start","plant/adminPlantList");//登陆后默认加载"adminPlantList"界面
 		}
@@ -170,7 +175,7 @@ public class UserController {
 	public ModelAndView adminAddStaff(User user,String identity,ModelAndView mav) throws IOException {
 		//用户名、真实姓名、联系电话、邮箱、住址、用户身份为管理员输入
 		//还要在user_role表里添加新的工作人员映射
-		if(userservice.adminInsertStaff(user)!=0) {
+		if(userservice.adminInsertStaff(user) != 0) {
 			//添加工作人员的user_role表映射
 			Integer userId = user.getUserId();//获取自增生成的userId
 			if(identity.equals("conserver")){
@@ -230,10 +235,19 @@ public class UserController {
 		request.setAttribute("userservice", userservice);//把userservice也传过去，在adminUserList.jsp中要用
 		return "admin/adminUserListBoss";
 	}
+
 	//管理员删除一个用户
 	@RequestMapping(params = "method=deleteUser")
 	public ModelAndView deleteUser(ModelAndView mav, HttpServletRequest request) throws IOException {
 		String userId = request.getParameter("userId"); //接收要删用户的Id
+		String forward = null;
+		if(userservice.getUserRole(Integer.valueOf(userId)).equals("养护人员")){
+			forward = "user/adminUserListConserver";
+		} else if (userservice.getUserRole(Integer.valueOf(userId)).equals("监测人员")) {
+			forward = "user/adminUserListMonitor";
+		}else{
+			forward = "user/adminUserListBoss";
+		}
 		try {
 			userservice.deleteUser(Integer.valueOf(userId)); //删除user表里的
 			userservice.deleteUserRole(Integer.valueOf(userId)); //删除user_role表里的
@@ -242,14 +256,6 @@ public class UserController {
 		}catch(Exception e) {
 			mav.setViewName("admin/adminIndex");
 			mav.addObject("deleteUser","该用户有正在执行的养护或监测任务，删除失败"); //传给前端需要弹窗的内容
-		}
-		String forward = null;
-		if(userservice.getUserRole(Integer.valueOf(userId)).equals("养护人员")){
-			forward = "user/adminUserListConserver";
-		} else if (userservice.getUserRole(Integer.valueOf(userId)).equals("监测人员")) {
-			forward = "user/adminUserListMonitor";
-		}else{
-			forward = "user/adminUserListBoss";
 		}
 		mav.addObject("start",forward);//删完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminUserList.jsp，让删完之后还留在用户列表的界面
 		return mav;

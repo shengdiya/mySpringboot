@@ -20,11 +20,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/plant")
-public class PlantController {    @Resource(name="plantService")
-private PlantService plantservice;
-
+public class PlantController {
+    @Resource(name="plantService")
+    private PlantService plantservice;
     @Resource(name="MonitoringManagementService")
     private MonitoringManagementService monitoringmanagementservice;
+
+
     @RequestMapping("/adminAddPlant")
     public String adminAddPlant(HttpServletRequest request) {
         List<String> plantsSpecies = plantservice.getAllSpecies();

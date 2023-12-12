@@ -81,18 +81,31 @@
     }
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
+            <% if(request.getAttribute("effectRow") != null) { %>
+                <% if((Integer) request.getAttribute("effectRow") == 1) { %>
+                    alert("修改成功");
+                <% } else { %>
+                    alert("修改失败");
+                <% } %>
+            <% } %>
+            <% if(request.getAttribute("effectRow_plant_disease") != null) { %>
+                <% if((Integer) request.getAttribute("effectRow_plant_disease") == 1) { %>
+                    alert("修改成功");
+                <% } else { %>
+                    alert("修改失败");
+                <% } %>
+            <% } %>
+
             <% if(request.getAttribute("addPlant") != null) { %>
                 alert("${addPlant}");
-            <% } else if(request.getAttribute("NotFound") != null) { %>
-                alert("${NotFound}");
-            <% } else if(request.getAttribute("alreadyLogin") != null) { %>
-                alert("${alreadyLogin}");
             <% } else if(request.getAttribute("LikeSearchPlantByName") != null) { %>
                 alert("${LikeSearchPlantByName}");
             <% } else if(request.getAttribute("addStaff") != null) { %>
                 alert("${addStaff}");
             <% } else if(request.getAttribute("deleteUser") != null) { %>
                 alert("${deleteUser}");
+            <% } else if(request.getAttribute("SQLMessage") != null) { %>
+                alert("${SQLMessage}");
             <% } %>
         }, 0); // 设置延时时间为0，将代码推入事件循环的末尾
     });
@@ -113,14 +126,18 @@
             <el-aside width="200px" class="el-menu-vertical-demo">
                 <el-menu default-active="1" @select="handleSelect" background-color="#1F2D3D" text-color="#BCC1C7" active-text-color="#409EFF">
                     <el-submenu index="1">
-                        <template slot="title"><i class="el-icon-setting"></i> 植物基本信息管理</template>
+                        <template slot="title"><i class="el-icon-setting"></i>植物基本信息管理</template>
                         <el-menu-item index="plantInfo-add">植物添加</el-menu-item>
                         <el-menu-item index="plantInfo-list">植物列表</el-menu-item>
                     </el-submenu>
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-setting"></i> 植物养护任务管理</template>
-<%--                        <el-menu-item index="unit-add">养护任务添加</el-menu-item>--%>
-<%--                        <el-menu-item index="unit-list">养护任务列表</el-menu-item>--%>
+                        <el-menu-item index="task-list">查看养护任务</el-menu-item>
+                        <el-submenu index="pest-list">
+                            <template slot="title">病虫害管理</template>
+                            <el-menu-item index="plant-list">植物患病情况</el-menu-item>
+                            <el-menu-item index="pest-list">病虫害列表</el-menu-item>
+                        </el-submenu>
                     </el-submenu>
                     <el-submenu index="3">
                         <template slot="title"><i class="el-icon-setting"></i> 植物检测记录管理</template>
@@ -129,16 +146,10 @@
                         <el-menu-item index="monitordevice-list">监测设备查看</el-menu-item>
                     </el-submenu>
                     <el-submenu index="4">
-                        <template slot="title"><i class="el-icon-setting"></i> 植物病虫害管理</template>
-<%--                        <el-menu-item index="unit-add">病虫害添加</el-menu-item>--%>
-<%--                        <el-menu-item index="unit-list">病虫害列表</el-menu-item>--%>
-<%--                        <el-menu-item index="unit-list">植物病虫害列表</el-menu-item>--%>
-                    </el-submenu>
-                    <el-submenu index="5">
                         <template slot="title"><i class="el-icon-setting"></i> 植物分类分布管理</template>
 <%--                        <el-menu-item index="unit-add">植物分类添加</el-menu-item>--%>
                     </el-submenu>
-                    <el-submenu index="6">
+                    <el-submenu index="5">
                         <template slot="title"> <i class="el-icon-menu"></i> 用户管理 </template>
                         <el-menu-item index="user-add">用户添加</el-menu-item>
                         <el-submenu index="user-list">
@@ -197,6 +208,18 @@
                         break;
                     case 'monitormanagement-list':
                         this.loadPageContent("MonitorManagement/MonitorManagementShow");
+                        break;
+                    case 'task-list':
+                        this.loadPageContent('conserverController/conserverTaskList');
+                        break;
+                    case 'task-add':
+                        this.loadPageContent('conserverController/conserverAddTask');
+                        break;
+                    case 'plant-list':
+                        this.loadPageContent('conserverController/conserverTODOPlant');
+                        break;
+                    case 'pest-list':
+                        this.loadPageContent('conserverController/conserverShowAndAddPest');
                         break;
                 }
             },

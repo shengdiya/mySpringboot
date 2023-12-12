@@ -56,6 +56,7 @@
         <th>植物种名</th>
         <th>基本信息管理</th>
         <th>添加检测记录</th>
+        <th>添加养护记录</th>
     </tr>
     <% for (int i = 0; i < plants.size(); i++) {
         Plant plant = plants.get(i);
@@ -75,17 +76,12 @@
                 <input type="submit" value="删除" class="action-button delete-button">
             </form>
         </td>
-
         <td>
             <a href="/MonitorManagement/MonitorManagementAdd?plantId=<%= plant.getPlantId() %>" class="action-button edit-button">添加</a>
         </td>
-
-<%--        <td>--%>
-<%--            <!--以下两条为超链接，点击后跳转到增加养护/监测任务的界面，--%>
-<%--                跳转前要先判断该植物有没有正在进行的养护/监测任务，如果有则不允许跳转，或者直接禁用超链接，或者不让在增加界面中提交增加记录，反正就想办法不让增加-->--%>
-<%--            <a href="#?plant=<%= plant.getPlantId() %>" class="action-button detail-button">添加养护记录</a>-- 齐贇博TODO%>
-
-<%--        </td>--%>
+        <td>
+            <a href="/conserverController/conserverAddTask?plantId=<%= plant.getPlantId() %>" class="action-button edit-button">添加</a>
+        </td>
     </tr>
     <% } %>
 </table>
