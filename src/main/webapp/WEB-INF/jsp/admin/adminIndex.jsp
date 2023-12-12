@@ -139,9 +139,14 @@
 <%--                        <el-menu-item index="unit-add">植物分类添加</el-menu-item>--%>
                     </el-submenu>
                     <el-submenu index="6">
-                        <template slot="title"><i class="el-icon-menu"></i> 用户管理</template>
+                        <template slot="title"> <i class="el-icon-menu"></i> 用户管理 </template>
                         <el-menu-item index="user-add">用户添加</el-menu-item>
-                        <el-menu-item index="user-list">用户列表</el-menu-item>
+                        <el-submenu index="user-list">
+                            <template slot="title">用户列表</template>
+                            <el-menu-item index="user-conserver">养护人员</el-menu-item>
+                            <el-menu-item index="user-monitor">监测人员</el-menu-item>
+                            <el-menu-item index="user-boss">上级管理人员</el-menu-item>
+                        </el-submenu>
                     </el-submenu>
                 </el-menu>
             </el-aside>
@@ -169,8 +174,14 @@
                     case 'user-add':
                         this.loadPageContent('user/adminAddUser');
                         break;
-                    case 'user-list':
-                        this.loadPageContent('user/adminUserList');
+                    case 'user-conserver':
+                        this.loadPageContent('user/adminUserListConserver');
+                        break;
+                    case 'user-monitor':
+                        this.loadPageContent('user/adminUserListMonitor');
+                        break;
+                    case 'user-boss':
+                        this.loadPageContent('user/adminUserListBoss');
                         break;
                     case 'plantInfo-add':
                         this.loadPageContent('plant/adminAddPlant');
@@ -197,7 +208,7 @@
                     })
                     .catch(function (error) {
                         console.log(error);
-                        vm.mainContent = '<p>加载页面失败，请稍后再试。</p>';
+                        vm.mainContent = '';
                     });
             }
         },

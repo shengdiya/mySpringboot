@@ -189,14 +189,72 @@ public class UserController {
 		return mav;
 	}
 	
-	//管理员查看所有的用户
-	@RequestMapping("/adminUserList")
-	public String userList(HttpServletRequest request) {
-		List<User> users = userservice.selectAllUsers();
-		request.setAttribute("users", users);
+	//查看所有的养护人员
+	@RequestMapping("/adminUserListConserver")
+	public String adminUserListConserver(HttpServletRequest request) {
+		List<User> allUsers = userservice.selectAllUsers();
+		List<User> conservers = new ArrayList<>();
+		for(User user : allUsers){
+			if(userservice.getUserRole(user.getUserId()).equals("养护人员")){
+				conservers.add(user);
+			}
+		}		request.setAttribute("users", conservers);
 		request.setAttribute("userservice", userservice);//把userservice也传过去，在adminUserList.jsp中要用
-	    return "admin/adminUserList";
+	    return "admin/adminUserListConserver";
 	}
+	//查看所有的监测人员
+	@RequestMapping("/adminUserListMonitor")
+	public String adminUserListMonitor(HttpServletRequest request) {
+		List<User> allUsers = userservice.selectAllUsers();
+		List<User> monitors = new ArrayList<>();
+		for(User user : allUsers){
+			if(userservice.getUserRole(user.getUserId()).equals("监测人员")){
+				monitors.add(user);
+			}
+		}
+		request.setAttribute("users", monitors);
+		request.setAttribute("userservice", userservice);//把userservice也传过去，在adminUserList.jsp中要用
+		return "admin/adminUserListMonitor";
+	}
+	//查看所有主管部门人员
+	@RequestMapping("/adminUserListBoss")
+	public String adminUserListBoss(HttpServletRequest request) {
+		List<User> allUsers = userservice.selectAllUsers();
+		List<User> bosses = new ArrayList<>();
+		for (User user : allUsers) {
+			if (userservice.getUserRole(user.getUserId()).equals("上级主管人员")) {
+				bosses.add(user);
+			}
+		}
+		request.setAttribute("users", bosses);
+		request.setAttribute("userservice", userservice);//把userservice也传过去，在adminUserList.jsp中要用
+		return "admin/adminUserListBoss";
+	}
+	//管理员删除一个用户
+	@RequestMapping(params = "method=deleteUser")
+	public ModelAndView deleteUser(ModelAndView mav, HttpServletRequest request) throws IOException {
+		String userId = request.getParameter("userId"); //接收要删用户的Id
+		try {
+			userservice.deleteUser(Integer.valueOf(userId)); //删除user表里的
+			userservice.deleteUserRole(Integer.valueOf(userId)); //删除user_role表里的
+			mav.addObject("deleteUser","删除成功"); //传给前端需要弹窗的内容
+			mav.setViewName("admin/adminIndex");
+		}catch(Exception e) {
+			mav.setViewName("admin/adminIndex");
+			mav.addObject("deleteUser","该用户有正在执行的养护或监测任务，删除失败"); //传给前端需要弹窗的内容
+		}
+		String forward = null;
+		if(userservice.getUserRole(Integer.valueOf(userId)).equals("养护人员")){
+			forward = "user/adminUserListConserver";
+		} else if (userservice.getUserRole(Integer.valueOf(userId)).equals("监测人员")) {
+			forward = "user/adminUserListMonitor";
+		}else{
+			forward = "user/adminUserListBoss";
+		}
+		mav.addObject("start",forward);//删完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminUserList.jsp，让删完之后还留在用户列表的界面
+		return mav;
+	}
+//----------------------------------------------------------------------------------------------------------------
 
 	//主管部门查看所有养护人员
 	@RequestMapping("/bossConserverList")
@@ -226,23 +284,6 @@ public class UserController {
 		return "boss/bossMonitorList";
 	}
 
-	//管理员删除一个用户
-	@RequestMapping(params = "method=deleteUser")
-	public ModelAndView deleteUser(ModelAndView mav, HttpServletRequest request) throws IOException {
-		try {
-			String userId = request.getParameter("userId"); //接收要删用户的Id
-			userservice.deleteUser(Integer.valueOf(userId)); //删除user表里的
-			userservice.deleteUserRole(Integer.valueOf(userId)); //删除user_role表里的
-			mav.addObject("deleteUser","删除成功"); //传给前端需要弹窗的内容
-			mav.setViewName("admin/adminIndex");
-		}catch(Exception e) {
-			mav.setViewName("admin/adminIndex");
-			mav.addObject("deleteUser","该用户有正在执行的养护或监测任务，删除失败"); //传给前端需要弹窗的内容
-		}
-		mav.addObject("start","user/adminUserList");//删完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminUserList.jsp，让删完之后还留在用户列表的界面
-		return mav;
-	}
-//----------------------------------------------------------------------------------------------------------------
 
 	//点击查看用户的详细信息
 	@RequestMapping("/adminSeeDetails")
