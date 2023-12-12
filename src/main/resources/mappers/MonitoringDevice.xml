@@ -8,7 +8,11 @@
     <select id="selectAllMonitoringDevice" resultType="com.myapp.demo.Entiy.Monitor.MonitoringDevice">
         select * from monitoring_device
     </select>
-    
+
+    <!--模糊匹配查找设备（设备名）-->
+    <select id="LikeSelectDevicesByName" resultType="com.myapp.demo.Entiy.Monitor.MonitoringDevice">
+        select * from monitoring_device where monitoringDeviceName like '%${searchContent}%'
+    </select>
     <!-- 通过Id查找监测设备 -->
     <select id="selectMonitoringDeviceById" resultType="com.myapp.demo.Entiy.Monitor.MonitoringDevice">
         select * from monitoring_device where monitoringDeviceId = #{monitoringDeviceId}

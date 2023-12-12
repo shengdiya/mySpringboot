@@ -17,7 +17,7 @@
 </head>
 <body>
 <input name="safe" type="hidden" value="<%= boss.getUserName() %>">
-<h2>养护人员列表</h2>
+<h2>监测人员列表</h2>
 <table class="table-style">
   <tr>
     <th>序号</th>

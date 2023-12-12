@@ -81,7 +81,7 @@ public class UserController {
 			request.getSession().removeAttribute("admin");
 		}else if(role.equals("养护人员")) {
 			request.getSession().removeAttribute("conserver");
-		}else if(role.equals("监护人员")){
+		}else if(role.equals("监测人员")){
 			request.getSession().removeAttribute("monitor");
 		}else{
 			request.getSession().removeAttribute("boss");
@@ -226,6 +226,22 @@ public class UserController {
 		return "boss/bossMonitorList";
 	}
 
+	//管理员删除一个用户
+	@RequestMapping(params = "method=deleteUser")
+	public ModelAndView deleteUser(ModelAndView mav, HttpServletRequest request) throws IOException {
+		try {
+			String userId = request.getParameter("userId"); //接收要删用户的Id
+			userservice.deleteUser(Integer.valueOf(userId)); //删除user表里的
+			userservice.deleteUserRole(Integer.valueOf(userId)); //删除user_role表里的
+			mav.addObject("deleteUser","删除成功"); //传给前端需要弹窗的内容
+			mav.setViewName("admin/adminIndex");
+		}catch(Exception e) {
+			mav.setViewName("admin/adminIndex");
+			mav.addObject("deleteUser","该用户有正在执行的养护或监测任务，删除失败"); //传给前端需要弹窗的内容
+		}
+		mav.addObject("start","user/adminUserList");//删完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminUserList.jsp，让删完之后还留在用户列表的界面
+		return mav;
+	}
 //----------------------------------------------------------------------------------------------------------------
 
 	//点击查看用户的详细信息
@@ -273,22 +289,7 @@ public class UserController {
 		mav.addObject("start","user/adminUserList");
 		return mav;
 	}
-	//管理员删除一个用户
-	@RequestMapping(params = "method=deleteUser")
-	public ModelAndView deleteUser(ModelAndView mav, HttpServletRequest request) throws IOException {
-		try {	
-			String userId = request.getParameter("userId"); //接收要删用户的Id
-			userservice.deleteUser(Integer.valueOf(userId)); //删除user表里的
-			userservice.deleteUserRole(Integer.valueOf(userId)); //删除user_role表里的
-			mav.addObject("deleteUser","删除成功"); //传给前端需要弹窗的内容
-			mav.setViewName("adminIndex");
-		}catch(Exception e) {
-			mav.setViewName("adminIndex");
-			mav.addObject("deleteUser","删除失败"); //传给前端需要弹窗的内容
-		}	
-		mav.addObject("start","user/adminUserList");//删完一个用户要再跳转到adminIndex.jsp，加载其中的内容为adminUserList.jsp，让删完之后还留在用户列表的界面
-		return mav;
-	}
+
 	
 	//回到adminIndex界面（点击"返回"）
 	@RequestMapping(params = "method=returnAdminIndex")

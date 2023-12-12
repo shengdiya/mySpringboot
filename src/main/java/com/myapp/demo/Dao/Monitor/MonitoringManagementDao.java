@@ -27,4 +27,9 @@ public interface MonitoringManagementDao {
 
     public String selectStatusByPlanId(Integer monitoringObject);
 
+    //以下为4个模糊匹配
+    public List<MonitoringManagement> LikeSelectMonitorTaskByRealName(String searchContent);
+    List<MonitoringManagement> LikeSelectMonitorTaskByPlantName(String searchContent);
+    List<MonitoringManagement> LikeSelectMonitorTaskByDeviceName(String searchContent);
+    List<MonitoringManagement> LikeSelectMonitorTaskByPlace(String searchContent);
 }

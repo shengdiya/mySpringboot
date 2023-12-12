@@ -42,6 +42,8 @@
                 alert("${modifyPlantDetails}");
             <% } else if(request.getAttribute("modifyPlantPhoto") != null) { %>
                 alert("${modifyPlantPhoto}");
+            <% } else if(request.getAttribute("deletePlant") != null) { %>
+                alert("${deletePlant}");
             <% } %>
         }, 0); // 设置延时时间为0，将代码推入事件循环的末尾
     });
@@ -52,10 +54,8 @@
     <tr>
         <th>植物编号</th>
         <th>植物种名</th>
-<%--        <th>养护状态</th>--%>
-        <th>监测状态</th>
         <th>基本信息管理</th>
-<%--        <th>养护与监测管理</th>--%>
+        <th>添加检测记录</th>
     </tr>
     <% for (int i = 0; i < plants.size(); i++) {
         Plant plant = plants.get(i);
@@ -63,11 +63,6 @@
     <tr>
         <td><%= plant.getNumber() %></td>
         <td><%= plant.getPlantName() %></td>
-<%--        <td><%= if(养护任务服务类.select一条养护记录ByplantIdAndStatus(plantId,"进行中")==null) 该位置显示“未分配养护任务
-                    else 此处显示“已分配养护任务” %></td>      齐贇波TODO--%>
-        <td><%= monitoringmanagementservice.selectStatusByPlanId(plant.getPlantId()) %></td>
-        <!--以上两条业务逻辑可以在service层中编写函数，不一定要在这个界面用纯jsp实现-->
-
         <td>
             <!-- 前两个需要跳转到一个新的界面，而删除后需要留在原界面，这里采用form表单提交的方式 -->
             <form action="/plant?method=deletePlant" method="post">
@@ -81,11 +76,15 @@
             </form>
         </td>
 
+        <td>
+            <a href="/MonitorManagement/MonitorManagementAdd?plantId=<%= plant.getPlantId() %>" class="action-button edit-button">添加</a>
+        </td>
+
 <%--        <td>--%>
 <%--            <!--以下两条为超链接，点击后跳转到增加养护/监测任务的界面，--%>
 <%--                跳转前要先判断该植物有没有正在进行的养护/监测任务，如果有则不允许跳转，或者直接禁用超链接，或者不让在增加界面中提交增加记录，反正就想办法不让增加-->--%>
 <%--            <a href="#?plant=<%= plant.getPlantId() %>" class="action-button detail-button">添加养护记录</a>-- 齐贇博TODO%>
-<%--            <a href="#?plant=<%= plant.getPlantId() %>" class="action-button edit-button">添加监测记录</a>-- 唐景睿TODO%>
+
 <%--        </td>--%>
     </tr>
     <% } %>

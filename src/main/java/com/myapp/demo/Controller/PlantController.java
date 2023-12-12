@@ -15,13 +15,14 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @Controller
 @RequestMapping("/plant")
-public class PlantController {
-    @Resource(name="plantService")
-    private PlantService plantservice;
+public class PlantController {    @Resource(name="plantService")
+private PlantService plantservice;
+
     @Resource(name="MonitoringManagementService")
     private MonitoringManagementService monitoringmanagementservice;
     @RequestMapping("/adminAddPlant")
@@ -168,6 +169,19 @@ public class PlantController {
         plant = plantservice.selectPlantByPlantId(plant.getPlantId());
         request.setAttribute("modifyPlantPhoto","修改成功");
         return adminPlantSameSpeciesList(plant.getPlantName(),request); //修改后返回adminPlantSameSpeciesList.jsp界面
+    }
+
+    //管理员删除植物
+    @RequestMapping(params = "method=deletePlant")
+    public String ModifyPlantPhoto(String plantId, HttpServletRequest request){
+        Plant plant = plantservice.selectPlantByPlantId(Integer.valueOf(plantId));
+        try{
+            plantservice.deletePlantById(plantId);
+        }catch (Exception e){
+            request.setAttribute("deletePlant", "此植物有正在执行的养护或监测任务，删除失败");
+        }
+
+        return adminPlantSameSpeciesList(plant.getPlantName(),request);
     }
 
     //搜索结果界面

@@ -55,7 +55,7 @@
 
 <div class="container">
     <h2>增加监测管理信息</h2>
-    <form action="MonitorManagement?method=addmoreMonitorManagement" method="post">
+    <form action="/MonitorManagement?method=addmoreMonitorManagement" method="post">
         <div class="form-group">
             <label for="monitoringTime1" class="required">监测时间:</label>
             <input type="datetime-local" id="monitoringTime1" name="monitoringTime1" value="<%=monitoringManagementaddmore.getMonitoringTime()%>" readonly>

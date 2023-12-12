@@ -15,10 +15,10 @@
     if(user==null){
         user = (User) request.getSession().getAttribute("monitor");
     }
-    MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) request.getAttribute("monitoringdeviceservice");
     PlantService plantService = (PlantService) request.getAttribute("plantservice");
     UserService userService = (UserService) request.getAttribute("userservice");
-    List<MonitoringManagement> monitoringmanagements = (List<MonitoringManagement>) request.getAttribute("monitoringmanagements");
+    MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) request.getAttribute("monitoringdeviceservice");
+    List<MonitoringManagement> monitoringmanagementsSearchResult = (List<MonitoringManagement>) request.getSession().getAttribute("monitoringmanagementsSearchResult");
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -33,11 +33,11 @@
 <div class="searchcontainer">
     <form action="/MonitorManagement?method=SearchMonitorTask" method="post" onsubmit="return handleSearch(this)">
         <select name="searchType" class="shortselect">
-            <option value="realName" selected>监测人员姓名</option>
-<%--            <option value="fullname">真实姓名</option>--%>
-<%--            <option value="phone">电话</option>--%>
-<%--            <option value="email">邮箱</option>--%>
-<%--            <option value="address">地址</option>--%>
+            <option value="realName" selected>养护人员真实姓名</option>
+            <%--            <option value="fullname">真实姓名</option>--%>
+            <%--            <option value="phone">电话</option>--%>
+            <%--            <option value="email">邮箱</option>--%>
+            <%--            <option value="address">地址</option>--%>
             <option value="plantName">植物种名</option>
             <option value="DeviceName">设备名</option>
             <option value="place">检测地点</option>
@@ -63,7 +63,7 @@
 
     </thead>
     <tbody>
-    <% for (MonitoringManagement monitoringmanagement : monitoringmanagements) { %>
+    <% for (MonitoringManagement monitoringmanagement : monitoringmanagementsSearchResult) { %>
     <tr>
         <td><%= monitoringmanagement.getMonitoringManagementId() %></td>
         <td><%= monitoringmanagement.getMonitoringTime() %></td>

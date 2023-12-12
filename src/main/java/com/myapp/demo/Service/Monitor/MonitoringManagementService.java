@@ -46,4 +46,20 @@ public class MonitoringManagementService {
         return monitoringmanagementdao.selectStatusByPlanId(monitoringObject);
     }
     //根据植物Id查找监测状态
+
+    public List<MonitoringManagement> LikeSelectMonitorTaskByRealName(String searchContent) {
+        return monitoringmanagementdao.LikeSelectMonitorTaskByRealName(searchContent);
+    }
+
+    public List<MonitoringManagement> LikeSelectMonitorTaskByPlantName(String searchContent) {
+        return monitoringmanagementdao.LikeSelectMonitorTaskByPlantName(searchContent);
+    }
+
+    public List<MonitoringManagement> LikeSelectMonitorTaskByDeviceName(String searchContent) {
+        return monitoringmanagementdao.LikeSelectMonitorTaskByDeviceName(searchContent);
+    }
+
+    public List<MonitoringManagement> LikeSelectMonitorTaskByPlace(String searchContent) {
+        return monitoringmanagementdao.LikeSelectMonitorTaskByPlace(searchContent);
+    }
 }

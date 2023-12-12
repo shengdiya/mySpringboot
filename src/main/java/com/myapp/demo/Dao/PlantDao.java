@@ -23,5 +23,5 @@ public interface PlantDao {
     public List<String> getAllSpecies();
     public List<Plant> LikeSearchPlantByName(String searchQuery);
     public Plant selectPlantInfoByPlantId(Integer plantId);
-
+    public Integer deletePlantById(String plantId);
 }

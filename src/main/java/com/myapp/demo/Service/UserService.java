@@ -37,7 +37,7 @@ public class UserService {
                 roleChinese = "养护人员";
                 break;
             case "monitor":
-                roleChinese = "监护人员";
+                roleChinese = "监测人员";
                 break;
             case "boss":
                 roleChinese = "上级主管人员";

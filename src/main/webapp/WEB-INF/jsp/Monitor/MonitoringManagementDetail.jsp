@@ -21,7 +21,7 @@
 <html lang="en">
 <head>
 
-    <title>增加工作人员</title>
+    <title>查看检测任务详情</title>
 
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
@@ -29,7 +29,7 @@
 <input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="container">
-    <h2>增加监测管理信息</h2>
+    <h2>查看检测任务详情</h2>
     <form action="MonitorManagement?method=addmoreMonitorManagement" method="post">
         <div class="form-group">
             <label for="monitoringTime1" class="required">监测时间:</label>
@@ -71,8 +71,13 @@
         <%
             }
         %>
+    </form>
 
-
+    <form action="/MonitorManagement?method=returnMonitoringManagementShow" method="post">
+        <div class="form-group">
+            <input type="hidden" name="userId" value="<%= user.getUserId()%>">
+            <input type="submit" value="返回">
+        </div>
     </form>
 </div>
 </body>

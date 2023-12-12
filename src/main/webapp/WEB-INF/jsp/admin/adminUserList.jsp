@@ -43,7 +43,7 @@
             <th><%= user.getAddress() %></th>
             <td>
                 <!-- 修改跳转到一个新的界面，而删除后需要留在原界面，这里采用form表单提交的方式 -->
-                <form action="user?method=deleteUser" method="post">
+                <form action="/user?method=deleteUser" method="post">
 	                <!-- 隐藏的userId，用于删除时向后端传递参数，后端可以通过request.getParameter("userId")得到这个Id -->
 	                <input type="hidden" name="userId" value="<%= user.getUserId() %>">
 	                <!-- input按钮用CSS时鼠标悬浮时变小手 -->

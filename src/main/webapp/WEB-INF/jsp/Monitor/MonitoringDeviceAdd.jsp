@@ -11,12 +11,12 @@
         user = (User) request.getSession().getAttribute("monitor");
     }
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
     <script>
-
             function addInput() {
             var inputContainer = document.getElementById("inputContainer");
             var newInput = document.createElement("input");
@@ -26,13 +26,13 @@
             inputContainer.appendChild(newInput);
         }
     </script>
-    <title>增加工作人员</title>
+    <title>增加监测仪器</title>
 </head>
 <body>
 <input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="container">
-    <h2>增加监测管理信息</h2>
+    <h2>增加监测仪器</h2>
     <form action="MonitorDevice?method=addMonitorDevice" method="post">
         <div class="form-group">
             <label for="monitoringIndicatorName" class="required">设备名字:</label>

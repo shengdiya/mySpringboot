@@ -14,8 +14,7 @@
         user = (User) request.getSession().getAttribute("monitor");
     }
 
-    MonitoringManagement monitoringmanagementdetail = (MonitoringManagement) request.getAttribute("monitoringmanagementdetail");
-    MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) session.getAttribute("monitoringdeviceservice");
+    MonitoringManagement monitoringmanagementdetail = (MonitoringManagement) request.getAttribute("monitoringManagementmodify");
     String []monitoringindictors = monitoringmanagementdetail.getMonitoringIndicatorValues().split(";");
     String []monitoringDevices = (String[]) request.getAttribute("monitoringDevices");
 %>
@@ -23,7 +22,7 @@
 <html lang="en">
 <head>
 
-    <title>增加工作人员</title>
+    <title>修改监测任务</title>
 
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
@@ -31,8 +30,8 @@
 <input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="container">
-    <h2>增加监测管理信息</h2>
-    <form action="MonitorManagement?method=modifyMonitorManagements" method="post">
+    <h2>修改监测管理信息</h2>
+    <form action="/MonitorManagement?method=modifyMonitorManagements" method="post">
         <div class="form-group">
             <label for="monitoringTime1" class="required">监测时间:</label>
             <input type="datetime-local" id="monitoringTime1" name="monitoringTime1" value="<%=monitoringmanagementdetail.getMonitoringTime()%>" required>
@@ -82,6 +81,12 @@
             <input type="submit" value="提交">
         </div>
 
+    </form>
+
+    <form action="/MonitorManagement?method=returnMonitoringManagementShow" method="post">
+        <div class="form-group">
+            <input type="submit" value="返回">
+        </div>
     </form>
 </div>
 </body>

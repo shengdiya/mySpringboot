@@ -28,4 +28,7 @@ public interface MonitoringDeviceDao {
 
     public Integer updateMonitoringDevice(MonitoringDevice monitoringdevice);
     //更新一条设备管理记录
+
+    public List<MonitoringDevice> LikeSelectDevicesByName(String searchContent);
+    //模糊匹配通过设备名查找设备
 }

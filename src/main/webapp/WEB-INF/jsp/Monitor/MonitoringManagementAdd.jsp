@@ -12,8 +12,7 @@
     if(user==null){
         user = (User) request.getSession().getAttribute("monitor");
     }
-    List<Unit> units = (List<Unit>) request.getAttribute("units");
-
+    Plant plantToBoMonitor = (Plant) request.getAttribute("plantToBoMonitor");
     List<MonitoringDevice> MonitoringDevices = (List<MonitoringDevice>)request.getAttribute("MonitoringDevices");
 %>
 <!DOCTYPE html>
@@ -51,7 +50,7 @@
 
 <div class="container">
     <h2>增加监测管理信息</h2>
-    <form action="MonitorManagement?method=addMonitorManagement" method="post">
+    <form action="/MonitorManagement?method=addMonitorManagement" method="post">
         <div class="form-group">
             <label for="monitoringTime1" class="required">监测时间:</label>
             <input type="datetime-local" id="monitoringTime1" name="monitoringTime1" required>
@@ -69,9 +68,9 @@
 
         <div class="form-group">
             <label for="monitoringObject" class="required">监测对象:</label>
-            <input type="text" id="monitoringObject" name="monitoringObject" required>
+            <input type="hidden" id="monitoringObject" name="monitoringObject" value="<%= plantToBoMonitor.getPlantId()%>">
+            <input type="text" id="show" name="show" value="<%= plantToBoMonitor.getPlantName()%><%= plantToBoMonitor.getNumber()%>" readonly>
         </div>
-
 
         <div class="form-group">
             <label for="monitoringDeviceId" class="required">监测设备ID:</label>
@@ -93,9 +92,14 @@
             </select>
         </div>
 
-
         <div class="form-group">
             <input type="submit" value="提交">
+        </div>
+    </form>
+
+    <form action="/plant?method=returnPlantSameSpeciesList" method="post">
+        <div class="form-group">
+            <input type="submit" value="返回">
         </div>
     </form>
 </div>

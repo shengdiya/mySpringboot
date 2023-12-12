@@ -90,10 +90,10 @@
     <div class="container" style="width: 300px;">
         <h2>用户登录</h2>
         <form action="/user?method=Getlogin" method="post" onsubmit="prepareSubmission()">
-            <input type="radio" name="role" value="conserver" checked onchange="onRoleChange(this.value)"> 养护人员
+            <input type="radio" name="role" value="conserver" onchange="onRoleChange(this.value)"> 养护人员
             <input type="radio" name="role" value="monitor" onchange="onRoleChange(this.value)"> 检测人员
             <input type="radio" name="role" value="boss" onchange="onRoleChange(this.value)"> 上级管理
-            <input type="radio" name="role" value="admin" onchange="onRoleChange(this.value)"> 系统管理员
+            <input type="radio" name="role" value="admin" checked onchange="onRoleChange(this.value)"> 系统管理员
             <br><br>
 
 			<div id="conserver-input" class="hide">

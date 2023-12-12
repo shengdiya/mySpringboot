@@ -80,5 +80,9 @@
         GROUP BY plantName
     </select>
 
+    <!--根据植物Id删除植物-->
+    <delete id="deletePlantById">
+        delete from plant where plantId = #{plantId}
+    </delete>
 
 </mapper>

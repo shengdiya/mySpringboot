@@ -129,4 +129,20 @@ public class MonitoringDeviceController {
         return mav;
     }
 
+    //显示监测设备列表界面
+    @RequestMapping("/MonitoringDeviceSearchResult")
+    public String MonitoringDeviceSearchResult(HttpServletRequest request, HttpServletResponse response) {
+        return "Monitor/MonitoringDeviceSearchResult";
+    }
+
+    //搜索监测设备（根据名称）
+    @RequestMapping(params = "method=deviceSearch")
+    public ModelAndView deviceSearch(HttpServletRequest request,ModelAndView mav) {
+        String searchContent = request.getParameter("searchContent");
+        List<MonitoringDevice> monitoringdevices = monitoringdeviceservice.LikeSelectDevicesByName(searchContent);
+        request.getSession().setAttribute("monitoringdevices", monitoringdevices);
+        mav.setViewName("admin/adminIndex");
+        mav.addObject("start","MonitorDevice/MonitoringDeviceSearchResult");
+        return mav;
+    }
 }

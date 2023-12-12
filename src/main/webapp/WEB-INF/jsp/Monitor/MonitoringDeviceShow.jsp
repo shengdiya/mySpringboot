@@ -19,8 +19,6 @@
             break;
         }
     }
-    MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService ) session.getAttribute("monitoringdeviceservice");
-    MonitoringIndicatorService monitoringindicatorservice = (MonitoringIndicatorService ) session.getAttribute("monitoringindicatorservice");
     List<MonitoringDevice> monitoringdevices = (List<MonitoringDevice>) request.getAttribute("monitoringdevices");
 
 %>
@@ -35,16 +33,8 @@
 <input name="safe" type="hidden" value="<%= user.getUserName() %>">
 
 <div class="searchcontainer">
-    <form action="Managershowuser" method="post" onsubmit="return handleSearch(this)">
-        <select name="searchType" class="shortselect">
-            <option value="username" selected>用户名</option>
-            <option value="fullname">真实姓名</option>
-            <option value="phone">电话</option>
-            <option value="email">邮箱</option>
-            <option value="address">地址</option>
-            <option value="workplace">工作单位</option>
-        </select>
-        <input type="text" placeholder="输入搜索信息" class="search"  name="searchContent">
+    <form action="/MonitorDevice?method=deviceSearch" method="post" onsubmit="return handleSearch(this)">
+        <input type="text" placeholder="输入设备名查找信息" class="search"  name="searchContent">
         <button class="btnsearch" type="submit">搜索</button>
     </form>
 </div>

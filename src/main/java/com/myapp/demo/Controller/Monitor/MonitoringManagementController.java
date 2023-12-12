@@ -4,12 +4,15 @@ import com.myapp.demo.Entiy.Book;
 import com.myapp.demo.Entiy.Monitor.MonitoringDevice;
 import com.myapp.demo.Entiy.Monitor.MonitoringIndicator;
 import com.myapp.demo.Entiy.Monitor.MonitoringManagement;
+import com.myapp.demo.Entiy.Plant;
 import com.myapp.demo.Entiy.Unit;
 import com.myapp.demo.Entiy.User;
 import com.myapp.demo.Service.BookService;
 import com.myapp.demo.Service.Monitor.MonitoringDeviceService;
 import com.myapp.demo.Service.Monitor.MonitoringIndicatorService;
 import com.myapp.demo.Service.Monitor.MonitoringManagementService;
+import com.myapp.demo.Service.PlantService;
+import com.myapp.demo.Service.UserService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -47,12 +50,23 @@ public class MonitoringManagementController {
     @Resource(name="MonitoringDeviceService")
     private MonitoringDeviceService monitoringdeviceservice;
 
+    @Resource(name="plantService")
+    private PlantService plantservice;
+
+    @Resource(name="userService")
+    private UserService userservice;
 
     //显示监测列表界面
     @RequestMapping("/MonitorManagementShow")
-    public String MonitoringManagementShow(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("sssssssssss");
+    public String MonitoringManagementShow(HttpServletRequest request) {
         List<MonitoringManagement> monitoringmanagements = monitoringmanagementservice.selectAllMonitoringManagement();
+
+        //wyx------------------------
+        request.setAttribute("plantservice",plantservice);
+        request.setAttribute("userservice",userservice);
+        request.setAttribute("monitoringdeviceservice",monitoringdeviceservice);
+        //----------------------
+
         request.setAttribute("monitoringmanagements", monitoringmanagements);
         return "Monitor/MonitoringManagementShow";
     }
@@ -78,15 +92,13 @@ public class MonitoringManagementController {
         return mav;
     }
 
-
-
-
     //添加监测记录界面
     @RequestMapping("/MonitorManagementAdd")
-    public String adminAddManagement(HttpServletRequest request) {
-
+    public String adminAddManagement(@RequestParam("plantId") int plantId, HttpServletRequest request) {
+        Plant plantToBoMonitor = plantservice.selectPlantByPlantId(plantId);
         List<MonitoringDevice> MonitoringDevices =monitoringdeviceservice.selectAllMonitoringDevice();
         request.setAttribute("MonitoringDevices",MonitoringDevices);
+        request.setAttribute("plantToBoMonitor",plantToBoMonitor);
         return "Monitor/MonitoringManagementAdd";
     }
 
@@ -147,7 +159,6 @@ public class MonitoringManagementController {
             monitoringDeviced.setMonitoringDeviceStatus("工作中");
             monitoringdeviceservice.updateMonitoringDevice(monitoringDeviced);
             monitoringmanagementservice.insertOneMonitoringManagement(monitoringmanagement);
-
 
             mav.setViewName("admin/adminIndex");
             mav.addObject("modifyUnit","增加监测信息成功"); //传给前端需要弹窗的内容
@@ -223,9 +234,6 @@ public class MonitoringManagementController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-
-
             int deviceID = monitoringmanagement.getMonitoringDeviceId();
             MonitoringDevice monitoringDeviced = monitoringdeviceservice.selectMonitoringDeviceById(deviceID);
             String monitoringDevicess = monitoringDeviced.getMonitoringIndicatorCategories();
@@ -234,11 +242,8 @@ public class MonitoringManagementController {
             for ( String monitoringdevice :monitoringDevices) {
                 indicators = indicators + (String) request.getParameter(monitoringdevice) + ";";
             }
-            System.out.println(indicators);
             monitoringmanagement.setMonitoringIndicatorValues(indicators);
             monitoringmanagementservice.updateMonitoringManagement(monitoringmanagement);
-
-
             mav.setViewName("admin/adminIndex");
             mav.addObject("modifyUnit","修改监测信息成功"); //传给前端需要弹窗的内容
         }catch(Exception e) {
@@ -249,6 +254,58 @@ public class MonitoringManagementController {
         return mav;
     }
 
+    //搜索结果界面
+    @RequestMapping("/MonitoringManagementSearchResult")
+    public String MonitoringManagementSearchResult(HttpServletRequest request) {
+        request.setAttribute("plantservice",plantservice);
+        request.setAttribute("userservice",userservice);
+        request.setAttribute("monitoringdeviceservice",monitoringdeviceservice);
+        return "Monitor/MonitoringManagementSearchResult";
+    }
+    //执行搜索操作
+    @RequestMapping(params ="method=SearchMonitorTask")
+    public ModelAndView SearchMonitorTask( HttpServletRequest request,ModelAndView mav) {
+        String searchType = request.getParameter("searchType");
+        String searchContent = request.getParameter("searchContent");
+
+        List<MonitoringManagement> monitoringmanagementsSearchResult = SearchByType(searchType,searchContent);
+        request.getSession().setAttribute("monitoringmanagementsSearchResult", monitoringmanagementsSearchResult); //更新要展示的列表
+        mav.setViewName("admin/adminIndex");
+        mav.addObject("start","MonitorManagement/MonitoringManagementSearchResult");
+        return mav;
+    }
+
+    private List<MonitoringManagement> SearchByType(String searchType, String searchContent) {
+        List<MonitoringManagement> result = new ArrayList<>();
+        switch (searchType) {
+            case "realName":
+                result = monitoringmanagementservice.LikeSelectMonitorTaskByRealName(searchContent);
+                break;
+            case "plantName":
+                result = monitoringmanagementservice.LikeSelectMonitorTaskByPlantName(searchContent);
+                break;
+            case "DeviceName":
+                result = monitoringmanagementservice.LikeSelectMonitorTaskByDeviceName(searchContent);
+                break;
+            default:
+                result = monitoringmanagementservice.LikeSelectMonitorTaskByPlace(searchContent);
+                break;
+        }
+        return result;
+    }
+
+
+    //返回MonitoringManagementShow.jsp界面
+//    @RequestMapping(params ="method=returnMonitoringManagementShow")
+//    public ModelAndView returnMonitoringManagementShow(ModelAndView mav,HttpServletRequest request) {
+//        String userId = request.getParameter("userId");
+//        if(userservice.getUserRole(Integer.valueOf(userId)).equals("管理员")){
+//            mav.setViewName("admin/adminIndex");
+//        } else if (userservice.getUserRole(Integer.valueOf(userId)).equals("监测人员")) {
+//
+//        }
+//
+//    }
 
 
 }

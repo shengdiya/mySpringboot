@@ -2,8 +2,6 @@ package com.myapp.demo.Service.Monitor;
 import java.util.List;
 import javax.annotation.Resource;
 
-import com.myapp.demo.Dao.BookDao;
-import com.myapp.demo.Entiy.Book;
 import org.springframework.stereotype.Service;
 import com.myapp.demo.Dao.Monitor.*;
 import com.myapp.demo.Entiy.Monitor.*;
@@ -44,5 +42,11 @@ public class MonitoringDeviceService {
     public Integer updateMonitoringDevice(MonitoringDevice monitoringdevice){
         return monitoringdevicedao.updateMonitoringDevice(monitoringdevice);
     }
+
+    public List<MonitoringDevice> LikeSelectDevicesByName(String searchContent) {
+        return monitoringdevicedao.LikeSelectDevicesByName(searchContent);
+    }
+
+
     //更新一条监测设备记录
 }

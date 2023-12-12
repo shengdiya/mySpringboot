@@ -4,6 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.myapp.demo.Dao.Monitor.MonitoringManagementDao">
+
+    <!--根据监测人名模糊匹配-->
+    <select id="LikeSelectMonitorTaskByRealName" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        select * from monitoring_management
+        inner join user
+        on monitoring_management.monitoringPersonnelId = user.userId
+        where user.realName like '%${searchContent}%'
+    </select>
+    <!--根据监测对象模糊匹配-->
+    <select id="LikeSelectMonitorTaskByPlantName" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        select * from monitoring_management
+        inner join plant
+        on monitoring_management.monitoringObject = plant.plantId
+        where plant.plantName like '%${searchContent}%'
+    </select>
+    <!--根据监测仪器模糊匹配-->
+    <select id="LikeSelectMonitorTaskByDeviceName" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        select * from monitoring_management
+        inner join monitoring_device
+        on monitoring_management.monitoringDeviceId = monitoring_device.monitoringDeviceId
+        where monitoring_device.monitoringDeviceName like '%${searchContent}%'
+    </select>
+    <!--根据监测地点模糊匹配-->
+    <select id="LikeSelectMonitorTaskByPlace" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        select * from monitoring_management where monitoringLocation like '%${searchContent}%'
+    </select>
+
     <!-- 查找所有监测管理 -->
     <select id="selectAllMonitoringManagement" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
         select * from monitoring_management
@@ -48,6 +75,7 @@
     <select id="selectStatusByPlanId" resultType="String">
         select monitoringStatus from monitoring_management where monitoringObject = #{monitoringObject}
     </select>
+
 
 
 </mapper>

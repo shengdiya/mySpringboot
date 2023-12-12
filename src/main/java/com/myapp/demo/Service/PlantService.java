@@ -79,4 +79,8 @@ public class PlantService {
     public List<Plant> LikeSearchPlantByName(String searchQuery) {
         return plantDao.LikeSearchPlantByName(searchQuery);
     }
+
+    public Integer deletePlantById(String plantId) {
+        return plantDao.deletePlantById(plantId);
+    }
 }

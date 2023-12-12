@@ -67,6 +67,12 @@
             <input type="submit" value="提交">
         </div>
     </form>
+
+    <form action="/MonitorManagement?method=returnMonitoringDeviceShow" method="post">
+        <div class="form-group">
+            <input type="submit" value="返回">
+        </div>
+    </form>
 </div>
 
 </body>

@@ -91,6 +91,8 @@
                 alert("${LikeSearchPlantByName}");
             <% } else if(request.getAttribute("addStaff") != null) { %>
                 alert("${addStaff}");
+            <% } else if(request.getAttribute("deleteUser") != null) { %>
+                alert("${deleteUser}");
             <% } %>
         }, 0); // 设置延时时间为0，将代码推入事件循环的末尾
     });
@@ -122,7 +124,6 @@
                     </el-submenu>
                     <el-submenu index="3">
                         <template slot="title"><i class="el-icon-setting"></i> 植物检测记录管理</template>
-                        <el-menu-item index="monitormanagement-add">监测记录添加</el-menu-item>
                         <el-menu-item index="monitormanagement-list">监测记录查看</el-menu-item>
                         <el-menu-item index="monitordevice-add">监测设备添加</el-menu-item>
                         <el-menu-item index="monitordevice-list">监测设备查看</el-menu-item>
@@ -185,9 +186,6 @@
                         break;
                     case 'monitormanagement-list':
                         this.loadPageContent("MonitorManagement/MonitorManagementShow");
-                        break;
-                    case 'monitormanagement-add':
-                        this.loadPageContent("MonitorManagement/MonitorManagementAdd");
                         break;
                 }
             },
