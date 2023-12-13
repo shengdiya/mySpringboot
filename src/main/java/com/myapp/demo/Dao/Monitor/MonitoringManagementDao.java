@@ -15,7 +15,8 @@ public interface MonitoringManagementDao {
 
     public MonitoringManagement selectMonitoringManagementById(Integer monitoringManagementId);
     //根据id查找监测管理记录
-
+    public MonitoringManagement selectMonitoringManagementByIdView(Integer monitoringManagementId);
+    //根据id查找监测管理记录(视图)
     public Integer insertOneMonitoringManagement(MonitoringManagement monitoringmanagement);
     //增加一条监测管理记录
 
@@ -32,4 +33,5 @@ public interface MonitoringManagementDao {
     List<MonitoringManagement> LikeSelectMonitorTaskByPlantName(String searchContent);
     List<MonitoringManagement> LikeSelectMonitorTaskByDeviceName(String searchContent);
     List<MonitoringManagement> LikeSelectMonitorTaskByPlace(String searchContent);
+
 }

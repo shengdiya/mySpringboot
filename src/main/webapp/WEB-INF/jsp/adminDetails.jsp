@@ -4,8 +4,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 
 <%
-	User admin = (User) request.getSession().getAttribute("admin");
-    User user = (User) request.getAttribute("user");
+	User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");User user = (User) request.getAttribute("user");
  %>
 <!DOCTYPE html>
 <html>
@@ -37,7 +36,7 @@
   </head>
   
   <body>
-  	<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+  	<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
   	
     <div class="container">
     	<h2>修改信息</h2>

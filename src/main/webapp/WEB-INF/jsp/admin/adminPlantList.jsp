@@ -13,8 +13,7 @@
 
 <%
     List<Plant> plants = (List<Plant>) request.getAttribute("plantsInOneSpecies");
-    User admin = (User) request.getSession().getAttribute("admin");
-    PlantService plantservice = (PlantService) request.getAttribute("plantservice");
+    User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");PlantService plantservice = (PlantService) request.getAttribute("plantservice");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -57,11 +56,19 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <h2>植物缩略图展示</h2>
+<%--<form id="searchForm" action="/plant?method=searchPlant" method="post">--%>
+<%--    <input type="text" id="searchInput" name="searchQuery" >--%>
+<%--    <button type="submit">搜索</button>--%>
+<%--</form>--%>
+
 <form id="searchForm" action="/plant?method=searchPlant" method="post">
-    <input type="text" id="searchInput" name="searchQuery" >
-    <button type="submit">搜索</button>
+    <input type="text" id="genus" name="genus" placeholder="请输入科名">
+    <input type="text" id="family" name="family" placeholder="请输入属名">
+    <input type="text" id="species" name="species" placeholder="请输入种名">
+    <input type="text" id="alias" name="alias"  placeholder="请输入别名">
+    <input type="submit" value="搜索">
 </form>
 
 <div class="grid-container">

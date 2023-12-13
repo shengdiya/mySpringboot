@@ -1,9 +1,7 @@
 package com.myapp.demo.Service;
 
 import com.myapp.demo.Dao.ConserverDao;
-import com.myapp.demo.Entiy.ConserveTask;
-import com.myapp.demo.Entiy.Garden_pest;
-import com.myapp.demo.Entiy.Plant;
+import com.myapp.demo.Entiy.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -90,6 +88,27 @@ public class ConserverService {
     public List<ConserveTask> LikeSelectTaskByPlace(String searchContent) {
         return conserverDao.LikeSelectTaskByPlace(searchContent);
 
+    }
+    public List<Pesticide> selectAllPesticide() {
+        return conserverDao.selectAllPesticide();
+    }
+    public int insertPesticide(Pesticide pesticide) {
+        return conserverDao.insertPesticide(pesticide);
+    }
+    public List<Pest_control_plan> selectAllControlPlan() {
+        return conserverDao.selectAllControlPlan();
+    }
+    public Pesticide selectPesticideByPesticideId(int pesticideId) {
+        return conserverDao.selectPesticideByPesticideId(pesticideId);
+    }
+    public int deletePestControlPlanById(int pestId, int pesticideId) {
+        return conserverDao.deletePestControlPlanById(pestId, pesticideId);
+    }
+    public int insertControlPlan(Pest_control_plan pestControlPlan) {
+        return conserverDao.insertControlPlan(pestControlPlan);
+    }
+    public int deletePesticideByPesticideId(int pesticideId) {
+        return conserverDao.deletePesticideByPesticideId(pesticideId);
     }
 }
 

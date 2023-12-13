@@ -5,14 +5,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 <%@ page import="lombok.var" %>
 <%
-  User user = null;
-  List<String> roles = Arrays.asList("admin", "monitor", "boss", "conserver");
-  for(String role : roles) {
-    user = (User) request.getSession().getAttribute(role);
-    if(user != null) {
-      break;
-    }
-  }
+ User user1 = (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
   ConserverService conserverService = (ConserverService) request.getAttribute("conserverService");
 %>
 <!DOCTYPE html>
@@ -22,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="container">
   <h2>添加植物病虫害</h2>
@@ -50,6 +43,12 @@
     </div>
     <div class="form-group">
       <input type="submit" value="提交">
+    </div>
+  </form>
+
+  <form action="/conserverController?method=returnConserverTODOPlant" method="post">
+    <div class="form-group">
+      <input type="submit" value="返回">
     </div>
   </form>
 </div>

@@ -1,10 +1,11 @@
 package com.myapp.demo.Controller;
 
+import com.myapp.demo.Entiy.Area;
 import com.myapp.demo.Entiy.Photo;
 import com.myapp.demo.Entiy.Plant;
+import com.myapp.demo.Entiy.SpeciesArea;
+import com.myapp.demo.Service.*;
 import com.myapp.demo.Service.Monitor.MonitoringManagementService;
-import com.myapp.demo.Service.PlantService;
-import com.myapp.demo.Service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,8 +27,21 @@ public class PlantController {
     private PlantService plantservice;
     @Resource(name="MonitoringManagementService")
     private MonitoringManagementService monitoringmanagementservice;
+    @Resource(name = "speciesAreaService")
+    private SpeciesAreaService speciesAreaService;
+    @Resource(name = "speciesService")
+    private SpeciesService speciesService;
+    @Resource(name = "areaService")
+    private AreaService areaService;
+    @Resource(name = "familyspeciesService")
+    private FamilyspeciesService familyspeciesService;
 
+    @Resource(name = "genusfamilyService")
+    private GenusfamilyService genusfamilyService;
 
+    @Resource(name = "speciesAliasService")
+    private SpeciesAliasService speciesAliasService;
+    //获得所有种名
     @RequestMapping("/adminAddPlant")
     public String adminAddPlant(HttpServletRequest request) {
         List<String> plantsSpecies = plantservice.getAllSpecies();
@@ -109,6 +124,12 @@ public class PlantController {
         List<Plant> plantsInSameSpecies = plantservice.selectPlantsByPlantName(plantName);
         request.setAttribute("plantsInSameSpecies", plantsInSameSpecies);
         request.setAttribute("monitoringManagementService",monitoringmanagementservice);
+
+        request.setAttribute("speciesAliasService",speciesAliasService);
+        request.setAttribute("genusfamilyService",genusfamilyService);
+        request.setAttribute("familyspeciesService",familyspeciesService);
+        request.setAttribute("speciesService",speciesService);
+
         return "admin/adminPlantSameSpeciesList";
     }
 
@@ -117,8 +138,18 @@ public class PlantController {
     public String adminSeePlantDetails(@RequestParam("plantId") int plantId, HttpServletRequest request){
         Plant plantToBeShow = plantservice.selectPlantByPlantId(plantId);
         Photo photoToBeShow = plantservice.selectPhotoByPlantId(plantId);
+        String plantName = plantToBeShow.getPlantName();
+        Integer speciesId = speciesService.findSpeciesIdByName(plantName);
+        List<SpeciesArea> area = speciesAreaService.selectSpeciesArea(speciesId);
+
+        request.setAttribute("areaService",areaService);
+        request.setAttribute("speciesAliasService",speciesAliasService);
+        request.setAttribute("genusfamilyService",genusfamilyService);
+        request.setAttribute("familyspeciesService",familyspeciesService);
+        request.setAttribute("speciesService",speciesService);
         request.setAttribute("plantToBeShow", plantToBeShow);
         request.setAttribute("photoToBeShow", photoToBeShow);
+        request.setAttribute("area", area);
         return "admin/adminSeePlantDetails";
     }
 
@@ -179,6 +210,7 @@ public class PlantController {
         Plant plant = plantservice.selectPlantByPlantId(Integer.valueOf(plantId));
         try{
             plantservice.deletePlantById(plantId);
+            request.setAttribute("deletePlant", "删除成功");
         }catch (Exception e){
             request.setAttribute("deletePlant", "此植物有正在执行的养护或监测任务，删除失败");
         }
@@ -195,8 +227,20 @@ public class PlantController {
     //执行搜索
     @RequestMapping(params = "method=searchPlant")
     public ModelAndView searchPlant(ModelAndView mav, HttpServletRequest request){
-        String searchQuery = request.getParameter("searchQuery");
-        List<Plant> TargetPlants = plantservice.LikeSearchPlantByName(searchQuery);
+        //String searchQuery = request.getParameter("searchQuery");
+        //List<Plant> TargetPlants = plantservice.LikeSearchPlantByName(searchQuery);
+        String genus = request.getParameter("genus");
+        String family = request.getParameter("family");
+        String species = request.getParameter("species");
+        String alias = request.getParameter("alias");
+        List<Integer> speciesIds = speciesService.findPlantIdsByParams(genus, family, species, alias, "");
+        //得到一个种名Id列表，通过种名Id，要查找出种名
+        List<Plant> TargetPlants = new ArrayList<>();//最后得到的plant列表
+        for(Integer speciesId : speciesIds){
+            String speciesName = speciesService.findSpeciesById(speciesId).getSpeciesName();
+            Plant plant = plantservice.LikeSearchPlantByName(speciesName);
+            TargetPlants.add(plant);
+        }
         if(TargetPlants.isEmpty()) { //如果没查出来，就给一个弹窗
             mav.addObject("LikeSearchPlantByName", "查询无结果");
         }

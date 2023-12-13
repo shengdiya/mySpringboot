@@ -17,7 +17,7 @@
 </head>
 
 <body>
-	<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+	<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <h2>借阅书籍</h2>
 <table class="table-style">
     <tr>

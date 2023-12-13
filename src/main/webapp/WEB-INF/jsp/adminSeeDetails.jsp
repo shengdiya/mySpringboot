@@ -4,8 +4,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 
 <%
-	User admin = (User) request.getSession().getAttribute("admin");
-    User user = (User) request.getAttribute("user");
+	User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");User user = (User) request.getAttribute("user");
     UserService userservice = (UserService) request.getAttribute("userservice");
  %>
 
@@ -18,7 +17,7 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <div class="container">
 	<h2>用户详细信息</h2>
 	<!-- 在发送POST请求的时候，表单的action属性会被解析为相对路径， -->

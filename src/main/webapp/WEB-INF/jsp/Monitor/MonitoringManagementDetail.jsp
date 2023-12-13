@@ -9,11 +9,8 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringDevice" %>
 
 <%
-    User user = (User) request.getSession().getAttribute("admin");
-    if(user==null){
-        user = (User) request.getSession().getAttribute("monitor");
-    }
-    MonitoringManagement monitoringmanagementdetail = (MonitoringManagement) request.getAttribute("monitoringmanagementdetail");
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
+MonitoringManagement monitoringmanagementdetail = (MonitoringManagement) request.getAttribute("monitoringmanagementdetail");
     String []monitoringindictors = monitoringmanagementdetail.getMonitoringIndicatorValues().split(";");
     String []monitoringDevices = (String[]) request.getAttribute("monitoringDevices");
 %>
@@ -26,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="container">
     <h2>查看检测任务详情</h2>
@@ -75,7 +72,6 @@
 
     <form action="/MonitorManagement?method=returnMonitoringManagementShow" method="post">
         <div class="form-group">
-            <input type="hidden" name="userId" value="<%= user.getUserId()%>">
             <input type="submit" value="返回">
         </div>
     </form>

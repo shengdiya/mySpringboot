@@ -31,6 +31,13 @@ public class MonitoringDeviceController {
         return "Monitor/MonitoringDeviceShow";
     }
 
+    //返回MonitorDeviceShow.jsp
+    @RequestMapping(params = "method=returnMonitoringDeviceShow")
+    public String returnMonitoringDeviceShow(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("start","MonitorDevice/MonitorDeviceShow");
+        return "admin/adminIndex";
+    }
+
     //管理员添加设备界面
     @RequestMapping("/MonitorDeviceAdd")
     public String adminAddUnit() {
@@ -52,16 +59,16 @@ public class MonitoringDeviceController {
                 monitoringdevice.setMonitoringDeviceStatus("空闲中");
 
                 monitoringdeviceservice.insertOneMonitoringDevice(monitoringdevice);
-                mav.addObject("modifyMonitorDevice","增加单位信息成功"); //传给前端需要弹窗的内容
+                mav.addObject("modifyMonitor","增加设备信息成功"); //传给前端需要弹窗的内容
             }else { //工作中不能删
-                mav.addObject("modifyMonitorDevice","该设备重名，增加失败"); //传给前端需要弹窗的内容
+                mav.addObject("modifyMonitor","该设备重名，增加失败"); //传给前端需要弹窗的内容
             }
 
             mav.setViewName("admin/adminIndex");
 
         }catch(Exception e) {
             mav.setViewName("admin/adminIndex");
-            mav.addObject("modifyMonitoringDevice","增加设备信息失败"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","增加设备信息失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorDevice/MonitorDeviceShow");
         return mav;
@@ -77,14 +84,14 @@ public class MonitoringDeviceController {
             MonitoringDevice monitoringDevice = monitoringdeviceservice.selectMonitoringDeviceById(Integer.valueOf(monitoringmanagerId));
             if(monitoringDevice.getMonitoringDeviceStatus().equals("空闲中")) { //没被在监测中
                 monitoringdeviceservice.deleteMonitoringDevice(Integer.valueOf(monitoringmanagerId)); //删除monitoring_device表里的
-                mav.addObject("deleteMonitoringDevice","删除成功"); //传给前端需要弹窗的内容
+                mav.addObject("modifyMonitor","删除成功"); //传给前端需要弹窗的内容
             }else { //工作中不能删
-                mav.addObject("deleteMonitorDevice","该设备尚在监测，删除失败"); //传给前端需要弹窗的内容
+                mav.addObject("modifyMonitor","该设备尚在监测，删除失败"); //传给前端需要弹窗的内容
             }
             mav.setViewName("admin/adminIndex");
         }catch(Exception e) {
             mav.setViewName("admin/adminIndex");
-            mav.addObject("deleteMonitoringDevice","删除失败"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","删除失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorDevice/MonitorDeviceShow");//删完一个用户要再跳转到admin/adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
         return mav;
@@ -94,10 +101,20 @@ public class MonitoringDeviceController {
     @RequestMapping(params = "method=modifyMonitoringDevice")
     public String MonitoringDeviceModify( HttpServletRequest request) {
         String monitoringdeviceId = request.getParameter("id"); //接收要删除用户的Id
-        MonitoringDevice monitoringDevice = monitoringdeviceservice.selectMonitoringDeviceById(Integer.valueOf(monitoringdeviceId));
-        request.setAttribute("monitoringDevicemodify", monitoringDevice);
 
-        return "Monitor/MonitoringDeviceModify";
+        MonitoringDevice monitoringDevice = monitoringdeviceservice.selectMonitoringDeviceById(Integer.valueOf(monitoringdeviceId));
+        if(monitoringDevice.getMonitoringDeviceStatus().equals("工作中"))
+        {
+            request.setAttribute("modifyDevice","工作中禁止修改");
+            request.setAttribute("start","MonitorDevice/MonitorDeviceShow");
+            return "admin/adminIndex";
+        }
+        else
+        {
+            request.setAttribute("monitoringDevicemodify", monitoringDevice);
+            return "Monitor/MonitoringDeviceModify";
+        }
+
     }
 
     //修改监测设备,并返回admin/adminIndex.jsp
@@ -113,16 +130,16 @@ public class MonitoringDeviceController {
                 }
                 monitoringdevice.setMonitoringIndicatorCategories(inputValues);
                 monitoringdeviceservice.updateMonitoringDevice(monitoringdevice);
-                mav.addObject("modifyMonitoringDevice","修改单位信息成功"); //传给前端需要弹窗的内容
+                mav.addObject("modifyMonitor","修改单位信息成功"); //传给前端需要弹窗的内容
             }else {  //此处可以改成用触发器
-                mav.addObject("modifyMonitoringDevice","该设备重名，修改失败"); //传给前端需要弹窗的内容
+                mav.addObject("modifyMonitor","该设备重名，修改失败"); //传给前端需要弹窗的内容
             }
 
             mav.setViewName("admin/adminIndex");
 
         }catch(Exception e) {
             mav.setViewName("admin/adminIndex");
-            mav.addObject("modifyMonitoringDevice","修改设备信息失败"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","修改设备信息失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorDevice/MonitorDeviceShow");
         return mav;

@@ -6,7 +6,7 @@
 <%@ page import="com.myapp.demo.Controller.*" %>
 
 <%
-	User admin = (User) request.getSession().getAttribute("admin");
+	User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
  %>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
 <body>
-	<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+	<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 	
     <div class="container">
         <h2>增加工作人员</h2>

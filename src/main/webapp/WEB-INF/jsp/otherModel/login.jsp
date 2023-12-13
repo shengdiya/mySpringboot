@@ -9,66 +9,6 @@
     <link rel="stylesheet" type="text/css" href="/css/loginAndRegister.css">
 
     <script type="text/javascript">
-        function onRoleChange(role) {
-            var conserverInput = document.getElementById('conserver-input');
-            var monitorInput = document.getElementById("monitor-input");
-            var bossInput = document.getElementById("boss-input");
-            var adminInput = document.getElementById("admin-input")
-            //根据单选框选中的角色，开放相应的输入框，隐藏其他的输入框
-            if (role === 'conserver') {
-                conserverInput.style.display = 'block';
-                monitorInput.style.display = 'none'
-                bossInput.style.display = 'none';
-                adminInput.style.display = 'none'
-            } else if(role === 'monitor') {
-                conserverInput.style.display = 'none';
-                monitorInput.style.display = 'block'
-                bossInput.style.display = 'none';
-                adminInput.style.display = 'none'
-            } else if(role === 'boss') {
-                conserverInput.style.display = 'none';
-                monitorInput.style.display = 'none'
-                bossInput.style.display = 'block';
-                adminInput.style.display = 'none'
-            } else{
-                conserverInput.style.display = 'none';
-                monitorInput.style.display = 'none'
-                bossInput.style.display = 'none';
-                adminInput.style.display = 'block'
-            }
-        }
-        
-        function prepareSubmission() {
-	        var role = document.querySelector('input[name="role"]:checked').value;
-	        var conserverInput = document.querySelector('#conserver-input input');
-	        var monitorInput = document.querySelector('#monitor-input input');
-            var bossInput = document.querySelector('#boss-input input');
-            var adminInput = document.querySelector('#admin-input input');
-
-			 //根据单选框选中的角色，确保其他输入框的name为空，并设置相应输入框的name
-	        if(role === 'conserver') {
-                conserverInput.name = 'userName';
-                monitorInput.name = '';
-                bossInput.name =  '';
-	            adminInput.name = '';
-	        } else if(role === 'monitor'){
-                conserverInput.name = '';
-                monitorInput.name = 'userName';
-                bossInput.name =  '';
-                adminInput.name = '';
-	        } else if(role === 'boss'){
-                conserverInput.name = '';
-                monitorInput.name = '';
-                bossInput.name =  'userName';
-                adminInput.name = '';
-            }else{
-                conserverInput.name = '';
-                monitorInput.name = '';
-                bossInput.name =  '';
-                adminInput.name = 'userName';
-	        }
-	    }
-	    
 	    document.addEventListener("DOMContentLoaded", function() {
 	        setTimeout(function() {
 	            <% if(request.getAttribute("modifyPasswordSeccuss") != null) { %>
@@ -89,24 +29,7 @@
 <body>
     <div class="container" style="width: 300px;">
         <h2>用户登录</h2>
-        <form action="/user?method=Getlogin" method="post" onsubmit="prepareSubmission()">
-            <input type="radio" name="role" value="conserver" onchange="onRoleChange(this.value)"> 养护人员
-            <input type="radio" name="role" value="monitor" onchange="onRoleChange(this.value)"> 检测人员
-            <input type="radio" name="role" value="boss" onchange="onRoleChange(this.value)"> 上级管理
-            <input type="radio" name="role" value="admin" checked onchange="onRoleChange(this.value)"> 系统管理员
-            <br><br>
-
-			<div id="conserver-input" class="hide">
-                 	用户名: <input type="text" name="userName"><br>
-            </div>
-				
-            <div id="monitor-input" class="hide">
-                    用户名: <input type="text" name="userName"><br>
-            </div>
-            
-			<div id="boss-input" class="hide">
-                	用户名: <input type="text" name="userName"><br>
-            </div>
+        <form action="/user?method=Getlogin" method="post">
 
             <div id="admin-input">
                 用户名: <input type="text" name="userName"><br>

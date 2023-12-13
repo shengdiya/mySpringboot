@@ -5,8 +5,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 
 <%
-    User admin = (User) request.getSession().getAttribute("admin");
-    List<User> users = (List<User>) request.getAttribute("users");
+    User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");List<User> users = (List<User>) request.getAttribute("users");
     UserService userservice = (UserService) request.getAttribute("userservice");
 %>
 
@@ -17,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="/css/tables.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <h2>用户列表</h2>
 <table class="table-style">
     <tr>

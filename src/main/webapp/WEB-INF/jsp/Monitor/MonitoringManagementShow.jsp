@@ -11,11 +11,7 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringIndicator" %>
 
 <%
-    User user = (User) request.getSession().getAttribute("admin");
-    if(user==null){
-        user = (User) request.getSession().getAttribute("monitor");
-    }
-    MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) request.getAttribute("monitoringdeviceservice");
+    User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) request.getAttribute("monitoringdeviceservice");
     PlantService plantService = (PlantService) request.getAttribute("plantservice");
     UserService userService = (UserService) request.getAttribute("userservice");
     List<MonitoringManagement> monitoringmanagements = (List<MonitoringManagement>) request.getAttribute("monitoringmanagements");
@@ -28,7 +24,7 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="searchcontainer">
     <form action="/MonitorManagement?method=SearchMonitorTask" method="post" onsubmit="return handleSearch(this)">
@@ -73,6 +69,7 @@
         <td><%= monitoringdeviceservice.selectMonitoringDeviceById(monitoringmanagement.getMonitoringDeviceId()).getMonitoringDeviceName() %></td>
         <td><%= monitoringmanagement.getMonitoringStatus() %></td>
         <td>
+            <%if(roleId == 1 || roleId == 3) { %>
             <form action="/MonitorManagement?method=deleteMonitoringManagement" method="POST">
                 <input type="hidden" name="id" value=<%=monitoringmanagement.getMonitoringManagementId()%>>
                 <button type="submit">删除</button>
@@ -81,10 +78,6 @@
                 <input type="hidden" name="id" value=<%=monitoringmanagement.getMonitoringManagementId()%>>
                 <button type="submit">修改</button>
             </form>
-            <form action="/MonitorManagement?method=detailMonitoringManagement" method="POST">
-                <input type="hidden" name="id" value=<%=monitoringmanagement.getMonitoringManagementId()%>>
-                <button type="submit">详情</button>
-            </form>
             <%if(monitoringmanagement.getMonitoringStatus().equals("进行中")) { %>
 
             <form action="/MonitorManagement?method=endMonitoringManagement" method="POST">
@@ -92,6 +85,13 @@
                 <button type="submit">结束监测</button>
             </form>
             <%} %>
+            <%} %>
+
+            <form action="/MonitorManagement?method=detailMonitoringManagement" method="POST">
+                <input type="hidden" name="id" value=<%=monitoringmanagement.getMonitoringManagementId()%>>
+                <button type="submit">详情</button>
+            </form>
+
 
         </td>
 

@@ -8,11 +8,7 @@
 <%@ page import="com.myapp.demo.Service.Monitor.MonitoringDeviceService" %>
 
 <%
-    User user = (User) request.getSession().getAttribute("admin");
-    if(user==null){
-        user = (User) request.getSession().getAttribute("monitor");
-    }
-    Plant plantToBoMonitor = (Plant) request.getAttribute("plantToBoMonitor");
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");Plant plantToBoMonitor = (Plant) request.getAttribute("plantToBoMonitor");
     UserService userservice = (UserService) request.getAttribute("userservice");
     List<MonitoringDevice> MonitoringDevices = (List<MonitoringDevice>)request.getAttribute("MonitoringDevices");
 %>
@@ -47,7 +43,7 @@
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="container">
     <h2>增加监测管理信息</h2>
@@ -109,6 +105,7 @@
 
     <form action="/plant?method=returnPlantSameSpeciesList" method="post">
         <div class="form-group">
+            <input type="hidden" name="plantName" value="<%= plantToBoMonitor.getPlantName()%>">
             <input type="submit" value="返回">
         </div>
     </form>

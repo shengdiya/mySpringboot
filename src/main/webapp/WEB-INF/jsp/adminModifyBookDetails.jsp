@@ -3,8 +3,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 
 <%
-	User admin = (User) request.getSession().getAttribute("admin");
-    Book book = (Book) request.getAttribute("book");
+	User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");Book book = (Book) request.getAttribute("book");
  %>
  
 <!DOCTYPE html>
@@ -15,7 +14,7 @@
   </head>
   
   <body>
-  	  <input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+  	  <input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 	  <div class="containerAll">
 		  <h2>修改<%= book.getBookName() %>的信息</h2>
 		  <form action="/book?method=ModifyBookDetails" method="post">

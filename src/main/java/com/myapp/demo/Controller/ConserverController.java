@@ -1,10 +1,7 @@
 package com.myapp.demo.Controller;
 
-import com.myapp.demo.Entiy.ConserveTask;
-import com.myapp.demo.Entiy.Garden_pest;
+import com.myapp.demo.Entiy.*;
 import com.myapp.demo.Entiy.Monitor.MonitoringManagement;
-import com.myapp.demo.Entiy.Plant;
-import com.myapp.demo.Entiy.User;
 import com.myapp.demo.Service.ConserverService;
 import com.myapp.demo.Service.PlantService;
 import com.myapp.demo.Service.UserService;
@@ -58,6 +55,13 @@ public class ConserverController {
         return "conserver/conserverTODOPlant";
     }
 
+    //返回conserverTODOPlant.jsp
+    @RequestMapping(params = "method=returnConserverTODOPlant")
+    public String returnConserverTODOPlant(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("start", "conserverController/conserverTODOPlant");
+        return "admin/adminIndex";
+    }
+
     @RequestMapping("/conserverAddPlantPest")
     public String toAddPlantPestPage(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute("conserverService", conserverService);
@@ -73,7 +77,27 @@ public class ConserverController {
         request.setAttribute("pests", pests);
         return "conserver/conserverShowAndAddPest";
     }
+    @RequestMapping("/showAndaddPesticide")
+    public String toShowPesticidePage(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("conserverService", conserverService);
+        List<Pesticide> pesticides = conserverService.selectAllPesticide();
+        request.setAttribute("pesticides", pesticides);
+        return "conserver/conserverShowAndAddPesticide";
+    }
 
+    @RequestMapping("/conserverControlPlan")
+    public String toControlPlanPage(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("conserverService", conserverService);
+        List<Pest_control_plan> pestControlPlans = conserverService.selectAllControlPlan();
+        request.setAttribute("pestControlPlans", pestControlPlans);
+        return "conserver/conserverControlPlan";
+    }
+
+    @RequestMapping("/addControlPlan")
+    public String toAddControlPlanPage(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("conserverService", conserverService);
+        return "conserver/conserverAddControlPlan";
+    }
     @RequestMapping(params = "method=AddTask")
     public String AddTask(HttpServletRequest request, ConserveTask conserveTask) {
         try {
@@ -163,7 +187,54 @@ public class ConserverController {
         return "admin/adminIndex";
     }
 
+    @RequestMapping(params = "method=addPesticide")
+    public String addPesticide(HttpServletRequest request, HttpServletResponse response ,Pesticide pesticide) {
+        try {
+            int effectRow = conserverService.insertPesticide(pesticide);
+            request.setAttribute("effectRow", effectRow);
+        } catch (Exception e) {
+            request.setAttribute("SQLMessage", "添加失败，已添加过同名药剂");
+        }
+        List<Pesticide> pesticides = conserverService.selectAllPesticide();
+        request.setAttribute("pesticides", pesticides);
+        return "conserver/conserverShowAndAddPesticide";
+    }
 
+    @RequestMapping(params = "method=deleteControlPlanById")
+    public String deleteControlPlanById(HttpServletRequest request, HttpServletResponse response) {
+        int effectRow = conserverService.deletePestControlPlanById(Integer.parseInt(request.getParameter("pestId")), Integer.parseInt(request.getParameter("pesticideId")));
+        request.setAttribute("effectRow", effectRow);
+        request.setAttribute("start","conserverController/conserverControlPlan");//执行完状态修改后跳转回养护人员主页，并设置加载页为防治方案展示页
+        return "admin/adminIndex";
+    }
+
+    @RequestMapping(params = "method=returnToConserverControlPlan")
+    public String returnToconserverControlPlan(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("conserverService", conserverService);
+        List<Pest_control_plan> pestControlPlans = conserverService.selectAllControlPlan();
+        request.setAttribute("pestControlPlans", pestControlPlans);
+        request.setAttribute("start", "conserverController/conserverControlPlan");
+        return "admin/adminIndex";
+    }
+
+    @RequestMapping(params = "method=addControlPlan")
+    public String addControlPlan(HttpServletRequest request, HttpServletResponse response, Pest_control_plan pestControlPlan) {
+        request.setAttribute("conserverService", conserverService);
+        int effectRow = conserverService.insertControlPlan(pestControlPlan);
+        request.setAttribute("effectRow", effectRow);
+        request.setAttribute("start", "conserverController/conserverControlPlan");
+        return "admin/adminIndex";
+    }
+
+    @RequestMapping(params = "method=deletePesticide")
+    public String deletePesticide(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("conserverService", conserverService);
+        int effectRow = conserverService.deletePesticideByPesticideId(Integer.parseInt(request.getParameter("pesticideId")));
+        request.setAttribute("effectRow", effectRow);
+        List<Pesticide> pesticides = conserverService.selectAllPesticide();
+        request.setAttribute("pesticides", pesticides);
+        return "conserver/conserverShowAndAddPesticide";
+    }
     //以下为模糊搜索功能
     @RequestMapping("/ConserveTaskSearchResult")
     public String MonitoringManagementSearchResult(HttpServletRequest request) {
@@ -204,6 +275,7 @@ public class ConserverController {
         }
         return result;
     }
+
 
 
 }

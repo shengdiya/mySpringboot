@@ -13,7 +13,9 @@
 <%@ page import="com.myapp.demo.Controller.*" %>
 
 <%
-    User admin = (User) request.getSession().getAttribute("admin");
+
+    User user1 = (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -30,11 +32,20 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- 自定义样式 -->
     <link rel="stylesheet" type="text/css" href="/css/rolesIndexs.css">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="JavaScript/doCom.js"></script>
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%=user1.getUserName() %>">
 <script>
+    function addInput() {
+        var inputContainer = document.getElementById("inputContainer");
+        var newInput = document.createElement("input");
+        newInput.type = "text";
+        newInput.name = "inputField[]";
+        newInput.required = true;
+        inputContainer.appendChild(newInput);
+    }
     function filterOptions() {
         console.log("******");
         var inputValue = document.getElementById("inputText").value.trim();
@@ -106,6 +117,16 @@
                 alert("${deleteUser}");
             <% } else if(request.getAttribute("SQLMessage") != null) { %>
                 alert("${SQLMessage}");
+            <% } else if(request.getAttribute("deleteMonitoringManagerment") != null) { %>
+                alert("${deleteMonitoringManagerment}");
+            <% } else if(request.getAttribute("addMore") != null) { %>
+                alert("${addMore}");
+            <% } else if(request.getAttribute("ModifyMonitoringManagerment") != null) { %>
+                alert("${ModifyMonitoringManagerment}");
+            <% } else if(request.getAttribute("modifyMonitor") != null) { %>
+                alert("${modifyMonitor}");
+            <% } else if(request.getAttribute("modifyDevice") != null) { %>
+                alert("${modifyDevice}");
             <% } %>
         }, 0); // 设置延时时间为0，将代码推入事件循环的末尾
     });
@@ -116,20 +137,35 @@
         <el-header>
             <span class="brand">植物信息管理系统</span>
             <form class="logout" action="/user?method=LogOut" method="post">
-                <input type="hidden" name="userIdOnlineing" value="<%= admin.getUserId() %>">
+                <input type="hidden" name="userIdOnlineing" value="<%= user1.getUserId() %>">
                 <input type="submit" value="退出登录" class="submitbuttom">
             </form>
+            <%if(roleId == 1 ) { %>
             <span class="user-info">欢迎你，管理员</span>
+            <%} %>
+            <%if(roleId == 2 ) { %>
+            <span class="user-info">欢迎你，养护人员</span>
+            <%} %>
+            <%if(roleId == 3 ) { %>
+            <span class="user-info">欢迎你，监测人员</span>
+            <%} %>
+            <%if(roleId == 4 ) { %>
+            <span class="user-info">欢迎你，上级管理人员</span>
+            <%} %>
         </el-header>
 
         <el-container>
             <el-aside width="200px" class="el-menu-vertical-demo">
                 <el-menu default-active="1" @select="handleSelect" background-color="#1F2D3D" text-color="#BCC1C7" active-text-color="#409EFF">
+
                     <el-submenu index="1">
                         <template slot="title"><i class="el-icon-setting"></i>植物基本信息管理</template>
+                        <%if(roleId == 1) { %>
                         <el-menu-item index="plantInfo-add">植物添加</el-menu-item>
+                        <%} %>
                         <el-menu-item index="plantInfo-list">植物列表</el-menu-item>
                     </el-submenu>
+                    <%if(roleId == 1 || roleId == 2 || roleId == 4) { %>
                     <el-submenu index="2">
                         <template slot="title"><i class="el-icon-setting"></i> 植物养护任务管理</template>
                         <el-menu-item index="task-list">查看养护任务</el-menu-item>
@@ -137,21 +173,34 @@
                             <template slot="title">病虫害管理</template>
                             <el-menu-item index="plant-list">植物患病情况</el-menu-item>
                             <el-menu-item index="pest-list">病虫害列表</el-menu-item>
+                            <el-menu-item index="plan-list">防治方案列表</el-menu-item>
                         </el-submenu>
                     </el-submenu>
+                    <%} %>
+                    <%if(roleId == 1 || roleId == 3 || roleId == 4) { %>
                     <el-submenu index="3">
                         <template slot="title"><i class="el-icon-setting"></i> 植物检测记录管理</template>
                         <el-menu-item index="monitormanagement-list">监测记录查看</el-menu-item>
+                        <%if(roleId == 1 || roleId == 3) { %>
                         <el-menu-item index="monitordevice-add">监测设备添加</el-menu-item>
+                        <%} %>
                         <el-menu-item index="monitordevice-list">监测设备查看</el-menu-item>
+
                     </el-submenu>
+                    <%} %>
                     <el-submenu index="4">
                         <template slot="title"><i class="el-icon-setting"></i> 植物分类分布管理</template>
-<%--                        <el-menu-item index="unit-add">植物分类添加</el-menu-item>--%>
+                        <%if(roleId == 1) { %>
+                        <el-menu-item index="species-add">植物种类添加</el-menu-item>
+                        <%} %>
+                        <el-menu-item index="species-list">植物种类查询</el-menu-item>
                     </el-submenu>
+                    <%if(roleId == 1 || roleId == 4) { %>
                     <el-submenu index="5">
                         <template slot="title"> <i class="el-icon-menu"></i> 用户管理 </template>
+                        <%if(roleId == 1 ) { %>
                         <el-menu-item index="user-add">用户添加</el-menu-item>
+                        <%} %>
                         <el-submenu index="user-list">
                             <template slot="title">用户列表</template>
                             <el-menu-item index="user-conserver">养护人员</el-menu-item>
@@ -159,6 +208,7 @@
                             <el-menu-item index="user-boss">上级管理人员</el-menu-item>
                         </el-submenu>
                     </el-submenu>
+                    <%} %>
                 </el-menu>
             </el-aside>
 
@@ -220,6 +270,15 @@
                         break;
                     case 'pest-list':
                         this.loadPageContent('conserverController/conserverShowAndAddPest');
+                        break;
+                    case'species-add':
+                        this.loadPageContent('species/adminAddSpecies');
+                        break;
+                    case'species-list':
+                        this.loadPageContent('species/adminSpeciesList');
+                        break;
+                    case 'plan-list':
+                        this.loadPageContent('conserverController/conserverControlPlan');
                         break;
                 }
             },

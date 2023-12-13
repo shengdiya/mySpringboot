@@ -10,8 +10,7 @@
 <%@ page import="com.myapp.demo.Entiy.*" %>
 
 <%
-    User admin = (User) request.getSession().getAttribute("admin");
-    Plant plant = (Plant) request.getAttribute("plantToBeModified");
+    User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");Plant plant = (Plant) request.getAttribute("plantToBeModified");
 %>
 
 <!DOCTYPE html>
@@ -22,9 +21,9 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <div class="containerAll">
-    <h2>修改<%= plant.getPlantName() %><%= plant.getNumber()%>的信息</h2>
+    <h2>修改<%= plant.getPlantName() %>的信息</h2>
 
     <form action="/plant?method=ModifyPlantDetails" method="post">
         <input type="hidden" name="plantId" value="<%= plant.getPlantId() %>" />

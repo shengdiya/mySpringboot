@@ -3,8 +3,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 
 <%
-	User admin = (User) request.getSession().getAttribute("admin");
-    Unit unit = (Unit) request.getAttribute("unit");
+	User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");Unit unit = (Unit) request.getAttribute("unit");
  %>
  
 <!DOCTYPE html>
@@ -15,7 +14,7 @@
   </head>
   
   <body>
-  	  <input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+  	  <input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 	  <div class="containerAll">
 		  <h2>修改<%= unit.getUnitName() %>的信息</h2>
 		  <form action="/unit?method=ModifyunitDetails" method="post">

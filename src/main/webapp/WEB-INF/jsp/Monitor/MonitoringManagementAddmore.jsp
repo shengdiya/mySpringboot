@@ -12,11 +12,7 @@
     System.out.println(2);
     MonitoringManagement monitoringManagementaddmore = (MonitoringManagement) request.getAttribute("monitoringManagementaddmore");
     MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) session.getAttribute("monitoringdeviceservice");
-    User user = (User) request.getSession().getAttribute("admin");
-    if(user==null){
-        user = (User) request.getSession().getAttribute("monitor");
-    }
-    String []monitoringDevices = (String[]) request.getAttribute("monitoringDevices");
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");String []monitoringDevices = (String[]) request.getAttribute("monitoringDevices");
     System.out.println(3);
 %>
 <!DOCTYPE html>
@@ -51,7 +47,7 @@
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="container">
     <h2>增加监测管理信息</h2>

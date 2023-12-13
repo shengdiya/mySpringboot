@@ -36,7 +36,6 @@ public class PlantService {
     }
 
 
-
     //admin添加植物的同时要插入图片
     public Integer adminInsertPlantPhoto(Photo photo){
         return plantDao.adminInsertPlantPhoto(photo);
@@ -76,7 +75,7 @@ public class PlantService {
         return plantDao.modifyPlantPhoto(photo);
     }
 
-    public List<Plant> LikeSearchPlantByName(String searchQuery) {
+    public Plant LikeSearchPlantByName(String searchQuery) {
         return plantDao.LikeSearchPlantByName(searchQuery);
     }
 

@@ -5,7 +5,7 @@
 <mapper namespace="com.myapp.demo.Dao.PlantDao">
 
     <select id="getAllSpecies" resultType="String">
-        select speciesName from species_alias
+        select speciesName from speciesd
     </select>
     <!-- admin添加一株植物 -->
     <insert id="adminInsertPlant" useGeneratedKeys="true" keyProperty="plantId">
@@ -20,7 +20,7 @@
 
     <!--通过plantId查找植物图片-->
     <select id="selectPhotoByPlantId" resultType="com.myapp.demo.Entiy.Photo" >
-        select * from photo where plantId = #{plantId}
+        select * from photoInfo where plantId = #{plantId}
     </select>
 
     <!--通过plantId查找植物-->

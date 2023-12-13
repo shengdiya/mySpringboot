@@ -79,14 +79,14 @@ public class MonitoringManagementController {
             MonitoringManagement monitoringManagement = monitoringmanagementservice.selectMonitoringManagementById(Integer.valueOf(monitoringmanagerId));
             if(monitoringManagement.getMonitoringStatus().equals("已结束")) { //没被在监测中
                 monitoringmanagementservice.deleteMonitoringManagement(Integer.valueOf(monitoringmanagerId)); //删除monitoring_management表里的
-                mav.addObject("deleteMonitoringManagerment","删除成功"); //传给前端需要弹窗的内容
-            }else { //借出了不能删
-                mav.addObject("deleteMonitoringManagerment","该植物尚在监测，删除失败"); //传给前端需要弹窗的内容
+                mav.addObject("modifyMonitor","删除成功"); //传给前端需要弹窗的内容
+            }else {
+                mav.addObject("modifyMonitor","该植物尚在监测，删除失败"); //传给前端需要弹窗的内容
             }
             mav.setViewName("admin/adminIndex");
         }catch(Exception e) {
             mav.setViewName("admin/adminIndex");
-            mav.addObject("deleteMonitoringManagerment","删除失败"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","删除失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorManagement/MonitorManagementShow");//删完一个用户要再跳转到admin/adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
         return mav;
@@ -162,10 +162,10 @@ public class MonitoringManagementController {
             monitoringmanagementservice.insertOneMonitoringManagement(monitoringmanagement);
 
             mav.setViewName("admin/adminIndex");
-            mav.addObject("modifyUnit","增加监测信息成功"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","增加监测信息成功"); //传给前端需要弹窗的内容
         }catch(Exception e) {
             mav.setViewName("admin/adminIndex");
-            mav.addObject("modifyUnit","增加监测信息失败"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","增加监测信息失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorManagement/MonitorManagementShow");
         return mav;
@@ -180,11 +180,11 @@ public class MonitoringManagementController {
             monitoringmanagement.setMonitoringStatus("已结束");
             monitoringmanagementservice.updateMonitoringManagement(monitoringmanagement);
             //进行更新操作
-            mav.addObject("deleteMonitoringManagerment","修改成功");
+            mav.addObject("modifyMonitor","修改成功");
             mav.setViewName("admin/adminIndex");
         }catch(Exception e) {
             mav.setViewName("admin/adminIndex");
-            mav.addObject("deleteMonitoringManagerment","修改失败"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","修改失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorManagement/MonitorManagementShow");//删完一个用户要再跳转到admin/adminIndex.jsp，加载其中的内容为adminSeeMonitoringManagerments.jsp，让删完之后还留在图书列表的界面
         return mav;
@@ -195,7 +195,7 @@ public class MonitoringManagementController {
     public String detailMonitoringManagement(HttpServletRequest request)  {
 
         String monitoringmanagerId = request.getParameter("id"); //接收要删除用户的Id
-        MonitoringManagement monitoringmanagement = monitoringmanagementservice.selectMonitoringManagementById(Integer.valueOf(monitoringmanagerId));
+        MonitoringManagement monitoringmanagement = monitoringmanagementservice.selectMonitoringManagementByIdView(Integer.valueOf(monitoringmanagerId));
         int num = Integer.valueOf(monitoringmanagement.getMonitoringDeviceId());
         String monitoringDevicess = monitoringdeviceservice.selectMonitoringDeviceById(num).getMonitoringIndicatorCategories();
         System.out.println(monitoringDevicess);
@@ -211,6 +211,7 @@ public class MonitoringManagementController {
         String monitoringmanagerId = request.getParameter("id"); //接收要删除用户的Id
         MonitoringManagement monitoringManagement = monitoringmanagementservice.selectMonitoringManagementById(Integer.valueOf(monitoringmanagerId));
         request.setAttribute("monitoringManagementmodify", monitoringManagement);
+
         int num = Integer.valueOf(monitoringManagement.getMonitoringDeviceId());
         String monitoringDevicess = monitoringdeviceservice.selectMonitoringDeviceById(num).getMonitoringIndicatorCategories();
         System.out.println(monitoringDevicess);
@@ -246,10 +247,10 @@ public class MonitoringManagementController {
             monitoringmanagement.setMonitoringIndicatorValues(indicators);
             monitoringmanagementservice.updateMonitoringManagement(monitoringmanagement);
             mav.setViewName("admin/adminIndex");
-            mav.addObject("modifyUnit","修改监测信息成功"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","修改监测信息成功"); //传给前端需要弹窗的内容
         }catch(Exception e) {
             mav.setViewName("admin/adminIndex");
-            mav.addObject("modifyUnit","修改监测信息失败"); //传给前端需要弹窗的内容
+            mav.addObject("modifyMonitor","修改监测信息失败"); //传给前端需要弹窗的内容
         }
         mav.addObject("start","MonitorManagement/MonitorManagementShow");
         return mav;
@@ -295,18 +296,12 @@ public class MonitoringManagementController {
         return result;
     }
 
-
     //返回MonitoringManagementShow.jsp界面
-//    @RequestMapping(params ="method=returnMonitoringManagementShow")
-//    public ModelAndView returnMonitoringManagementShow(ModelAndView mav,HttpServletRequest request) {
-//        String userId = request.getParameter("userId");
-//        if(userservice.getUserRole(Integer.valueOf(userId)).equals("管理员")){
-//            mav.setViewName("admin/adminIndex");
-//        } else if (userservice.getUserRole(Integer.valueOf(userId)).equals("监测人员")) {
-//
-//        }
-//
-//    }
+    @RequestMapping(params ="method=returnMonitoringManagementShow")
+    public String returnMonitoringManagementShow(HttpServletRequest request) {
+        request.setAttribute("start","MonitorManagement/MonitorManagementShow");
+        return "admin/adminIndex";
+    }
 
 
 }

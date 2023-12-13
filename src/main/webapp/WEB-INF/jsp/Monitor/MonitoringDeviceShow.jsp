@@ -11,15 +11,7 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringIndicator" %>
 
 <%
-    User user = null;
-    List<String> roles = Arrays.asList("admin", "monitor", "boss");
-    for(String role : roles) {
-        user = (User) request.getSession().getAttribute(role);
-        if(user != null) {
-            break;
-        }
-    }
-    List<MonitoringDevice> monitoringdevices = (List<MonitoringDevice>) request.getAttribute("monitoringdevices");
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");List<MonitoringDevice> monitoringdevices = (List<MonitoringDevice>) request.getAttribute("monitoringdevices");
 
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -30,7 +22,7 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="searchcontainer">
     <form action="/MonitorDevice?method=deviceSearch" method="post" onsubmit="return handleSearch(this)">
@@ -48,6 +40,7 @@
         <th>监测指标种类</th>
         <th>监测设备状态</th>
         <th>操作</th>
+
         <!-- 其他表格头部数据 -->
     </tr>
 
@@ -65,6 +58,7 @@
 
 
         <td>
+            <%if(roleId == 1 || roleId == 3) { %>
             <form action="/MonitorDevice?method=deleteMonitoringDevice" method="POST">
                 <input type="hidden" name="id" value="<%=monitoringdevice.getMonitoringDeviceId()%>">
                 <button type="submit">删除</button>
@@ -73,6 +67,7 @@
                 <input type="hidden" name="id" value="<%=monitoringdevice.getMonitoringDeviceId()%>">
                 <button type="submit">修改</button>
             </form>
+            <%} %>
 
         </td>
 

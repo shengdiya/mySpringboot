@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.demo.Dao.SpeciesDao">
+
+<!--    插入speciesName, 返回自增主键speciesId-->
+        <insert id="insertSpecies" parameterType="com.myapp.demo.Entiy.Species">
+            <selectKey keyProperty="speciesId" resultType="java.lang.Integer" order="AFTER">
+                SELECT LAST_INSERT_ID()
+            </selectKey>
+            INSERT INTO species (speciesId, speciesName) VALUES (#{speciesId}, #{speciesName})
+        </insert>
+
+    <!--    根据speciesId-->
+    <select id="findSpeciesById" resultType="com.myapp.demo.Entiy.Species">
+        SELECT * FROM species WHERE speciesId = #{Id}
+    </select>
+
+    <!--根据种名查种名Id-->
+    <select id="findSpeciesIdByName" resultType="Integer">
+        select speciesId from species where speciesName = #{speciesName}
+    </select>
+
+    <select id="findPlantIdsByParams" resultType="java.lang.Integer">
+        SELECT DISTINCT s.speciesId
+        FROM genusfamily gf
+        JOIN familyspecies fs ON gf.family = fs.family
+        JOIN species s ON fs.species = s.speciesName
+        LEFT JOIN speciesalias sa ON s.speciesId = sa.speciesId
+        LEFT JOIN speciesarea spa ON s.speciesId = spa.speciesId
+        WHERE 1=1 <!-- 添加默认条件 -->
+        <if test="family != null and family != ''">
+            AND gf.family like '%${family}%'
+        </if>
+        <if test="genus != null and genus != ''">
+            AND gf.genus like '%${genus}%'
+        </if>
+        <if test="species != null and species != ''">
+            AND s.speciesName like '%${species}%'
+        </if>
+        <if test="alias != null and alias != ''">
+            AND sa.speciesAlias like '%${alias}%'
+        </if>
+        <if test="distribution != null and distribution != ''">
+            AND spa.areaId = #{distribution}
+        </if>
+    </select>
+
+
+</mapper>
+
+

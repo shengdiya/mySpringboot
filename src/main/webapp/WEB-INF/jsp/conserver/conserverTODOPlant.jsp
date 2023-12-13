@@ -5,15 +5,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 <%@ page import="lombok.var" %>
 <%
-    User user = null;
-    List<String> roles = Arrays.asList("admin", "monitor", "boss", "conserver");
-    for(String role : roles) {
-        user = (User) request.getSession().getAttribute(role);
-        if(user != null) {
-            break;
-        }
-    }
-    List<Plant> plants = (List<Plant>) request.getAttribute("plants");
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");List<Plant> plants = (List<Plant>) request.getAttribute("plants");
     ConserverService conserverService = (ConserverService) request.getAttribute("conserverService");
 %>
 
@@ -25,7 +17,7 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <h2>植物列表</h2>
 <table class="table-style">
     <tr>
@@ -62,11 +54,13 @@
         %>
         <td><%= pestNames %></td>
         <td>
+            <%if(roleId == 1 || roleId == 2) { %>
             <form action="conserverController/conserverAddPlantPest">
                 <input type="hidden" name="plantId" value="<%= plant.getPlantId() %>">
                 <input type="hidden" name="plantName" value="<%= plant.getPlantName() %>">
                 <button type="submit">添加病情</button>
             </form>
+            <% } %>
         </td>
         <% } %>
     </tr>

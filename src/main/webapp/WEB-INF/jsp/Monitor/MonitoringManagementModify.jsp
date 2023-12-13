@@ -9,10 +9,7 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringDevice" %>
 
 <%
-    User user = (User) request.getSession().getAttribute("admin");
-    if(user==null){
-        user = (User) request.getSession().getAttribute("monitor");
-    }
+    User user1 = (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
 
     MonitoringManagement monitoringmanagementdetail = (MonitoringManagement) request.getAttribute("monitoringManagementmodify");
     String []monitoringindictors = monitoringmanagementdetail.getMonitoringIndicatorValues().split(";");
@@ -27,7 +24,7 @@
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="container">
     <h2>修改监测管理信息</h2>

@@ -114,5 +114,32 @@
     <select id="LikeSelectTaskByTaskName" resultType="com.myapp.demo.Entiy.ConserveTask">
         select * from conservetask where taskName like '%${searchContent}%'
     </select>
-
+    <!--查询所有药剂-->
+    <select id="selectAllPesticide" resultType="com.myapp.demo.Entiy.Pesticide">
+        select * from pesticide
+    </select>
+    <!--添加药剂-->
+    <insert id="insertPesticide" useGeneratedKeys="true" keyProperty="pesticideId">
+        insert into pesticide (pesticideId, pesticideName) values (#{pesticideId}, #{pesticideName})
+    </insert>
+    <!--添加防治方案-->
+    <insert id="insertControlPlan">
+        insert into pest_control_plan (pestId, pesticideId, controlMethod, pesticideDose, effectDuration) VALUES (#{pestId}, #{pesticideId}, #{controlMethod}, #{pesticideDose}, #{effectDuration})
+    </insert>
+    <!--查询所有防治方案-->
+    <select id="selectAllControlPlan" resultType="com.myapp.demo.Entiy.Pest_control_plan">
+        select * from pest_control_plan
+    </select>
+    <!--根据药剂ID查询药剂-->
+    <select id="selectPesticideByPesticideId" resultType="com.myapp.demo.Entiy.Pesticide">
+        select * from pesticide where pesticideId = #{pesticideId}
+    </select>
+    <!--根据防治方案ID删除防治方案-->
+    <delete id="deletePestControlPlanById">
+        delete from pest_control_plan where pestId = #{pestId} and pesticideId = #{pesticideId}
+    </delete>
+    <!--根据药剂ID删除药剂记录-->
+    <delete id="deletePesticideByPesticideId">
+        delete from pesticide where pesticideId = #{pesticideId}
+    </delete>
 </mapper>

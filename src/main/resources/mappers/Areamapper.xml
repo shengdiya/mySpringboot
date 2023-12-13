@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.demo.Dao.AreaDao">
+
+<!--    获取所有pid为pid的地区-->
+    <select id="selectAreaByPid" resultType="com.myapp.demo.Entiy.Area">
+        select * from area where pid = #{pid}
+    </select>
+
+<!--    获取所有地区-->
+    <select id="selectAllArea" resultType="com.myapp.demo.Entiy.Area">
+        select * from area
+    </select>
+
+<!--    根据id获取地区-->
+    <select id="selectAreaById" resultType="com.myapp.demo.Entiy.Area">
+        select * from area where id = #{id}
+    </select>
+
+
+</mapper>
+
+

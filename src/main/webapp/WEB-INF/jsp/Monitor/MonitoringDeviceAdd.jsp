@@ -6,10 +6,7 @@
 <%@ page import="com.myapp.demo.Controller.*" %>
 
 <%
-    User user = (User) request.getSession().getAttribute("admin");
-    if(user==null){
-        user = (User) request.getSession().getAttribute("monitor");
-    }
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
 %>
 
 <!DOCTYPE html>
@@ -29,7 +26,7 @@
     <title>增加监测仪器</title>
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="container">
     <h2>增加监测仪器</h2>

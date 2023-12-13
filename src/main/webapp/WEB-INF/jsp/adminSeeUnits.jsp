@@ -5,7 +5,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 
 <%
-	User admin = (User) request.getSession().getAttribute("admin");
+	User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
 	List<Unit> units = (List<Unit>) request.getAttribute("units");
  %>
 
@@ -16,7 +16,7 @@
 	<link rel="stylesheet" type="text/css" href="/css/tables.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <h2>单位列表</h2>
 <form action="/unit?method=searchUnit" method="post">
 	<input type="text" name="unitName" placeholder="输入单位名查询"> 

@@ -11,14 +11,7 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringIndicator" %>
 
 <%
-  User user = null;
-  List<String> roles = Arrays.asList("admin", "monitor", "boss", "conserver");
-  for(String role : roles) {
-    user = (User) request.getSession().getAttribute(role);
-    if(user != null) {
-      break;
-    }
-  }
+ User user1 = (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
   List<MonitoringDevice> monitoringdevices = (List<MonitoringDevice>) request.getSession().getAttribute("monitoringdevices");
 
 %>
@@ -30,7 +23,7 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="searchcontainer">
   <form action="/MonitorDevice?method=deviceSearch" method="post" onsubmit="return handleSearch(this)">

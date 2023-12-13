@@ -6,7 +6,7 @@
 <%@ page import="com.myapp.demo.Controller.*" %>
 
 <%
-	User admin = (User) request.getSession().getAttribute("admin");
+	User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
  %>
 <!DOCTYPE html>
 <html>
@@ -26,7 +26,7 @@
 
 </head>
 <body>
- <input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+ <input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 	<script>
         function filterOptions() {
             console.log("******");
@@ -132,7 +132,7 @@
                 
                 <!-- 底部按钮 -->
             	<form class="aside-form" action="/user?method=LogOut" method="post">
-            		<input type="hidden" name="userIdOnlineing" value="<%= admin.getUserId() %>">
+            		<input type="hidden" name="userIdOnlineing" value="<%= user.getUserId() %>">
                 	<input type="submit" value="退出登录" class="submitbuttom">
             	</form>
             	

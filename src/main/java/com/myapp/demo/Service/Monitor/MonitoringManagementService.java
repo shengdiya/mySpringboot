@@ -24,6 +24,11 @@ public class MonitoringManagementService {
     }
     //根据id查找监测管理记录
 
+    public MonitoringManagement selectMonitoringManagementByIdView(Integer monitoringManagementId){
+        return monitoringmanagementdao.selectMonitoringManagementByIdView(monitoringManagementId);
+    }
+    //根据id查找监测管理记录(视图)
+
     public Integer insertOneMonitoringManagement(MonitoringManagement monitoringmanagement) {
         return monitoringmanagementdao.insertOneMonitoringManagement(monitoringmanagement);
     }

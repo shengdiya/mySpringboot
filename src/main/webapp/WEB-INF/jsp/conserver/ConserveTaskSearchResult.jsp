@@ -5,15 +5,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 <%@ page import="lombok.var" %>
 <%
-    User user = null;
-    List<String> roles = Arrays.asList("admin", "monitor", "boss", "conserver");
-    for(String role : roles) {
-        user = (User) request.getSession().getAttribute(role);
-        if(user != null) {
-            break;
-        }
-    }
-    List<ConserveTask> conserveTasks = (List<ConserveTask>) request.getSession().getAttribute("ConserveTaskSearchResult");
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");List<ConserveTask> conserveTasks = (List<ConserveTask>) request.getSession().getAttribute("ConserveTaskSearchResult");
     ConserverService conserverService = (ConserverService) request.getAttribute("conserverService");
 %>
 
@@ -24,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="/css/tables.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <h2>任务列表</h2>
 
 <div class="searchcontainer">

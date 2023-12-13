@@ -1,8 +1,6 @@
 package com.myapp.demo.Dao;
 
-import com.myapp.demo.Entiy.ConserveTask;
-import com.myapp.demo.Entiy.Garden_pest;
-import com.myapp.demo.Entiy.Plant;
+import com.myapp.demo.Entiy.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -29,11 +27,18 @@ public interface ConserverDao {
     List<ConserveTask> selectConserveTaskByPestId(int pestId);
     String selectConserverNameByConserverId(int userId);
     List<ConserveTask> selectAllConserveTasks();
-
+    List<Pesticide> selectAllPesticide();
+    int insertPesticide(Pesticide pesticide);
+    List<Pest_control_plan> selectAllControlPlan();
+    Pesticide selectPesticideByPesticideId(int pesticideId);
+    int deletePestControlPlanById(int pestId, int pesticideId);
+    int insertControlPlan(Pest_control_plan pestControlPlan);
+    int deletePesticideByPesticideId(int pesticideId);
 
     List<ConserveTask> LikeSelectTaskByTaskName(String searchContent);
     List<ConserveTask> LikeSelectTaskByPlantName(String searchContent);
     List<ConserveTask> LikeSelectTaskByRealName(String searchContent);
     List<ConserveTask> LikeSelectTaskByPestName(String searchContent);
     List<ConserveTask> LikeSelectTaskByPlace(String searchContent);
+
 }

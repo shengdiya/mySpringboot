@@ -7,11 +7,7 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringDevice" %>
 
 <%
-    User user = (User) request.getSession().getAttribute("admin");
-    if(user==null){
-        user = (User) request.getSession().getAttribute("monitor");
-    }
-    MonitoringDevice monitoringdevice = (MonitoringDevice)request.getAttribute("monitoringDevicemodify");
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");MonitoringDevice monitoringdevice = (MonitoringDevice)request.getAttribute("monitoringDevicemodify");
     String name = monitoringdevice.getMonitoringDeviceName();
 
 
@@ -21,7 +17,22 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/css/addAndModifyUserDetails.css">
     <script>
+        function generateInputFields() {
+            var inputNumber = parseInt(document.getElementById("inputNumber").value);
+            var inputContainer = document.getElementById("inputContainer");
 
+            // 清空容器
+            inputContainer.innerHTML = "";
+
+            // 生成输入框并添加到容器
+            for (var i = 1; i <= inputNumber; i++) {
+                var inputField = document.createElement("input");
+                inputField.type = "text";
+                inputField.name = "inputField" + i;
+                inputContainer.appendChild(inputField);
+                inputContainer.appendChild(document.createElement("br"));
+            }
+        }
         function addInput() {
             var inputContainer = document.getElementById("inputContainer");
             var newInput = document.createElement("input");
@@ -37,7 +48,7 @@
 
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <input name="oldname" type="hidden" value="<%= name %>">
 
 <div class="container">
@@ -68,7 +79,7 @@
         </div>
     </form>
 
-    <form action="/MonitorManagement?method=returnMonitoringDeviceShow" method="post">
+    <form action="/MonitorDevice?method=returnMonitoringDeviceShow" method="post">
         <div class="form-group">
             <input type="submit" value="返回">
         </div>

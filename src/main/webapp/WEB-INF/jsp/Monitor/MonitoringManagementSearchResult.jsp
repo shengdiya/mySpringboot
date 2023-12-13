@@ -11,11 +11,7 @@
 <%@ page import="com.myapp.demo.Entiy.Monitor.MonitoringIndicator" %>
 
 <%
-    User user = (User) request.getSession().getAttribute("admin");
-    if(user==null){
-        user = (User) request.getSession().getAttribute("monitor");
-    }
-    PlantService plantService = (PlantService) request.getAttribute("plantservice");
+    User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");PlantService plantService = (PlantService) request.getAttribute("plantservice");
     UserService userService = (UserService) request.getAttribute("userservice");
     MonitoringDeviceService monitoringdeviceservice = (MonitoringDeviceService) request.getAttribute("monitoringdeviceservice");
     List<MonitoringManagement> monitoringmanagementsSearchResult = (List<MonitoringManagement>) request.getSession().getAttribute("monitoringmanagementsSearchResult");
@@ -28,7 +24,7 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 
 <div class="searchcontainer">
     <form action="/MonitorManagement?method=SearchMonitorTask" method="post" onsubmit="return handleSearch(this)">

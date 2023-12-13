@@ -5,14 +5,7 @@
 <%@ page import="com.myapp.demo.Service.*" %>
 <%@ page import="lombok.var" %>
 <%
-    User user = null;
-    List<String> roles = Arrays.asList("admin", "monitor", "boss", "conserver");
-    for(String role : roles) {
-        user = (User) request.getSession().getAttribute(role);
-        if(user != null) {
-            break;
-        }
-    }
+User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");
   List<Garden_pest> pests = (List<Garden_pest>) request.getAttribute("pests");
   ConserverService conserverService = (ConserverService) request.getAttribute("conserverService");
 %>
@@ -24,7 +17,7 @@
   <link rel="stylesheet" type="text/css" href="/css/tables.css">
 </head>
 <body>
-<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <style>
   .head-container {
     display: flex;
@@ -39,13 +32,16 @@
 <div class="head-container">
   <h2>病虫害类型展示</h2>
   <div id="left-container">
+      <%if(roleId == 1 || roleId == 2) { %>
     <form action="/conserverController?method=addPest" method="post">
+
       <div class="form-group">
         <label for="pestName">快捷添加病虫害名称：</label>
         <input id="pestName" name="pestName" required>
         <input type="submit" value="提交">
       </div>
     </form>
+      <%} %>
   </div>
 
 </div>
@@ -94,10 +90,12 @@
     <td><%= conserveTaskNames %></td>
     <td>
 <%--由于外键的设置，在删除病虫害记录的时候，会一并把关联的养护任务、植物病虫害记录删除--%>
+    <%if(roleId == 1 || roleId == 2) { %>
       <form action="conserverController?method=deletePestById" method="post">
         <input type="hidden" name="pestId" value="<%= pest.getPestId() %>">
         <input type="submit" value="删除">
       </form>
+    <% } %>
     </td>
   </tr>
   <% } %>

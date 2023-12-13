@@ -34,39 +34,22 @@ public class UserController {
 	}
 	//登录处理
 	@RequestMapping(params = "method=Getlogin")
-    public ModelAndView Getlogin(@RequestParam("role") String role, User user, ModelAndView mav,HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
+    public ModelAndView Getlogin(User user, ModelAndView mav,HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
 		Integer roleId = userservice.getUserRoleId(user);//根据user的角色id，决定他们进入不同的界面
 		user = userservice.selectUserByuserName(user.getUserName());  //把其他信息补全
+		System.out.println(roleId);
 		//管理员
-		if("admin".equals(role) && roleId==1) {
-			request.getSession().setAttribute("admin", user);
+		if(user != null) {
+			request.getSession().setAttribute("user", user);
 
 			//.............
-			request.getSession().setAttribute("roleId", userservice.getUserRoleId(user));
+			request.getSession().setAttribute("roleId", roleId);
 			//...................
 
 			mav.setViewName("admin/adminIndex");
 			mav.addObject("start","plant/adminPlantList");//登陆后默认加载"adminPlantList"界面
 		}
-		//养护人员
-		else if("conserver".equals(role) && roleId==2) {
-			request.getSession().setAttribute("conserver", user);
-			mav.setViewName("conserver/conserverIndex");
-			//mav.addObject("staffStart","book/staffBookCirculation");//登陆后默认加载"staffBookCirculation"界面
-		}
-		//监测用户
-		else if("monitor".equals(role) && roleId==3) {
-			request.getSession().setAttribute("monitor", user); //把登陆的读者传过去（存到Session里）
-			mav.setViewName("monitor/monitorIndex");
-			//mav.addObject("readerStart","book/readerBorrowBooks");//登陆后默认加载"readerBorrowBooks"界面
-		}
-		//上级主管部门
-		else if("boss".equals(role) && roleId==4) {
-			request.getSession().setAttribute("boss", user); //把登陆的读者传过去（存到Session里）
-			mav.setViewName("boss/bossIndex");
-			mav.addObject("start","user/bossConserverList");//登陆后默认加载"readerBorrowBooks"界面
-		}
-		//用户不存在
+
 		else {
 			mav.setViewName("otherModel/login");
 			mav.addObject("noSuchUser","密码错误或用户不存在，请重新输入");
@@ -150,9 +133,9 @@ public class UserController {
 	//忘记密码修改密码界面
 	@RequestMapping(params = "method=GetforgetPassword3")
 	public ModelAndView GetforgetPassword3(HttpServletRequest request, String password, ModelAndView mav) {
-		User user = (User) request.getSession().getAttribute("user");
-		user.setPassword(password);
-		userservice.modifyPassword(user); //修改密码
+		User user1= (User) request.getSession().getAttribute("user");
+		user1.setPassword(password);
+		userservice.modifyPassword(user1); //修改密码
 		mav.setViewName("otherModel/login");
 		mav.addObject("modifyPasswordSeccuss", "重置密码成功，可以登录");
 		return mav;

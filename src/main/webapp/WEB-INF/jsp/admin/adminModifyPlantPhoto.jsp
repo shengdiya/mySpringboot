@@ -9,8 +9,7 @@
 <%@ page import="com.myapp.demo.Entiy.*" %>
 
 <%
-    User admin = (User) request.getSession().getAttribute("admin");
-    Plant plant = (Plant) request.getAttribute("plantToBeModified");
+    User user1= (User) request.getSession().getAttribute("user");Integer roleId= (Integer) request.getSession().getAttribute("roleId");Plant plant = (Plant) request.getAttribute("plantToBeModified");
     Photo photo = (Photo) request.getAttribute("photoToBeModify");
 %>
 
@@ -32,7 +31,7 @@
 </head>
 
 <body>
-<input name="safe" type="hidden" value="<%= admin.getUserName() %>">
+<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <div class="containerAll">
     <h2>修改<%= plant.getPlantName() %><%= plant.getNumber()%>图片</h2>
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myapp.demo.Dao.FamilyspeciesDao">
+
+    <insert id="insertfamilySpecies" parameterType="com.myapp.demo.Entiy.Familyspecies">
+        insert into familyspecies(family, species) values(#{family}, #{species})
+    </insert>
+
+<!--    查询种名-->
+    <select id="selectfamilyspeciesByFamily" resultType="com.myapp.demo.Entiy.Familyspecies">
+        select * from familyspecies where family = #{family}
+    </select>
+
+    <select id="selectfamilyspeciesBySpecies" resultType="com.myapp.demo.Entiy.Familyspecies">
+        select * from familyspecies where species = #{species}
+    </select>
+</mapper>
+
+

@@ -18,7 +18,7 @@
 </head>
 
 <body>
-	<input name="safe" type="hidden" value="<%= user.getUserName() %>">
+	<input name="safe" type="hidden" value="<%= user1.getUserName() %>">
 <h2>已借出订单信息</h2>
 <table class="table-style">
     <tr>
