@@ -1,10 +1,7 @@
 package com.myapp.demo.Controller.Monitor;
 
 import com.myapp.demo.Entiy.Monitor.MonitoringDevice;
-import com.myapp.demo.Entiy.Monitor.MonitoringManagement;
-import com.myapp.demo.Entiy.Unit;
 import com.myapp.demo.Service.Monitor.MonitoringDeviceService;
-import com.myapp.demo.Service.Monitor.MonitoringManagementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;

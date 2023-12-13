@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import com.myapp.demo.Dao.UserDao;
@@ -18,7 +19,7 @@ public class UserService {
 	private UserDao userdao;
 	
 	public UserService() {}
-	
+
 	//用于通过用户的用户名和密码找出用户Id，进而判断用户的身份，返回roleId
 	public Integer getUserRoleId(User user) {
 		Integer userId = userdao.selectUserId(user.getUserName(), user.getPassword());

@@ -5,7 +5,6 @@
     ServletContext context = request.getServletContext();
     response.setContentType("application/json;charset=UTF-8");
     AreaService areaService = (AreaService) context.getAttribute("areaService");
-
 %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>

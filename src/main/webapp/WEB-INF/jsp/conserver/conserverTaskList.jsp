@@ -56,8 +56,8 @@ User user1= (User) request.getSession().getAttribute("user");Integer roleId= (In
         <td><%= conserveTask.getExecutionLocation() %></td>
         <td><%= conserverService.selectConserverNameByConserverId(conserveTask.getExecutionPersonnel()) %></td>
         <td><%= conserveTask.getTaskDescription() %></td>
-        <th><%= conserverService.selectPlantByPlantId(conserveTask.getPlantId()).getPlantName() %><%= conserverService.selectPlantByPlantId(conserveTask.getPlantId()).getNumber()%></th>
-        <th><%= conserverService.selectPestByPestId(conserveTask.getPestId()).getPestName() %></th>
+        <th><%= conserverService.viewsSelectConservePlant(conserveTask.getTaskId()) %><%= conserverService.selectPlantByPlantId(conserveTask.getPlantId()).getNumber()%></th>
+        <th><%= conserverService.viewsSelectConservePest(conserveTask.getTaskId()) %></th>
         <td>
             <%
                 if (conserveTask.getStatus() == conserveTask.STATUS_NOT_START) {

@@ -40,5 +40,9 @@ public interface ConserverDao {
     List<ConserveTask> LikeSelectTaskByRealName(String searchContent);
     List<ConserveTask> LikeSelectTaskByPestName(String searchContent);
     List<ConserveTask> LikeSelectTaskByPlace(String searchContent);
-
+    String viewsSelectConservePlant(int taskId);
+    List<String> viewsSelectPestPlant(int taskId);
+    String viewsSelectConservePest(int pestId);
+    List<String> viewsSelectPestConserveTask(int pestId);
+    int viewsSelectPestPlantNumber(int pestId);
 }

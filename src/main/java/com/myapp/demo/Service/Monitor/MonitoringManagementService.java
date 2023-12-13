@@ -2,8 +2,6 @@ package com.myapp.demo.Service.Monitor;
 import java.util.List;
 import javax.annotation.Resource;
 
-import com.myapp.demo.Dao.BookDao;
-import com.myapp.demo.Entiy.Book;
 import org.springframework.stereotype.Service;
 import com.myapp.demo.Dao.Monitor.*;
 import com.myapp.demo.Entiy.Monitor.*;

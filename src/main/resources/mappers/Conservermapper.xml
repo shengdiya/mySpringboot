@@ -142,4 +142,24 @@
     <delete id="deletePesticideByPesticideId">
         delete from pesticide where pesticideId = #{pesticideId}
     </delete>
+<!--查询视图中养护任务对应的植物名称-->
+    <select id="viewsSelectConservePlant" resultType="string">
+        select plantName from conservePlant where taskId = #{taskId}
+    </select>
+<!--查询视图中养护任务对应的病虫害名称-->
+    <select id="viewsSelectConservePest" resultType="string">
+        select pestName from conservePest where taskId = #{taskId}
+    </select>
+<!--查询视图中病虫害对应的植物名称-->
+    <select id="viewsSelectPestPlant" resultType="string">
+        select plantName from pestPlant where pestId = #{pestId}
+    </select>
+<!--查询视图中病虫害对应的植物编号-->
+    <select id="viewsSelectPestPlantNumber" resultType="int">
+        select plantNumber from pestPlant where pestId = #{pestId}
+    </select>
+<!--查询视图中病虫害对应的养护任务名称-->
+    <select id="viewsSelectPestConserveTask" resultType="string">
+        select taskName from pestConserveTask where pestId = #{pestId}
+    </select>
 </mapper>

@@ -127,6 +127,8 @@
                 alert("${modifyMonitor}");
             <% } else if(request.getAttribute("modifyDevice") != null) { %>
                 alert("${modifyDevice}");
+            <% } else if(request.getAttribute("doAdd") != null) { %>
+                alert("${doAdd}");
             <% } %>
         }, 0); // 设置延时时间为0，将代码推入事件循环的末尾
     });

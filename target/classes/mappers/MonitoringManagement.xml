@@ -41,6 +41,11 @@
         select * from monitoring_management where monitoringManagementId = #{monitoringManagementId}
     </select>
 
+    <!-- 通过Id查找监测管理（视图）-->
+    <select id="selectMonitoringManagementByIdView" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
+        select * from monitorDetail where monitoringManagementId = #{monitoringManagementId}
+    </select>
+
     <!-- 通过Id模糊查找监测管理 -->
     <select id="LikeSelectMonitoringManagementById" parameterType="String" resultType="com.myapp.demo.Entiy.Monitor.MonitoringManagement">
         select * from monitoring_management where CAST(monitoringManagementId AS char) like '%${booId}%'

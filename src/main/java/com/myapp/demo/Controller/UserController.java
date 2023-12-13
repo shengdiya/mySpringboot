@@ -38,18 +38,15 @@ public class UserController {
 		Integer roleId = userservice.getUserRoleId(user);//根据user的角色id，决定他们进入不同的界面
 		user = userservice.selectUserByuserName(user.getUserName());  //把其他信息补全
 		System.out.println(roleId);
-		//管理员
-		if(user != null) {
-			request.getSession().setAttribute("user", user);
 
+		if(user != null && roleId != 0) {
+			request.getSession().setAttribute("user", user);
 			//.............
 			request.getSession().setAttribute("roleId", roleId);
 			//...................
-
 			mav.setViewName("admin/adminIndex");
 			mav.addObject("start","plant/adminPlantList");//登陆后默认加载"adminPlantList"界面
 		}
-
 		else {
 			mav.setViewName("otherModel/login");
 			mav.addObject("noSuchUser","密码错误或用户不存在，请重新输入");

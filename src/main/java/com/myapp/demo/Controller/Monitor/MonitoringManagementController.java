@@ -1,44 +1,25 @@
 package com.myapp.demo.Controller.Monitor;
 
-import com.myapp.demo.Entiy.Book;
 import com.myapp.demo.Entiy.Monitor.MonitoringDevice;
-import com.myapp.demo.Entiy.Monitor.MonitoringIndicator;
 import com.myapp.demo.Entiy.Monitor.MonitoringManagement;
 import com.myapp.demo.Entiy.Plant;
-import com.myapp.demo.Entiy.Unit;
-import com.myapp.demo.Entiy.User;
-import com.myapp.demo.Service.BookService;
 import com.myapp.demo.Service.Monitor.MonitoringDeviceService;
-import com.myapp.demo.Service.Monitor.MonitoringIndicatorService;
 import com.myapp.demo.Service.Monitor.MonitoringManagementService;
 import com.myapp.demo.Service.PlantService;
 import com.myapp.demo.Service.UserService;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -61,11 +42,9 @@ public class MonitoringManagementController {
     public String MonitoringManagementShow(HttpServletRequest request) {
         List<MonitoringManagement> monitoringmanagements = monitoringmanagementservice.selectAllMonitoringManagement();
 
-        //wyx------------------------
         request.setAttribute("plantservice",plantservice);
         request.setAttribute("userservice",userservice);
         request.setAttribute("monitoringdeviceservice",monitoringdeviceservice);
-        //----------------------
 
         request.setAttribute("monitoringmanagements", monitoringmanagements);
         return "Monitor/MonitoringManagementShow";
@@ -208,7 +187,7 @@ public class MonitoringManagementController {
     //修改监测记录
     @RequestMapping(params ="method=modifyMonitoringManagement")
     public String adminModifyUnitDetails( HttpServletRequest request) {
-        String monitoringmanagerId = request.getParameter("id"); //接收要删除用户的Id
+        String monitoringmanagerId = request.getParameter("id");
         MonitoringManagement monitoringManagement = monitoringmanagementservice.selectMonitoringManagementById(Integer.valueOf(monitoringmanagerId));
         request.setAttribute("monitoringManagementmodify", monitoringManagement);
 
@@ -217,6 +196,7 @@ public class MonitoringManagementController {
         System.out.println(monitoringDevicess);
         String[] monitoringDevices = monitoringDevicess.split(";");
         request.setAttribute("monitoringDevices",monitoringDevices);
+        request.setAttribute("userservice",userservice);
 
         return "Monitor/MonitoringManagementModify";
     }

@@ -1,12 +1,9 @@
 package com.myapp.demo.Dao.Monitor;
 import java.util.List;
-import com.myapp.demo.Entiy.Book;
+
 import com.myapp.demo.Entiy.Monitor.*;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository("MonitoringIndicatorDao")
 @Mapper

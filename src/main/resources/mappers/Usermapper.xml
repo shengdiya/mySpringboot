@@ -28,7 +28,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectRoleById" resultType="String">
 		select roleName from role where roleId = #{roleId}
 	</select>
-	
 
 	<!-- 工作人员添加后同时更新user_role表  -->
 	<insert id="insertStaffRole">
@@ -82,9 +81,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	<update id="modifyStatus" parameterType="com.myapp.demo.Entiy.User">
 		update user set status = "offline" where userId = #{userId}
     </update>
-
-
-	<!-- &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&以下为数据库课设用得着的，以上是javaWeb课设用的&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& -->
 
 	<!-- 根据用户名密码查询一个用户信息 -->
 	<select id="selectUserId" resultType="Integer">

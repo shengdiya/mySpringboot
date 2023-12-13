@@ -63,29 +63,29 @@ User user1= (User) request.getSession().getAttribute("user");Integer roleId= (In
     <td><%= pest.getPestName() %><%%></td>
 <%--查询这种病虫害感染了哪些植物--%>
     <%
-      List<Integer> plantIds = conserverService.selectPlantByPestId(pest.getPestId());
-      StringBuilder plantNames = new StringBuilder();
-      for (Integer plantId:plantIds) {
-        Plant plant = conserverService.selectPlantByPlantId(plantId);
-        String plantName = plant.getPlantName() + plant.getNumber();
-        plantNames.append(plantName);
+//      List<Integer> plantIds = conserverService.selectPlantByPestId(pest.getPestId());
+        List<String> plantNameLists = conserverService.viewsSelectPestPlant(pest.getPestId());
+        StringBuilder plantNames = new StringBuilder();
+      for (String plantName:plantNameLists) {
+        String plantNamePlusNumber = plantName + conserverService.viewsSelectPestPlantNumber(pest.getPestId());
+        plantNames.append(plantNamePlusNumber);
         plantNames.append("、");
       }
 //        如果plantIds为空，即没有病虫害，就不用去掉尾部的"、"符号了
-      if (!plantIds.isEmpty()) plantNames.deleteCharAt(plantNames.length()-1);
+      if (!plantNameLists.isEmpty()) plantNames.deleteCharAt(plantNames.length()-1);
     %>
     <td><%= plantNames %></td>
 
 <%--查询这种病虫害关联哪些养护任务--%>
       <%
-      List<ConserveTask> conserveTasks = conserverService.selectConserveTaskByPestId(pest.getPestId());
+      List<String> conserveTaskNameLists = conserverService.viewsSelectPestConserveTask(pest.getPestId());
       StringBuilder conserveTaskNames = new StringBuilder();
-      for (ConserveTask conserveTask:conserveTasks) {
-        conserveTaskNames.append(conserveTask.getTaskName());
+      for (String conserveTask:conserveTaskNameLists) {
+        conserveTaskNames.append(conserveTask);
         conserveTaskNames.append("、");
       }
 //        如果conserveTasks为空，即没有关联任务，就不用去掉尾部的"、"符号了
-        if (!conserveTasks.isEmpty()) conserveTaskNames.deleteCharAt(conserveTaskNames.length()-1);
+        if (!conserveTaskNameLists.isEmpty()) conserveTaskNames.deleteCharAt(conserveTaskNames.length()-1);
       %>
     <td><%= conserveTaskNames %></td>
     <td>

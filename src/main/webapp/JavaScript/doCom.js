@@ -97,6 +97,7 @@ function onclickupd1() {
             table.find("tbody").empty();
         },
         error: function(xhr, status, error) {
+            alert("已添加过此种名");
             console.log("Ajax请求失败：" + error);
             console.log(xhr);
             console.log(status);
